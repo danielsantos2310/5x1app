@@ -48,7 +48,7 @@ flowchart TD
 ## Flow F04 — Attendance
 1. Admin or assigned coach opens event's attendance tab.
 2. Server returns relevant team roster and RSVP status.
-3. Operator marks Present / Absent / Late; includes manually added attending member if allowed.
+3. Operator marks Present / Absent / Late for people with a going RSVP only. Walk-ins are not handled in the app.
 4. Operator saves batch; backend verifies role and records operator/time.
 5. Operator reviews summary and can correct with audit trail.
 **Errors:** unauthorized team, event cancelled, simultaneous edits, accidental marking, offline state.

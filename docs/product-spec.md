@@ -56,7 +56,7 @@ One person can hold several roles: a coach can also play, and an admin can also 
 - Teams: create teams with a division and a gender category; assign members to one or more teams.
 - Events: title, type (match, training, social), start and end, venue as text with an optional map link, optional capacity (blank means no limit), and RSVP deadline (pre-filled to 2 hours before the start). Events can be club-wide or for one team. Social events can also be set to `mixed`.
 - RSVP: members mark going, not going or maybe, and see the live list of who is going. Maybe does not hold a place or count against capacity. Members can opt in to the waitlist when an event is full. Promotion from the waitlist is automatic and in order; admins can promote, hold or remove any waitlisted RSVP at any time (for example for payment or team needs). Lowering capacity below the number already going keeps those people going, sends new RSVPs to the waitlist, and shows the admin a warning. After the deadline, members cannot change their RSVP; admins can.
-- Attendance: present, absent or late, recorded by an admin or the team's coach. An admin can record attendance for someone who did not RSVP, with an audit trail.
+- Attendance: present, absent or late, recorded by an admin or the team's coach. Attendance can only be recorded for people with a going RSVP. Walk-ins are not handled in the app. Changes are audited.
 - Basic in-app notifications. Email is optional.
 - Installable PWA.
 
@@ -149,7 +149,7 @@ Seven phases, each ending at a gate. Dates are proposals for a part-time build.
 | 1 | First hosting region | Ireland (`eu-west-1`) |
 | 2 | Do `maybe` RSVPs count against capacity? | No |
 | 3 | Can non-team members see a team's events? | Not for now. Build the setting, leave it off for the internal pilot |
-| 4 | Can an admin record attendance for someone who did not RSVP? | Yes, with an audit trail |
+| 4 | Can an admin record attendance for someone who did not RSVP? | No. Walk-ins are not handled in the app |
 | 5 | Any players under 18 in the pilot? | No |
 | 6 | Brand for the pilot | IVI's colour palette |
 | 7 | IVI teams and divisions | See the pilot club table above |

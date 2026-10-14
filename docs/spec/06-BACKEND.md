@@ -14,7 +14,7 @@ Version 0.1 | Proposed; migration SQL to be generated after approval
 | join_requests | id, club_id, user_id, status, reviewed_by, reviewed_at | Pending/approved/declined |
 | events | id, club_id, team_id nullable, type, gender_category nullable, title, starts_at, ends_at, venue_text, map_url, capacity (nullable, null = no limit), rsvp_deadline (default starts_at minus 2 hours), status | `team_id=NULL` can represent club-wide. `gender_category` is `men` or `women` for team events; `mixed` is allowed only for social events. No season field in v1. |
 | rsvps | id, club_id, event_id, user_id, status, waitlist_position, promotion_source (auto or admin), updated_at | Unique `(event_id,user_id)`; no client-supplied queue rank |
-| attendance_records | id, club_id, event_id, user_id, status, marked_by, marked_at | Unique `(event_id,user_id)` |
+| attendance_records | id, club_id, event_id, user_id, status, marked_by, marked_at | Unique `(event_id,user_id)`; only for users with a `going` RSVP for the event (no walk-ins) |
 | notifications | id, club_id, recipient_user_id, kind, event_id, read_at, created_at | Permission-scoped |
 | audit_events | id, club_id, actor_user_id, action, entity_type, entity_id, happened_at, safe_metadata | Sensitive actions only; no token/PII payload |
 

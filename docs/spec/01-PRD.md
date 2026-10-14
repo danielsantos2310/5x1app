@@ -55,5 +55,5 @@ Guardian support; recurring events; notifications by email/push; registration fo
 - Are `maybe` RSVPs counted against capacity? **Decided 14 Oct 2026: no.**
 - Are social events club-wide? **Proposed: yes, if `team_id` is NULL; team events otherwise.**
 - Can non-team club members see a team-specific event? **Proposed: only if explicitly targeted or admin.**
-- Can an attendance record exist for someone whose RSVP was not `going`? **Proposed: yes, for walk-ins, with admin audit trail.**
+- Can an attendance record exist for someone whose RSVP was not `going`? **Decided 14 Oct 2026: no. Walk-ins are not handled in the app.**
 - Are profiles of minors supported in v1 without guardian interactions? Requires policy and legal assessment before onboarding minors.

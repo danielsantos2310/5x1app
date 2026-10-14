@@ -64,7 +64,7 @@ One person can hold several roles: a coach can also play, and an admin can also 
 
 **Out of scope for v1:** payments, team chat, social feed and polls, drills and training plans, player evaluations, guardian and family features, leagues, match scoring and statistics, native app store releases, and monetisation.
 
-**Deferred to v2 or later:** guardian access, email reminders, a venue library with photos and maps, recurring events, registration forms, attendance streaks, and languages beyond pt-BR and English.
+**Deferred to v2 or later:** public activities for other clubs and teams, private or open (public phase), guardian access, email reminders, a venue library with photos and maps, recurring events, registration forms, attendance streaks, and languages beyond pt-BR and English.
 
 ## Core user flows
 
@@ -177,6 +177,9 @@ Seven phases, each ending at a gate. Dates are proposals for a part-time build.
 | 29 | Typeface | Inter, with system sans-serif fallback |
 | 30 | Dark page colour | #021426 page background; navy #021C37 for surfaces and light-theme text |
 | 31 | Spacing and breakpoints | 4px base scale; phone 390px (baseline), tablet 768px, desktop 1280px |
+| 32 | Approval and team assignment | One admin step; approval requires at least one team |
+| 33 | Players on several teams | Allowed; admin can assign several teams at first contact |
+| 34 | Players with no team | Out of scope for the internal IVI pilot; public phase adds other teams and activities (private or open) |
 | — | Product name | 5x1 |
 | — | Language on screen | English only; pt-BR chosen in Settings (14 Oct 2026: pt-BR labels removed from screens) |
 | — | Success targets | Confirmed, with definitions in the testing document |

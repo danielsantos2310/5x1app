@@ -16,7 +16,7 @@ Mobile-first sports utility, simple enough for a coach in a gym and a player res
 | UI-01 | Landing | headline, feature explanation, login, join |
 | UI-02 | Auth | signup/login/reset, inline feedback |
 | UI-03 | Club setup | club name, timezone, optional logo, steps |
-| UI-04 | Member approvals | pending members, approve/decline |
+| UI-04 | Member approvals | pending members; approve and assign one or more teams in one step (at least one team required); decline; team picker shows division and gender category |
 | UI-05 | Teams | division, gender category, assigned member count |
 | UI-06 | Team detail | roster, coaches, team events |
 | UI-07 | Events list | upcoming/past, team filter, RSVP state |

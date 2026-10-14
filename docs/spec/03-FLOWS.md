@@ -13,8 +13,7 @@ Version 0.1
 ## Flow F02 — Join and roster
 1. Admin generates expiring/revocable invite link (token securely hashed at rest).
 2. Player opens token -> login/signup -> token validated -> membership request created or permitted instant join.
-3. Admin reviews pending members and approves/declines.
-4. Admin assigns one or more teams (division/gender category are team properties, not user properties).
+3. Admin reviews pending members and, in one step, approves and assigns one or more teams (division/gender category are team properties, not user properties). Approval requires at least one team; decline is a separate action. A pending player sees only a "waiting for approval" message, with no team content.
 5. Player sees own team roster and relevant events.
 **Errors:** expired/revoked invite, duplicate membership, club mismatch, unauthorized approval; do not reveal unnecessary existing-account details.
 

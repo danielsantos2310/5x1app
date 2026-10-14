@@ -22,7 +22,7 @@ One real club, IVI, can create its club, manage multiple teams and memberships, 
 | CLUB-01 | Create club with name, logo, timezone | Valid data persisted, creator becomes admin |
 | CLUB-02 | Expiring/revocable invite and request approval | Expired/revoked token denied; requests cannot self-approve |
 | TEAM-01 | Multiple teams per club | Club admin creates/edits team with `division` and `gender_category`; six IVI examples supported |
-| ROST-01 | Assign members to one or more teams | No accidental cross-team access; duplicates rejected |
+| ROST-01 | Assign members to one or more teams | Approval and team assignment happen in one admin step; approval requires at least one team; a player may belong to several teams; no accidental cross-team access; duplicates rejected |
 | ROLE-01 | Multiple roles by club and authorized team | Admin and coach permissions enforced server-side, not by hiding buttons |
 | EVT-01 | Create/edit/cancel event for club or team | Fields: type, title, start/end, venue text/map URL, optional capacity (blank = no limit), RSVP cutoff (default 2 hours before start); social events may be `mixed` |
 | RSVP-01 | Going / not going / maybe | One active status per user/event; response can be revised until cutoff |

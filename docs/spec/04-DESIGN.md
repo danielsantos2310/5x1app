@@ -45,5 +45,19 @@ Use semantic HTML, WCAG 2.2 AA as release target, keyboard traversal and focus v
 5. Clickable prototype and five-user usability test including player + coach + admin tasks.
 6. Developer handoff: component variants, states, responsive measurements and accessible labels.
 
+## Low-fidelity wireframes (v0.1, for review)
+Source and captures live in `docs/internal/wireframes/`:
+- `wireframes.html`: the four core flows, phone width, English first with pt-BR labels beneath. Dark mode is the default; a header button switches to light.
+- `wireframes-dark.png` and `wireframes-light.png`: captures of the two themes at desktop width.
+
+| Flow | Screen in the wireframes | Maps to |
+| --- | --- | --- |
+| F01 Club creation | Set up your club (4-step checklist) | UI-03 |
+| F03 Events and RSVP | Player home with Vou / Talvez / Não vou | UI-07, UI-08 |
+| F03 Events and RSVP | Admin event detail with waitlist, promote/hold, capacity warning | UI-08 |
+| F04 Attendance | One-tap Present / Absent / Late, running count, save | UI-10 |
+
+Status: awaiting approval. Colours follow the IVI palette in `docs/internal/ivi-brand.md`, and are provisional until official values are confirmed. Tablet and desktop layouts are not yet drawn (deliverable 2 above is partly met).
+
 ## Brand decision needed
 Define 5x1 independent brand mark (not IVI logo), visual palette, typography, iconography. IVI is the tenant/first launch club; 5x1 owns platform-wide interface.

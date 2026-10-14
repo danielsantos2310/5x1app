@@ -174,6 +174,9 @@ Seven phases, each ending at a gate. Dates are proposals for a part-time build.
 | 26 | Reminders in v1 | Admin can send an in-app notice (NOTE-01); no email or push reminders in v1 |
 | 27 | Bulk attendance | No "mark all present" in v1; each person is marked individually |
 | 28 | Brand name | 5x1 is the product name; COURT-SIDE is a board tagline only |
+| 29 | Typeface | Inter, with system sans-serif fallback |
+| 30 | Dark page colour | #021426 page background; navy #021C37 for surfaces and light-theme text |
+| 31 | Spacing and breakpoints | 4px base scale; phone 390px (baseline), tablet 768px, desktop 1280px |
 | — | Product name | 5x1 |
 | — | Language on screen | English only; pt-BR chosen in Settings (14 Oct 2026: pt-BR labels removed from screens) |
 | — | Success targets | Confirmed, with definitions in the testing document |

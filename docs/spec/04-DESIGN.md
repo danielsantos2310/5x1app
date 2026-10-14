@@ -40,7 +40,7 @@ Use semantic HTML, WCAG 2.2 AA as release target, keyboard traversal and focus v
 ## Design deliverables before coding
 1. Sitemap and site navigation model.
 2. Low-fidelity wireframes of F01–F04 on phone, tablet and desktop.
-3. Design tokens (colors, spacing, type, elevation, breakpoints) and club-level logo/avatar rules. Colours and light/dark tokens drafted in `docs/internal/design-tokens.md`; spacing, type scale and breakpoints still open.
+3. Design tokens (colors, spacing, type, elevation, breakpoints) and club-level logo/avatar rules. Colours and light/dark tokens drafted in `docs/internal/design-tokens.md`; typeface (Inter), type scale, 4px spacing scale and breakpoints (390 / 768 / 1280px) approved 14 Oct 2026 and recorded there.
 4. High-fidelity screens in English; pt-BR translation checked for text expansion, not shown as labels.
 5. Clickable prototype and five-user usability test including player + coach + admin tasks.
 6. Developer handoff: component variants, states, responsive measurements and accessible labels.

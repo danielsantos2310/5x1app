@@ -80,6 +80,14 @@ Rules that follow:
 2. On light surfaces, green, orange and flame are fills or icons only, never text.
 3. Status is never colour alone: every chip has a label and an icon.
 
+## Typography, spacing and breakpoints (approved 14 Oct 2026)
+
+- **Typeface:** Inter, with a system sans-serif fallback. Portuguese accents (ã, ç, é, ê, ó) must render correctly at every size in the type scale; check during the high-fidelity pass.
+- **Type scale:** Heading 1 bold 28–32px; Heading 2 semibold 20–24px; body regular 16px; caption regular 13–14px. Line height 1.2 for headings, 1.5 for body.
+- **Dark page colour:** `#021426` for the page background (sampled from the dark board). The navy label `#021C37` is used for surfaces and primary text on light, not as the dark page.
+- **Spacing:** 4px base scale (4, 8, 12, 16, 20, 24, 32, 40, 48). Phone gutter 16px.
+- **Breakpoints:** phone 390px (design baseline), tablet 768px, desktop 1280px.
+
 ## Board review: decisions (14 Oct 2026)
 
 Decided by Daniel:
@@ -91,7 +99,7 @@ Decided by Daniel:
 Still open for the board:
 - Board copy is Portuguese; the screens need English copy (pt-BR is checked for text length, not shown).
 - Attendance abbreviations ("A", "At", "P") need full visible labels and accessible names.
-- Typeface (Inter or similar) and the dark page colour (`#021426` or the navy label) are still to be fixed.
+- Typeface, dark page colour, spacing and breakpoints: decided, see the section below.
 
 Details of the original review:
 

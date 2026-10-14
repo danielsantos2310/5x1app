@@ -12,7 +12,7 @@ v1 goals:
 
 - Run IVI end to end: teams, roster, events, RSVP and attendance.
 - Work in the browser and on phones from one codebase (installable PWA).
-- Ship in pt-BR and English at launch. Portuguese is the default.
+- Ship in English and pt-BR at launch. English is the default.
 
 Success targets (confirmed):
 
@@ -80,7 +80,7 @@ Each requirement has an ID and is traced to flows, screens, tables and tests in 
 | ID | Module | Requirement |
 | --- | --- | --- |
 | AUTH-01 | Accounts | Sign up, log in and reset password by email, without revealing which emails have accounts. |
-| I18N-01 | Language | pt-BR default; full English; the choice is saved to the profile. |
+| I18N-01 | Language | English default; full pt-BR; the choice is saved to the profile. |
 | CLUB-01 | Club | Create a club with a name, logo and timezone; the creator becomes admin. |
 | CLUB-02 | Club | Invite links can be expired or revoked; join requests need admin approval. |
 | TEAM-01 | Teams | Several teams per club, each with a division and a gender category. |
@@ -119,7 +119,7 @@ For now, the basics of GDPR apply: a privacy notice, data export and deletion re
 
 ## Internationalisation
 
-Every user-facing string lives in a message file. pt-BR is the default. For a first visit, a saved language preference wins; otherwise pt-BR is used, and the browser language is not used silently. English is a complete, first-class language from launch and is always one tap away. Dates and times follow the club's timezone and the chosen language.
+Every user-facing string lives in a message file. English is the default. For a first visit, a saved language preference wins; otherwise English is used, and the browser language is not used silently. pt-BR is a complete, first-class language from launch and is always one tap away. Dates and times follow the club's timezone and the chosen language.
 
 ## Non-functional requirements
 
@@ -171,7 +171,7 @@ Seven phases, each ending at a gate. Dates are proposals for a part-time build.
 | 23 | Waitlisted or maybe RSVPs in attendance | Must be promoted to going before being marked |
 | 24 | Cancelled events | Attendance is read-only |
 | — | Product name | 5x1 |
-| — | Portuguese default | pt-BR |
+| — | Default language | English (changed on 14 Oct 2026 from pt-BR); pt-BR second |
 | — | Success targets | Confirmed, with definitions in the testing document |
 | — | Guardian access | v2 |
 | — | Platform | Responsive web and PWA first; native apps after v1 |

@@ -2,7 +2,7 @@
 Version 0.1
 
 ## Flow F01 — Club creation
-1. New user chooses pt-BR or en, signs up and verifies email if enabled.
+1. New user chooses en or pt-BR, signs up and verifies email if enabled.
 2. User chooses `Criar clube / Create club`.
 3. Enters club name, IANA timezone, optional image; validates.
 4. Server creates club and active admin membership transactionally.
@@ -54,8 +54,8 @@ flowchart TD
 **Errors:** unauthorized team, event cancelled, simultaneous edits, accidental marking, offline state.
 
 ## Flow F05 — Language
-1. Default anonymous locale pt-BR.
-2. User can switch to en on all screens including before signup.
+1. Default anonymous locale en.
+2. User can switch to pt-BR on all screens including before signup.
 3. Save preference to profile after signup; honor preference on later devices.
 4. Translate date/number labels using selected locale; use club timezone for event clock.
 

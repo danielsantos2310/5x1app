@@ -62,5 +62,8 @@ Status: awaiting approval. The interface palette and light/dark tokens are in `d
 ## Design boards (14 Oct 2026, light and dark)
 Two boards with five phone screens, a palette, typography, components, navigation and a club brand example. Images: `docs/internal/design/court-side-board-light.png` and `court-side-board-dark.png`. They show Portuguese copy and a PT-BR/EN switch on the landing, which conflict with the agreed rules; the conflicts are listed in `design-tokens.md` for decision.
 
+## High-fidelity screens (v0.1, for review)
+Source: `docs/internal/design/hifi/hifi-player-admin-v0.1.html`. Covers UI-07/UI-08 entry (player home) and UI-04/admin overview, in English, light and dark, on the approved tokens (Inter, 4px spacing, 16px gutter, 44px minimum targets). Event detail (UI-08 admin) and attendance (UI-10) are next. Interactions are static in this version.
+
 ## Brand decision needed
 Define 5x1 independent brand mark (not IVI logo), visual palette, typography, iconography. IVI is the tenant/first launch club; 5x1 owns platform-wide interface.

@@ -20,7 +20,7 @@ Mobile-first sports utility, simple enough for a coach in a gym and a player res
 | UI-05 | Teams | division, gender category, assigned member count |
 | UI-06 | Team detail | roster, coaches, team events |
 | UI-07 | Events list | upcoming/past, team filter, RSVP state |
-| UI-08 | Event detail | time/venue, capacity, going/maybe/no, waitlist, participant list |
+| UI-08 | Event detail | time/venue, capacity, going/maybe/no, waitlist, participant list, admin in-app reminder (NOTE-01; no email or push in v1) |
 | UI-09 | Create/edit event | title/type/start/end/venue/capacity/deadline, timezone warning |
 | UI-10 | Attendance | going RSVPs only, large touch targets, one tap per person, running count, batch save with confirmation, read-only for cancelled events, correction with audit |
 | UI-11 | Notifications | newest-first status changes, read state |

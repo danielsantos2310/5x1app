@@ -80,9 +80,20 @@ Rules that follow:
 2. On light surfaces, green, orange and flame are fills or icons only, never text.
 3. Status is never colour alone: every chip has a label and an icon.
 
-## Board review: items to decide before the design is final
+## Board review: decisions (14 Oct 2026)
 
-These come from the board itself and conflict with the agreed scope or the spec. Nothing has been changed for them yet.
+Decided by Daniel:
+1. Landing: no language switch on public screens. The board's PT-BR / EN switch is removed.
+2. Reminders: the "Enviar lembrete" button becomes an in-app notice to the event's participants (NOTE-01). No email or push in v1.
+3. Attendance: no "Marcar todos como presentes". Each person is marked individually.
+4. "COURT-SIDE" is a tagline on the boards only. The product name is 5x1.
+
+Still open for the board:
+- Board copy is Portuguese; the screens need English copy (pt-BR is checked for text length, not shown).
+- Attendance abbreviations ("A", "At", "P") need full visible labels and accessible names.
+- Typeface (Inter or similar) and the dark page colour (`#021426` or the navy label) are still to be fixed.
+
+Details of the original review:
 
 1. **pt-BR text on screens.** The board's screens show Portuguese copy ("Olá, João!", "Próximo treino", "Confirmado"). The agreed rule is English on screen, with pt-BR chosen in Settings. The boards need English copy (pt-BR can be shown as a translation check).
 2. **Language switch on public screens.** The landing and header show a PT-BR / EN switch. The agreed rule is no language switch on public screens; the switch is in Settings.

@@ -170,6 +170,10 @@ Seven phases, each ending at a gate. Dates are proposals for a part-time build.
 | 22 | Players and attendance | Players see their own history only |
 | 23 | Waitlisted or maybe RSVPs in attendance | Must be promoted to going before being marked |
 | 24 | Cancelled events | Attendance is read-only |
+| 25 | Language on screen | English only on screen; pt-BR chosen in Settings; no language switch on public screens |
+| 26 | Reminders in v1 | Admin can send an in-app notice (NOTE-01); no email or push reminders in v1 |
+| 27 | Bulk attendance | No "mark all present" in v1; each person is marked individually |
+| 28 | Brand name | 5x1 is the product name; COURT-SIDE is a board tagline only |
 | — | Product name | 5x1 |
 | — | Language on screen | English only; pt-BR chosen in Settings (14 Oct 2026: pt-BR labels removed from screens) |
 | — | Success targets | Confirmed, with definitions in the testing document |

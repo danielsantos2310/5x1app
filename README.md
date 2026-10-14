@@ -4,7 +4,7 @@ A volleyball club app for members, events, RSVPs, and attendance.
 
 ## Documentation
 
-The product spec and roadmap live in [`docs/product-spec.md`](docs/product-spec.md). They are published on GitHub Pages from the `docs/` folder.
+The product summary is [`docs/product-spec.md`](docs/product-spec.md). The full document package (PRD, TRD, flows, design, plan, backend, testing, and security and privacy) is in [`docs/spec/`](docs/spec/00-README.md). Both are published on GitHub Pages from the `docs/` folder.
 
 ## How publishing works
 

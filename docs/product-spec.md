@@ -1,199 +1,174 @@
-# 5x1 — Product Spec & Roadmap
+# 5x1 — Product Spec & Roadmap (summary)
 
-2026-10-14 · Daniel Santos
+2026-10-14 · Daniel Santos · Status: decisions recorded, spec in review
+
+This is the summary. The full document package lives in [`docs/spec/`](spec/00-README.md): PRD, TRD, flows, design, plan, backend, testing, and security and privacy. Where the two disagree, the full package is the reference and this summary should be corrected to match.
 
 ## Overview and goals
 
-5x1 is a free web and mobile app that lets a volleyball club run its members, events, RSVPs, and attendance in one place. v1 is built for one club first, our own, and is designed so other clubs can join later without a rewrite.
+5x1 is a free, bilingual web and mobile app that lets a volleyball club run its members, teams, events, RSVPs and attendance in one place. v1 launches with International Volleyball Ireland (IVI). Every table and permission is built for several clubs from day one, so a second club can join without a database redesign.
 
-Goals for v1:
+v1 goals:
 
-- Run one club end to end: roster, events, RSVP, and attendance.
-- Work in the browser and on phones from one codebase.
-- Ship in English, with Portuguese available from the first release.
+- Run IVI end to end: teams, roster, events, RSVP and attendance.
+- Work in the browser and on phones from one codebase (installable PWA).
+- Ship in pt-BR and English at launch. Portuguese is the default.
 
-Proposed success criteria (targets to confirm):
+Success targets (confirmed):
 
-- An admin can create a club, invite members, and schedule an event in under 5 minutes.
-- A member can RSVP in two taps or fewer.
-- An admin can record attendance for a session in under 2 minutes.
+- An admin can create a club, invite members and schedule an event in under 5 minutes.
+- A member can RSVP in two taps or fewer, not counting sign-in.
+- An admin can record attendance for a fixed roster in under 2 minutes.
+
+Timer start and end, device profile, sample size and the 12, 16 and 20-player roster tests are defined in the [testing document](spec/07-TESTING.md).
+
+## Pilot club: IVI
+
+IVI runs six teams across two categories:
+
+| Division | Men's team | Women's team |
+| --- | --- | --- |
+| Div 2 | Dinosaurs | Vixens |
+| Div 3 | Dragons | Lynnx |
+| Div 4 (Regional League) | Phoenix | Ravens |
+
+Team names and divisions are configuration data, not hard-coded. Other clubs can use their own divisions. Confirm that "Regional League" is the name of the Div 4 league, not a separate division.
+
+Pilot players are all adults. No one under 18 is in the pilot.
 
 ## Users and roles
 
-v1 has two primary roles, club admin and coach, and two secondary roles, player and guardian. Players are the largest group, so they must be able to RSVP without friction.
+Roles are assigned per club and per team, not as one global role field:
 
-| Role | Who | What they need in v1 |
-| --- | --- | --- |
-| Club admin | Runs the club | Manage the roster, create events, see RSVPs and attendance, approve join requests |
-| Coach | Leads training and matches | Create and view events for their team, record attendance, see who is coming |
-| Player | Plays for the club | Join a club, see upcoming events, RSVP, see the team list |
-| Guardian | Parent of a player under 18 | See a linked child's events and RSVPs, approve RSVPs (deferred to v2 unless needed) |
+- **Club admin:** configures the club and teams, approves members, assigns roles, creates and cancels events, reviews attendance.
+- **Coach:** manages events and attendance only for teams they are assigned to.
+- **Player:** sees their teams, RSVPs to events they are invited to, and views their attendance where allowed.
+- **Guardian:** not in v1. Guardian access and linked minor profiles come in v2.
 
-A person can hold more than one role, for example a coach who is also a player. Role is set per club, not globally.
-
-Open question: guardians are a v2 feature unless the first club needs them sooner (see Open questions).
+One person can hold several roles, for example a coach who also plays. Team access is checked on the server, never by hiding buttons.
 
 ## Scope for v1
 
-v1 covers the four modules you named, plus the minimum needed to make them usable: sign-in, a club, and roles.
+**In scope**
 
-**In scope (must-have)**
+- Accounts: sign up, log in, reset password, pt-BR and English UI.
+- Club: create a club with a name, logo and timezone; invite by expiring or revocable link; approve join requests.
+- Teams: create teams with a division and a gender category; assign members to one or more teams.
+- Events: title, type (match, training, social), start and end, venue as text with an optional map link, capacity and RSVP deadline. Events can be club-wide or for one team.
+- RSVP: going, not going or maybe; waitlist when full, promoted automatically in order.
+- Attendance: present, absent or late, recorded by an admin or the team's coach. An admin can record attendance for someone who did not RSVP, with an audit trail.
+- Basic in-app notifications. Email is optional.
+- Installable PWA.
 
-- Accounts: sign up, log in, reset password, English and Portuguese UI.
-- Club: create a club, name and logo, invite by link, approve join requests.
-- Roster: list members, assign roles (admin, coach, player), remove members.
-- Events: create a session with title, type (match, training, social), date and time, venue as free text, capacity, and RSVP deadline.
-- RSVP: members mark going, not going, or maybe; see the live list of who is going; waitlist when full.
-- Attendance: admin or coach marks each RSVP as present, absent, or late after the session.
-- Basic notifications: in-app list of new events and RSVP changes. Email is optional in v1.
-- Responsive web app that works on phones and can be added to the home screen (PWA).
+**Visibility of team events:** the setting is built so admins can limit a team event to that team, but it is switched off for the internal pilot. Until it is switched on, any club member can see any event in their club.
 
-**Explicit non-goals for v1**
+**Out of scope for v1:** payments, team chat, social feed and polls, drills and training plans, player evaluations, guardian and family features, leagues, match scoring and statistics, native app store releases, and monetisation.
 
-- Payments of any kind (not yet).
-- Team chat, social feed, polls.
-- Drills library, training plans, player evaluations, feedback.
-- Guardian and family features.
-- Leagues, match scoring, statistics.
-- Native app store releases (iOS and Android). The PWA covers mobile first; native comes after v1 is stable.
-- Monetization and paid plans.
-
-**Deferred to v2 or later:** venue library with photos and maps, recurring events, registration forms, attendance streaks, and additional languages beyond Portuguese.
+**Deferred to v2 or later:** guardian access, email reminders, a venue library with photos and maps, recurring events, registration forms, attendance streaks, and languages beyond pt-BR and English.
 
 ## Core user flows
 
-Four flows carry v1. Each one should work on a phone in under a minute.
-
-1. **Create a club.** Admin signs up, names the club, uploads a logo (optional), and gets an invite link.
-2. **Join a club.** Player opens the invite link, signs up or logs in, and either joins at once or sends a request that the admin approves.
-3. **Schedule and RSVP.** Admin creates an event. Members see it in their list, tap going, not going, or maybe, and the list updates for everyone. If the event is full, the next person joins the waitlist and is promoted when a spot opens.
-4. **Record attendance.** After the session, the coach opens the event, sees the RSVP list, and marks each person present, absent, or late. The attendance record stays on the event for later reports.
+1. **Create a club.** Admin signs up, names the club and gets an invite link.
+2. **Join a club.** Player opens the invite link, signs up or logs in, and joins or sends a request for approval.
+3. **Schedule and RSVP.** Admin or coach creates an event. Members tap going, not going or maybe. A full event puts the next person on the waitlist, who is promoted when a place frees up.
+4. **Record attendance.** The coach or admin opens the event, sees the RSVP list and marks each person present, absent or late.
 
 ## Functional requirements
 
-Each requirement has an ID so we can refer to it in tasks and tests. All are must-have for v1 unless marked otherwise.
+Each requirement has an ID and is traced to flows, screens, tables and tests in the [PRD](spec/01-PRD.md) and [testing document](spec/07-TESTING.md).
 
 | ID | Module | Requirement |
 | --- | --- | --- |
-| AUTH-1 | Accounts | A user can sign up and log in with email and password. |
-| AUTH-2 | Accounts | A user can reset a forgotten password by email. |
-| AUTH-3 | Accounts | A user chooses English or Portuguese; the choice is saved to their profile. |
-| CLUB-1 | Club | An admin creates a club with a name, optional logo, and timezone. |
-| CLUB-2 | Club | An admin creates an invite link that can be expired or revoked. |
-| CLUB-3 | Club | A user can request to join; an admin approves or declines. |
-| ROST-1 | Roster | An admin or coach sees all members with their roles. |
-| ROST-2 | Roster | An admin assigns or removes roles (admin, coach, player). |
-| EVT-1 | Events | An admin or coach creates an event: title, type, date and time, venue, capacity, RSVP deadline. |
-| EVT-2 | Events | An admin or coach edits or cancels an event; members are notified of changes. |
-| RSVP-1 | RSVP | A member sets going, not going, or maybe, and can change it before the deadline. |
-| RSVP-2 | RSVP | When capacity is reached, further RSVPs go to a waitlist and are promoted in order. |
-| ATT-1 | Attendance | A coach marks each going member as present, absent, or late. |
-| ATT-2 | Attendance | Attendance per member is viewable across events. (Could-have for v1.) |
-| NOTE-1 | Notifications | A user sees an in-app list of new events and RSVP changes. |
-| VEN-1 | Venues | An admin enters a venue as free text with an optional map link. |
-| PWA-1 | Platform | The app installs to the home screen and works on phones. |
+| AUTH-01 | Accounts | Sign up, log in and reset password by email, without revealing which emails have accounts. |
+| I18N-01 | Language | pt-BR default; full English; the choice is saved to the profile. |
+| CLUB-01 | Club | Create a club with a name, logo and timezone; the creator becomes admin. |
+| CLUB-02 | Club | Invite links can be expired or revoked; join requests need admin approval. |
+| TEAM-01 | Teams | Several teams per club, each with a division and a gender category. |
+| ROST-01 | Roster | Assign members to one or more teams; duplicates are rejected. |
+| ROLE-01 | Roles | Several roles per person; admin and coach rights enforced on the server. |
+| EVT-01 | Events | Create, edit and cancel events for the club or one team. |
+| RSVP-01 | RSVP | One active status per person per event; can be changed until the deadline. |
+| RSVP-02 | RSVP | Never over capacity, even with simultaneous responses; waitlist promotion in order. |
+| ATT-01 | Attendance | Present, absent or late; only authorised admins and coaches; changes audited. |
+| NOTE-01 | Notifications | In-app notices for new, changed or cancelled events. |
+| PWA-01 | Platform | Installable on phones. An offline shell does not mean offline RSVPs. |
+| ACCESS-01 | Accessibility | WCAG 2.2 AA. |
 
 ## Data model
 
-The core model has eight entities. Membership links a user to a club with a role, so one person can belong to several clubs with different roles.
+The model is in [backend design](spec/06-BACKEND.md). Main changes from the first draft:
 
-| Entity | Key fields | Relationships |
-| --- | --- | --- |
-| User | id, name, email, language (en or pt), created_at | Has many Memberships |
-| Club | id, name, logo_url, timezone, created_by | Has many Memberships, Teams, Events, Venues |
-| Membership | id, user_id, club_id, role (admin, coach, player), status (pending, active, removed) | Belongs to User and Club |
-| Team | id, club_id, name, division (Div 2, Div 3, Div 4), gender (men, women) | Has many Memberships (via TeamMember) |
-| Venue | id, club_id, name, address, map_url | Has many Events |
-| Event | id, club_id, team_id, venue_id, type (match, training, social), title, starts_at, ends_at, capacity, rsvp_deadline, status (scheduled, cancelled) | Has many Rsvps and AttendanceRecords |
-| Rsvp | id, event_id, user_id, status (going, not_going, maybe, waitlist), created_at | Belongs to Event and User |
-| AttendanceRecord | id, event_id, user_id, status (present, absent, late), marked_by, marked_at | Belongs to Event and User |
-| Invite | id, club_id, token, expires_at, revoked_at | Belongs to Club |
-
-All times are stored in UTC and shown in the club's timezone. Deletions are soft (status or deleted_at) so attendance history is never lost.
+- **Club memberships** and **club role assignments** are separate tables, so one person can hold several roles.
+- **Team memberships** link people to teams with a membership type (player or coach).
+- **Teams** have `division` (free text, not a fixed list) and `gender_category`.
+- **Events** can have a `team_id`; when it is empty, the event is club-wide.
+- **RSVPs** and **attendance** are unique per person per event, and cannot reference another club's data.
+- Every tenant table carries `club_id`, and constraints stop a row from pointing at another club's data.
 
 ## Tech stack
 
-Recommended: one TypeScript codebase using Next.js, with Supabase as the backend and Vercel for hosting. This gives a web app that works on phones as a PWA, with a real database and login from day one, and no server to maintain. It fits a solo builder and keeps a native app possible later.
+One TypeScript codebase: Next.js (App Router) with React and Tailwind CSS, shadcn/ui components, next-intl for pt-BR and English, and a service worker for the PWA. Supabase provides Postgres with Row Level Security, Auth, Storage and Realtime. The app is hosted on Vercel. Tests use Vitest and Playwright.
 
-| Layer | Choice | Why |
-| --- | --- | --- |
-| Frontend | Next.js (React) with TypeScript | One codebase for web and mobile browsers; server components keep pages fast |
-| UI | Tailwind CSS and shadcn/ui | Accessible components, fast to customise to our design |
-| Backend and database | Supabase (Postgres, Auth, Storage, Realtime) | Postgres fits the relational model; Row Level Security enforces who sees which club |
-| Realtime | Supabase Realtime | Live RSVP lists and waitlist promotion without refresh |
-| Internationalisation | next-intl | English and Portuguese routing and message files from the start |
-| Offline and install | Serwist (service worker) | Installable PWA with a basic offline shell |
-| Email (later) | Resend | Invitations and reminders when we add email |
-| Testing | Vitest (unit), Playwright (end to end) | Covers the four core flows and the permission rules |
-| Hosting | Vercel (app) and Supabase (data) | Free tiers cover early use; both have easy preview environments |
+## Hosting and data protection
 
-**Alternatives considered**
+**Launch region: EU, Ireland (`eu-west-1`).** Each Supabase project has one primary region, so the database can't be in Ireland, London and São Paulo at once. UK (London, `eu-west-2`) and Brazil (São Paulo, `sa-east-1`) will need their own projects and a transfer review before any UK or Brazilian club joins.
 
-- Firebase: fast to start, but the NoSQL model makes club-scoped permissions and reports harder to get right.
-- Native first (Expo or React Native): better store presence, but doubles the work before we know the product is right. Revisit after v1.
-- Self-hosted Postgres with a custom API: most control, most maintenance; not worth it for a solo v1.
+For now, the basics of GDPR apply: a privacy notice, data export and deletion requests, no unnecessary personal data in logs, and processors listed. The controller question for IVI's data (club or platform) is deferred to legal review.
 
-The data model above maps directly to Postgres tables, with a Row Level Security policy per table that checks the user's Membership in the club.
+**Minors:** the pilot has no one under 18. Sign-up for under-18s stays restricted until a legal review is complete.
 
 ## Internationalisation
 
-Every user-facing string lives in a message file, never hard-coded. English ships first, Portuguese second, and both are in the first release. Adding a language later means adding one file.
-
-- Language is chosen at sign-up and changed in settings. The choice is saved to the user profile and applies on every device.
-- Dates, times, and numbers follow the chosen language and the club's timezone.
-- Portuguese variant: Brazilian Portuguese (pt-BR) is the default, since it is the larger audience. European Portuguese (pt-PT) can be added later.
-- Right-to-left support is out of scope for v1.
-- Translation is done by the author, with a review pass before release.
+Every user-facing string lives in a message file. pt-BR is the default. For a first visit, a saved language preference wins; otherwise pt-BR is used, and the browser language is not used silently. English is a complete, first-class language from launch and is always one tap away. Dates and times follow the club's timezone and the chosen language.
 
 ## Non-functional requirements
 
-These apply to every feature. They are checked before each release.
-
-- **Privacy and data protection.** Data is stored in EU, UK, and Brazil regions. The app follows GDPR, UK GDPR, and Brazil's LGPD. Users can export and delete their data. The privacy policy is published before any outside user signs up.
-- **Minors.** Some members are under 18. A minor's profile shows only name and club. Contact details are hidden from other members by default. Guardian access is designed in v1 but enabled in v2.
-- **Security.** Passwords are hashed by Supabase Auth. Row Level Security is on for every table. Invite links are random, expiring tokens. All traffic uses HTTPS.
-- **Access control.** A user sees only clubs they are an active member of. Only admins change roles. Coaches manage events and attendance for their teams.
-- **Accessibility.** Target WCAG 2.2 AA: keyboard use, visible focus, sufficient contrast, labelled form fields, and screen-reader names for RSVP buttons.
-- **Performance.** The main screens load in under 2 seconds on a mid-range phone over 4G. RSVP changes appear for other users within 3 seconds.
-- **Reliability.** Uptime target of 99.5 percent for v1. Daily database backups with 7-day retention.
-- **Testing.** The four core flows have end-to-end tests. Permission rules have unit tests. Both run before every release.
-- **Observability.** Errors are logged with the user and club IDs (no personal data in messages).
+- **Privacy:** GDPR basics now; UK GDPR and LGPD in the expansion review. Export and deletion requests supported.
+- **Security:** Row Level Security on every table, deny by default. Invite tokens stored as hashes. Service keys never reach the browser. All traffic over HTTPS.
+- **Performance:** main screens under 2 seconds on a mid-range phone over 4G; RSVP changes reach other users within 3 seconds.
+- **Reliability:** 99.5% availability target; daily backups with 7-day retention, and restores tested.
+- **Accessibility:** WCAG 2.2 AA, tested by keyboard and screen reader.
+- **Testing:** the four core flows and the permission rules are tested before every release.
 
 ## Roadmap
 
-Seven phases, each ending at a gate. A phase does not start until the previous gate passes. Dates are proposals for a part-time solo build; adjust them to your hours.
+Seven phases, each ending at a gate. Dates are proposals for a part-time build.
 
-1. **Spec (14 Oct to 31 Oct 2026).** Finish this document and settle the open questions. Gate: spec approved by you.
-2. **Visual design (1 Nov to 21 Nov).** Wireframes, then high-fidelity screens for the four core flows, in English and Portuguese. Gate: the four flows are signed off as mockups.
-3. **Foundation (22 Nov to 5 Dec).** Repository, Supabase schema and policies, sign-in, language switch, PWA shell, CI with tests. Gate: a user can sign up, log in, and switch language on a phone.
-4. **Core build (6 Dec to 16 Jan 2027).** Clubs, roster, invites, events, RSVP with waitlist, attendance. Gate: all four core flows pass end-to-end tests.
-5. **Internal pilot (19 Jan to 13 Feb 2027).** Your own club uses the app for four weeks. Gate: two weeks with no blocking bugs and attendance recorded for at least eight sessions.
-6. **Polish and release (16 Feb to 6 Mar).** Portuguese review, accessibility audit, privacy policy, release checklist. Gate: release checklist passes and the app is live for invited clubs.
-7. **After v1 (from March 2027).** Guardian access, email reminders, venue library, recurring events. Native apps are considered once v1 has active use.
-
-The timeline will be drawn in the visual phase.
-
-## Open questions and decisions
-
-These need an answer before the visual phase starts (21 Nov at the latest, for the mockups).
-
-- [x] Confirm the Portuguese variant: Brazilian (pt-BR, proposed) or European (pt-PT).
-- [x] Confirm the success-criteria targets in Overview, or propose different ones.
-- [x] Confirm that guardian access waits for v2, or whether your first club needs it in v1.
-- [x] Confirm the PWA-first mobile approach, or require native store apps for v1.
-- [x] Choose a product name. "Spike" belongs to another app, so a different name is needed before release.
-- [x] Confirm the data region (EU or UK) and whether the club will be in the UK, the EU, or Brazil.
-- [x] Confirm the first club's typical size and teams, so the roster design is sized correctly.
+1. **Spec (14 Oct to 31 Oct 2026).** Finish the spec package. Gate: spec approved.
+2. **Visual design (1 Nov to 21 Nov).** Wireframes and bilingual screens for the four flows. Gate: flows signed off.
+3. **Foundation (22 Nov to 5 Dec).** Repository, CI, schema and Row Level Security, sign-in, language switch, PWA shell. Gate: sign-up, login and language switch work on a phone.
+4. **Core build (6 Dec to 16 Jan 2027).** Clubs, teams, roles, invites, events, RSVP with waitlist, attendance. Gate: four core flows pass end-to-end tests.
+5. **Internal pilot (19 Jan to 13 Feb 2027).** Our own club uses it for four weeks. Gate: two weeks without blocking bugs; attendance recorded for at least eight sessions.
+6. **Polish and release (16 Feb to 6 Mar).** Portuguese review, accessibility audit, privacy notice, release checklist. Gate: checklist passes; invite-only release.
+7. **After v1 (from March 2027).** Guardian access, email reminders, venues, recurring events; native apps considered after real use.
 
 ## Decisions (14 Oct 2026)
 
-- Portuguese: Brazilian (pt-BR) is the default.
-- Success criteria: the targets in Overview are confirmed.
-- Guardian access moves to v2.
-- Mobile: PWA first; native apps after v1.
-- Product name: 5x1.
-- Data regions: EU, UK, and Brazil. Brazil's LGPD applies alongside GDPR.
-- First club: IVI (International Volleyball Ireland), with about six teams across men's and women's categories in the national league: Div 2, Div 3, and Div 4. A team therefore needs a division and a gender, and one club has many teams.
+| # | Question | Decision |
+| --- | --- | --- |
+| 1 | First hosting region | Ireland (`eu-west-1`) |
+| 2 | Do `maybe` RSVPs count against capacity? | No |
+| 3 | Can non-team members see a team's events? | Not for now. Build the setting, leave it off for the internal pilot |
+| 4 | Can an admin record attendance for someone who did not RSVP? | Yes, with an audit trail |
+| 5 | Any players under 18 in the pilot? | No |
+| 6 | Brand for the pilot | IVI's colour palette |
+| 7 | IVI teams and divisions | See the pilot club table above |
+| 8 | Data controller for IVI's data | Deferred to legal review; basic GDPR now |
+| 9 | Where the spec files live | `docs/spec/`, linked from the Pages site |
+| — | Product name | 5x1 |
+| — | Portuguese default | pt-BR |
+| — | Success targets | Confirmed, with definitions in the testing document |
+| — | Guardian access | v2 |
+| — | Platform | Responsive web and PWA first; native apps after v1 |
+| — | Data regions | Corrected: Ireland at launch; UK and Brazil later, each in its own project after review |
+
+## Open items
+
+- [ ] IVI colour values (hex codes) for the pilot palette.
+- [ ] Confirm that "Regional League" is the name of Div 4.
+- [ ] Data controller for IVI's data, with legal input.
+- [ ] Brand for 5x1 itself, separate from IVI, before public launch.
+- [ ] Legal review before any under-18 sign-up.
 
 ## Sources
 
@@ -202,3 +177,5 @@ Reference product reviewed for this spec (public pages only, as of 14 Oct 2026):
 - [Spike homepage](https://www.volleyspike.app/)
 - [Spike on Google Play](https://play.google.com/store/apps/details?id=app.volleyspike.mobile)
 - [Spike on the App Store](https://apps.apple.com/app/id6792373783)
+
+Hosting regions: [Supabase regions](https://supabase.com/docs/guides/platform/regions).

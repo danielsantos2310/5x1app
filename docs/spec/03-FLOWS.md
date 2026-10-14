@@ -19,13 +19,15 @@ Version 0.1
 **Errors:** expired/revoked invite, duplicate membership, club mismatch, unauthorized approval; do not reveal unnecessary existing-account details.
 
 ## Flow F03 — Events and RSVP
-1. Authorized coach selects assigned team (or admin selects team/club-wide), enters title/type/date/start/end/venue/capacity/deadline.
+1. Authorized coach selects assigned team (or admin selects team/club-wide), enters title/type/date/start/end/venue/optional capacity (blank = no limit)/deadline (pre-filled to 2 hours before start). Social events may be set to `mixed`.
 2. Server verifies permission, timezone date ordering and event constraints.
 3. Members in scope see event and respond Going / Not going / Maybe.
 4. Server serializes concurrent updates and computes capacity.
-5. If going slots remain: status `going`; else `waitlist` (if requested Going); `maybe` does not reserve a spot (proposed).
+5. If going slots remain: status `going`; else `waitlist` (if requested Going); `maybe` does not reserve a spot and does not count against capacity.
 6. When Going cancels before cutoff, earliest eligible waitlisted user is promoted atomically and notified.
 7. On edits/cancellation, notifications generated to affected users.
+8. Admin can promote, hold or remove any waitlisted RSVP at any time (for example for payment or team needs); each action is audited.
+9. If an admin lowers capacity below the current number going, existing going RSVPs stay; new going RSVPs go to the waitlist; the admin sees a warning before saving.
 **Errors:** deadline passed, cancelled event, offline action, two members selecting last slot, contradictory status revisions.
 
 ```mermaid
@@ -66,6 +68,7 @@ flowchart TD
 | Create/edit team event | Yes | Assigned team | No |
 | RSVP to eligible event | Yes if participant | Yes if participant | Yes |
 | Mark attendance | Yes | Assigned team | No |
+| Promote, hold or remove waitlisted RSVP | Yes | Assigned team (proposed) | No |
 | See other club data | Never without membership | Never | Never |
 
 ## Special cases to test

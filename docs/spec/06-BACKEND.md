@@ -12,8 +12,8 @@ Version 0.1 | Proposed; migration SQL to be generated after approval
 | team_memberships | id, club_id, team_id, user_id, membership_type, status | `player` and `coach` team associations; FKs ensure same club |
 | invites | id, club_id, token_hash, expires_at, revoked_at, max_uses, used_count | Never store reusable plaintext token in logs |
 | join_requests | id, club_id, user_id, status, reviewed_by, reviewed_at | Pending/approved/declined |
-| events | id, club_id, team_id nullable, type, gender_category nullable, title, starts_at, ends_at, venue_text, map_url, capacity, rsvp_deadline, status | `team_id=NULL` can represent club-wide. `gender_category` is `men` or `women` for team events; `mixed` is allowed only for social events. No season field in v1. |
-| rsvps | id, club_id, event_id, user_id, status, waitlist_position, updated_at | Unique `(event_id,user_id)`; no client-supplied queue rank |
+| events | id, club_id, team_id nullable, type, gender_category nullable, title, starts_at, ends_at, venue_text, map_url, capacity (nullable, null = no limit), rsvp_deadline (default starts_at minus 2 hours), status | `team_id=NULL` can represent club-wide. `gender_category` is `men` or `women` for team events; `mixed` is allowed only for social events. No season field in v1. |
+| rsvps | id, club_id, event_id, user_id, status, waitlist_position, promotion_source (auto or admin), updated_at | Unique `(event_id,user_id)`; no client-supplied queue rank |
 | attendance_records | id, club_id, event_id, user_id, status, marked_by, marked_at | Unique `(event_id,user_id)` |
 | notifications | id, club_id, recipient_user_id, kind, event_id, read_at, created_at | Permission-scoped |
 | audit_events | id, club_id, actor_user_id, action, entity_type, entity_id, happened_at, safe_metadata | Sensitive actions only; no token/PII payload |
@@ -58,7 +58,7 @@ All tenant-owned tables use `club_id` where appropriate; enforce cross-table `cl
 API is illustrative, not a promise that all endpoints must be REST rather than server actions. Document request/response schemas, error codes, pagination, retry semantics and rate limiting before implementation.
 
 ## RSVP atomic algorithm
-Within one Postgres transaction: lock the event or use an equivalent concurrency strategy; verify event scheduled, user eligible, cutoff, and membership; count valid `going`; update user's single RSVP; if no slot then waitlist with stable sequence; if a going slot was freed, promote earliest eligible waitlisted RSVP; write audit and notification events; commit. Realtime broadcasts follow committed changes. Test two simultaneous last-slot requests and idempotent retries.
+Within one Postgres transaction: lock the event or use an equivalent concurrency strategy; verify event scheduled, user eligible, cutoff, and membership; count valid `going`; update user's single RSVP; if no slot then waitlist with stable sequence; if a going slot was freed, promote earliest eligible waitlisted RSVP; write audit and notification events; commit. Realtime broadcasts follow committed changes. Admins can promote, hold or remove any waitlisted RSVP; each action is audited. Lowering capacity below the current count of `going` never removes existing going RSVPs; new going RSVPs go to the waitlist and the admin is warned before saving. Test two simultaneous last-slot requests, idempotent retries, and a capacity reduction with people already going.
 
 ## Data lifecycle
 Store UTC event times; keep historical attendance on membership removal without exposing removed personal details to ordinary members. Implement export/deletion request queue and retention schedule consistent with legal obligations. Document soft-deletion behavior separately for each entity; do not promise to 'never delete' personal attendance records indefinitely.

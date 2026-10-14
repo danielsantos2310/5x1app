@@ -54,8 +54,8 @@ One person can hold several roles: a coach can also play, and an admin can also 
 - Accounts: sign up, log in, reset password, pt-BR and English UI.
 - Club: create a club with a name, logo and timezone; invite by expiring or revocable link; approve join requests.
 - Teams: create teams with a division and a gender category; assign members to one or more teams.
-- Events: title, type (match, training, social), start and end, venue as text with an optional map link, capacity and RSVP deadline. Events can be club-wide or for one team.
-- RSVP: going, not going or maybe; waitlist when full, promoted automatically in order.
+- Events: title, type (match, training, social), start and end, venue as text with an optional map link, optional capacity (blank means no limit), and RSVP deadline (pre-filled to 2 hours before the start). Events can be club-wide or for one team. Social events can also be set to `mixed`.
+- RSVP: members mark going, not going or maybe, and see the live list of who is going. Maybe does not hold a place or count against capacity. Members can opt in to the waitlist when an event is full. Promotion from the waitlist is automatic and in order; admins can promote, hold or remove any waitlisted RSVP at any time (for example for payment or team needs). Lowering capacity below the number already going keeps those people going, sends new RSVPs to the waitlist, and shows the admin a warning. After the deadline, members cannot change their RSVP; admins can.
 - Attendance: present, absent or late, recorded by an admin or the team's coach. An admin can record attendance for someone who did not RSVP, with an audit trail.
 - Basic in-app notifications. Email is optional.
 - Installable PWA.
@@ -86,9 +86,9 @@ Each requirement has an ID and is traced to flows, screens, tables and tests in 
 | TEAM-01 | Teams | Several teams per club, each with a division and a gender category. |
 | ROST-01 | Roster | Assign members to one or more teams; duplicates are rejected. |
 | ROLE-01 | Roles | Several roles per person; admin and coach rights enforced on the server. |
-| EVT-01 | Events | Create, edit and cancel events for the club or one team. |
+| EVT-01 | Events | Create, edit and cancel events for the club or one team. Capacity is optional; the RSVP deadline defaults to 2 hours before the start. Social events may be `mixed`. |
 | RSVP-01 | RSVP | One active status per person per event; can be changed until the deadline. |
-| RSVP-02 | RSVP | Never over capacity, even with simultaneous responses; waitlist promotion in order. |
+| RSVP-02 | RSVP | Never over capacity, even with simultaneous responses. Promotion is automatic and in order; admins can promote, hold or remove waitlisted RSVPs, with audit. Lowering capacity keeps current going RSVPs and warns the admin. |
 | ATT-01 | Attendance | Present, absent or late; only authorised admins and coaches; changes audited. |
 | NOTE-01 | Notifications | In-app notices for new, changed or cancelled events. |
 | PWA-01 | Platform | Installable on phones. An offline shell does not mean offline RSVPs. |
@@ -159,6 +159,12 @@ Seven phases, each ending at a gate. Dates are proposals for a part-time build.
 | 11 | Gender categories | Men and women for teams; `mixed` only for social events |
 | 12 | Coach visibility | Own assigned teams only: roster, events and attendance |
 | 13 | Admin also a player | Yes |
+| 14 | Maybe RSVPs and capacity | Maybe does not hold a place or count against capacity |
+| 15 | Capacity field | Optional; blank means no limit |
+| 16 | RSVP deadline | Required; pre-filled to 2 hours before the start |
+| 17 | Waitlist promotion | Automatic and in order, with admin override (promote, hold or remove) |
+| 18 | Lowering capacity below current going | Existing going RSVPs stay; new ones go to the waitlist; admin sees a warning |
+| 19 | Social events gender | Optional; can be set to `mixed`, default open |
 | — | Product name | 5x1 |
 | — | Portuguese default | pt-BR |
 | — | Success targets | Confirmed, with definitions in the testing document |

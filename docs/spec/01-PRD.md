@@ -24,9 +24,9 @@ One real club, IVI, can create its club, manage multiple teams and memberships, 
 | TEAM-01 | Multiple teams per club | Club admin creates/edits team with `division` and `gender_category`; six IVI examples supported |
 | ROST-01 | Assign members to one or more teams | No accidental cross-team access; duplicates rejected |
 | ROLE-01 | Multiple roles by club and authorized team | Admin and coach permissions enforced server-side, not by hiding buttons |
-| EVT-01 | Create/edit/cancel event for club or team | Fields: type, title, start/end, venue text/map URL, capacity, RSVP cutoff |
+| EVT-01 | Create/edit/cancel event for club or team | Fields: type, title, start/end, venue text/map URL, optional capacity (blank = no limit), RSVP cutoff (default 2 hours before start); social events may be `mixed` |
 | RSVP-01 | Going / not going / maybe | One active status per user/event; response can be revised until cutoff |
-| RSVP-02 | Waitlist capacity + automatic promotion | Never exceed capacity even under concurrent responses; promotion follows queue order |
+| RSVP-02 | Waitlist capacity + automatic promotion | Never exceed capacity even under concurrent responses; promotion follows queue order; admins can promote, hold or remove waitlisted RSVPs, with audit; lowering capacity keeps current going RSVPs and warns the admin |
 | ATT-01 | Mark present / absent / late | Only authorized admin/team coach; changes auditable |
 | NOTE-01 | In-app notifications | Relevant new/change/cancel event notices visible to intended users |
 | PWA-01 | Mobile-first installable PWA | Manifest/icons/HTTPS/installation tested; offline shell does not imply offline RSVP |
@@ -52,7 +52,7 @@ Payments, scoring/statistics, leagues, chat, public feed, drills, evaluations, g
 Guardian support; recurring events; notifications by email/push; registration forms; team/season history; maps and venue records; league modules; native apps if justified by usage.
 
 ## Open product decisions
-- Are `maybe` RSVPs counted against capacity? **Proposed: no.**
+- Are `maybe` RSVPs counted against capacity? **Decided 14 Oct 2026: no.**
 - Are social events club-wide? **Proposed: yes, if `team_id` is NULL; team events otherwise.**
 - Can non-team club members see a team-specific event? **Proposed: only if explicitly targeted or admin.**
 - Can an attendance record exist for someone whose RSVP was not `going`? **Proposed: yes, for walk-ins, with admin audit trail.**

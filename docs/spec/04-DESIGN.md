@@ -66,11 +66,16 @@ Two boards with five phone screens, a palette, typography, components, navigatio
 ## High-fidelity screens (v0.1, for review)
 Source: `docs/internal/design/hifi/hifi-player-admin-v0.1.html`. Covers UI-07/UI-08 entry (player home) and UI-04/admin overview, in English, light and dark, on the approved tokens (Inter, 4px spacing, 16px gutter, 44px minimum targets). Event detail (UI-08 admin) and attendance (UI-10) are next. Interactions are static in this version. Approval with team assignment (UI-04) and the pending waiting state (UI-13) are in `docs/internal/design/hifi/approvals-v0.1.html`: approval and team assignment are one step, approval needs at least one team, and the approve button names the team. Event detail (UI-08, admin, with the capacity-lowered warning and the waitlist tab) and attendance (UI-10, full-word Present / Absent / Late buttons, no bulk action) are in `docs/internal/design/hifi/eventatt-v0.1.html`. The waitlist promote and hold controls are noted for the next version. Landing and sign-in (UI-01, UI-02, English only, no language switch) are in `docs/internal/design/hifi/landing-v0.1.html`.
 
-## Platform wordmark (14 Oct 2026)
-The 5x1 wordmark is drawn from Inter ExtraBold with the text converted to outlines: `docs/internal/brand/5x1-logo-light.svg` (navy 5x, green 1) and `5x1-logo-dark.svg` (off-white 5x, green 1). It is the platform mark on public and platform screens (landing, sign-in). The IVI crest stays on club pages only. This is a first wordmark, not a final brand mark: the brand decision below still applies.
+## Platform brand identity (approved 14 Oct 2026)
+The 5x1 brand is the geometric hexagon mark with the "5x1" wordmark, plus a standalone icon and app icon. Full rules are in `docs/internal/brand/5x1-brand.md`; the approved sheet is `docs/internal/brand/5x1-brand-identity-sheet.png`. Files:
+- Primary logo: `5x1-logo-light.svg` (navy and green) and `5x1-logo-dark.svg` (off-white and green).
+- Standalone icon: `5x1-icon-light.svg` and `5x1-icon-dark.svg`.
+- App icon: `5x1-app-icon-dark.svg` (default, navy tile) and `5x1-app-icon-light.svg` (white tile), with PNG exports in `app-icon/` at 512, 192 and 180 px.
+
+The platform logo sits on public and platform screens (landing, sign-in), centred on the landing page. The IVI crest stays on club pages only.
 
 ## Sitemap and navigation (proposal, 14 Oct 2026)
 Full site map, route names per screen and navigation by role are in `docs/internal/sitemap.md`. Two decisions are open there: coach navigation, and whether Teams sits in the admin Home tabs or the bottom bar.
 
-## Brand decision needed
-Define 5x1 independent brand mark (not IVI logo), visual palette, typography, iconography. IVI is the tenant/first launch club; 5x1 owns platform-wide interface.
+## Brand (resolved)
+The 5x1 brand mark, palette, typography and iconography are decided (see the platform brand section above). IVI remains the tenant and first launch club, with its own crest and colours on club pages; 5x1 owns the platform interface.

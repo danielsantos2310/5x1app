@@ -7,7 +7,7 @@ Version: 0.1 | Date: 2026-10-14 | Status: Draft for approval
 ## Decisions already supplied
 - Product: **5x1**.
 - First pilot: **IVI**, approximately six men's/women's teams participating in Divisions 2–4; actual team names/assignments must be configured and confirmed.
-- Language: **English default**, pt-BR available as a complete first-class language from launch. For a user's first visit, use saved preference if present; otherwise default to English (no silent browser override). pt-BR remains available through a prominent switch. (Changed from pt-BR default on 14 Oct 2026.)
+- Language: **English on screen**. pt-BR is a complete translation from launch, chosen in Settings and not shown as labels on screens. Saved preference per profile; first visit uses English (no silent browser override). (Changed 14 Oct 2026: pt-BR labels removed from screens; switch moved to Settings.)
 - First release: responsive web + installable PWA; native apps after stable v1.
 - Roles: club admin, coach and player in v1; guardians in v2.
 - v1 free, no payments, chat, scoring or monetization.

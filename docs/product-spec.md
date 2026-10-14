@@ -12,7 +12,7 @@ v1 goals:
 
 - Run IVI end to end: teams, roster, events, RSVP and attendance.
 - Work in the browser and on phones from one codebase (installable PWA).
-- Ship in English and pt-BR at launch. English is the default.
+- Ship in English and pt-BR at launch. English is shown on screen; pt-BR is chosen in Settings.
 
 Success targets (confirmed):
 
@@ -51,7 +51,7 @@ One person can hold several roles: a coach can also play, and an admin can also 
 
 **In scope**
 
-- Accounts: sign up, log in, reset password, pt-BR and English UI.
+- Accounts: sign up, log in, reset password, in English; pt-BR available in Settings.
 - Club: create a club with a name, logo and timezone; invite by expiring or revocable link; approve join requests.
 - Teams: create teams with a division and a gender category; assign members to one or more teams.
 - Events: title, type (match, training, social), start and end, venue as text with an optional map link, optional capacity (blank means no limit), and RSVP deadline (pre-filled to 2 hours before the start). Events can be club-wide or for one team. Social events can also be set to `mixed`.
@@ -80,7 +80,7 @@ Each requirement has an ID and is traced to flows, screens, tables and tests in 
 | ID | Module | Requirement |
 | --- | --- | --- |
 | AUTH-01 | Accounts | Sign up, log in and reset password by email, without revealing which emails have accounts. |
-| I18N-01 | Language | English default; full pt-BR; the choice is saved to the profile. |
+| I18N-01 | Language | English on screen; full pt-BR chosen in Settings; the choice is saved to the profile. |
 | CLUB-01 | Club | Create a club with a name, logo and timezone; the creator becomes admin. |
 | CLUB-02 | Club | Invite links can be expired or revoked; join requests need admin approval. |
 | TEAM-01 | Teams | Several teams per club, each with a division and a gender category. |
@@ -119,7 +119,7 @@ For now, the basics of GDPR apply: a privacy notice, data export and deletion re
 
 ## Internationalisation
 
-Every user-facing string lives in a message file. English is the default. For a first visit, a saved language preference wins; otherwise English is used, and the browser language is not used silently. pt-BR is a complete, first-class language from launch and is always one tap away. Dates and times follow the club's timezone and the chosen language.
+Every user-facing string lives in a message file. English is the default. For a first visit, a saved language preference wins; otherwise English is used, and the browser language is not used silently. pt-BR is a complete, first-class translation from launch, chosen in Settings and not shown as labels on screens. Dates and times follow the club's timezone and the chosen language.
 
 ## Non-functional requirements
 
@@ -171,7 +171,7 @@ Seven phases, each ending at a gate. Dates are proposals for a part-time build.
 | 23 | Waitlisted or maybe RSVPs in attendance | Must be promoted to going before being marked |
 | 24 | Cancelled events | Attendance is read-only |
 | — | Product name | 5x1 |
-| — | Default language | English (changed on 14 Oct 2026 from pt-BR); pt-BR second |
+| — | Language on screen | English only; pt-BR chosen in Settings (14 Oct 2026: pt-BR labels removed from screens) |
 | — | Success targets | Confirmed, with definitions in the testing document |
 | — | Guardian access | v2 |
 | — | Platform | Responsive web and PWA first; native apps after v1 |

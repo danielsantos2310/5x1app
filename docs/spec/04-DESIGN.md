@@ -5,7 +5,7 @@ Version 0.1 | Status: Design direction proposed; no mockups approved
 Mobile-first sports utility, simple enough for a coach in a gym and a player responding while walking. Fast task completion over decorative complexity. Do not assume colors or logo are approved for 5x1; first IVI club branding can use its own crest/colors independently of platform brand.
 
 ## Information architecture
-- Public: landing, language switch, login/signup/reset, invite redemption.
+- Public: landing, login/signup/reset, invite redemption (English only; no language switch).
 - Player: Home/upcoming, My Teams, Event Detail + RSVP, Notifications, Profile/settings.
 - Coach: Player navigation plus Team Events, Attendance and Team Roster.
 - Admin: Club Overview, Teams, Members/Approvals, Invitations, Events, Attendance, Club Settings.
@@ -13,7 +13,7 @@ Mobile-first sports utility, simple enough for a coach in a gym and a player res
 ## Screen inventory
 | ID | Screen | Main elements |
 | --- | --- | --- |
-| UI-01 | Landing | headline, feature explanation, login, join, language toggle |
+| UI-01 | Landing | headline, feature explanation, login, join |
 | UI-02 | Auth | signup/login/reset, inline feedback |
 | UI-03 | Club setup | club name, timezone, optional logo, steps |
 | UI-04 | Member approvals | pending members, approve/decline |
@@ -41,13 +41,13 @@ Use semantic HTML, WCAG 2.2 AA as release target, keyboard traversal and focus v
 1. Sitemap and site navigation model.
 2. Low-fidelity wireframes of F01–F04 on phone, tablet and desktop.
 3. Design tokens (colors, spacing, type, elevation, breakpoints) and club-level logo/avatar rules.
-4. High-fidelity screens with pt-BR and English content (account for text expansion).
+4. High-fidelity screens in English; pt-BR translation checked for text expansion, not shown as labels.
 5. Clickable prototype and five-user usability test including player + coach + admin tasks.
 6. Developer handoff: component variants, states, responsive measurements and accessible labels.
 
 ## Low-fidelity wireframes (v0.1, for review)
 Source and captures live in `docs/internal/wireframes/`:
-- `wireframes.html`: the four core flows, phone width, English first with pt-BR labels beneath. Dark mode is the default; a header button switches to light.
+- `wireframes.html`: the four core flows, phone width, English only on screen. Dark mode is the default; a header button switches to light.
 - `wireframes-dark.png` and `wireframes-light.png`: captures of the two themes at desktop width.
 
 | Flow | Screen in the wireframes | Maps to |

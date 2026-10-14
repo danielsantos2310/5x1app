@@ -9,7 +9,6 @@
   --btn-bg:#06233F; --btn-fg:#F8F8F5;
   --primary:#09CD71; --primary-ink:#021C37;
   --warn:#FF8A5C; --warn-border:#F84C04;
-  --accent-orange:#FE6D09;
   --chip-done-bg:#F8F8F5; --chip-done-fg:#021C37;
   --wait-bg:#3A1E0C; --wait-ink:#FFB27F; --wait-border:#FE6D09;
   --input-bg:#021C37; --foot-bg:#06233F; --box-border:#4D6F93;
@@ -22,7 +21,6 @@
   --btn-bg:#FFFFFF; --btn-fg:#021C37;
   --primary:#09CD71; --primary-ink:#021C37;
   --warn:#F84C04; --warn-border:#F84C04;
-  --accent-orange:#FE6D09;
   --chip-done-bg:#021C37; --chip-done-fg:#F8F8F5;
   --wait-bg:#FFE9D9; --wait-ink:#7A2E00; --wait-border:#FE6D09;
   --input-bg:#FFFFFF; --foot-bg:#FFFFFF; --box-border:#9AA5B1;
@@ -41,7 +39,6 @@ header{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:fle
 .cell{min-width:0;display:flex;flex-direction:column;align-items:center;gap:10px}
 .cap{align-self:stretch;max-width:380px;width:100%}
 .cap strong{display:block;font-size:15px}
-.pt{display:block;color:var(--mute);font-size:12px}
 .phone{width:100%;max-width:380px;background:var(--card);border:2px solid var(--border-strong);border-radius:28px;overflow:hidden;min-width:0;display:flex;flex-direction:column;min-height:620px}
 .top{background:var(--top);color:var(--top-fg);padding:14px 16px;display:flex;justify-content:space-between;align-items:center;gap:8px}
 .top small{display:block;color:var(--top-mute);font-size:12px}
@@ -51,9 +48,7 @@ header{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:fle
 .field span{font-size:13px;font-weight:600}
 .input{border:2px solid var(--border);border-radius:10px;height:44px;display:flex;align-items:center;padding:0 12px;color:var(--mute);background:var(--input-bg)}
 .btn{min-height:48px;border-radius:12px;border:2px solid var(--border);background:var(--btn-bg);color:var(--btn-fg);font-family:inherit;font-weight:600;font-size:15px;line-height:1.2;padding:8px 12px;width:100%;cursor:pointer;text-align:center;display:flex;flex-direction:column;justify-content:center}
-.btn small{font-weight:400;font-size:12px;color:var(--mute)}
 .btn.primary{background:var(--primary);border-color:var(--primary);color:var(--primary-ink)}
-.btn.primary small{color:var(--primary-ink)}
 .btn.warn{border-color:var(--warn-border);color:var(--warn)}
 .btn.sm{min-height:36px;width:auto;padding:4px 10px;font-size:13px}
 .row{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--line);min-width:0}
@@ -65,13 +60,10 @@ header{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:fle
 .fill{height:100%;background:var(--fill)}
 .seg{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;min-width:0}
 .seg button{min-height:44px;border:2px solid var(--border);background:var(--btn-bg);color:var(--btn-fg);border-radius:10px;font-family:inherit;font-weight:600;font-size:13px;padding:2px;cursor:pointer}
-.seg button small{font-weight:400;color:var(--mute)}
 .seg button.on{background:var(--primary);border-color:var(--primary);color:var(--primary-ink)}
-.seg button.on small{color:var(--primary-ink)}
 .nav{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line);text-align:center;font-size:12px;padding:8px 0;color:var(--mute)}
 .nav b{display:block;color:var(--fg);font-size:13px}
 .banner{border:2px solid var(--wait-border);background:var(--wait-bg);color:var(--wait-ink);border-radius:12px;padding:10px 12px;font-size:13px}
-.banner .legend{color:var(--wait-ink)}
 .foot{border-top:1px solid var(--line);padding:12px 14px;background:var(--foot-bg);display:flex;flex-direction:column;gap:8px;margin-top:auto}
 .step{display:flex;gap:10px;align-items:center;padding:6px 0;border-bottom:1px solid var(--line)}
 .step i{font-style:normal;width:26px;height:26px;border-radius:50%;border:2px solid var(--border);display:inline-flex;align-items:center;justify-content:center;font-size:12px;flex:none}
@@ -83,23 +75,23 @@ header{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:fle
 <header>
   <div>
     <h1>5x1 wireframes: the four core flows</h1>
-    <p class="intro">Low fidelity, mobile first. English is the working language; the pt-BR label is shown in grey under each heading. Colours are the IVI palette. Layout and wording are for review, not final design.</p>
+    <p class="intro">Low fidelity, mobile first. English only on screen; the Portuguese (pt-BR) translation is chosen in Settings. Colours are the IVI palette. Layout and wording are for review, not final design.</p>
   </div>
-  <button class="toggle" id="theme-toggle" type="button" aria-pressed="false">Light mode · Modo claro</button>
+  <button class="toggle" id="theme-toggle" type="button" aria-pressed="false">Light mode</button>
 </header>
 
 <main class="grid">
 
   <!-- 1. Club setup -->
   <section class="cell" aria-label="Flow 1: club setup">
-    <div class="cap"><strong>1. Create a club (admin)</strong><span class="pt">1. Criar um clube (admin)</span></div>
+    <div class="cap"><strong>1. Create a club (admin)</strong></div>
     <div class="phone">
-      <div class="top"><div><h2>Set up your club</h2><small>Configurar seu clube</small></div><span class="chip">Step 1 of 4</span></div>
+      <div class="top"><div><h2>Set up your club</h2></div><span class="chip">Step 1 of 4</span></div>
       <div class="body">
-        <div class="step on"><i>1</i><div><b>Club details</b><small class="pt">Dados do clube</small></div></div>
-        <div class="step"><i>2</i><div>Add a team <small class="pt">Adicionar equipe</small></div></div>
-        <div class="step"><i>3</i><div>Invite members <small class="pt">Convidar membros</small></div></div>
-        <div class="step"><i>4</i><div>Schedule first event <small class="pt">Criar primeiro evento</small></div></div>
+        <div class="step on"><i>1</i><div><b>Club details</b></div></div>
+        <div class="step"><i>2</i><div>Add a team</div></div>
+        <div class="step"><i>3</i><div>Invite members</div></div>
+        <div class="step"><i>4</i><div>Schedule first event</div></div>
 
         <div class="field"><span>Club name</span><div class="input">International Volleyball Ireland</div></div>
         <div class="field"><span>Timezone</span><div class="input">Europe/Dublin ▾</div></div>
@@ -107,16 +99,16 @@ header{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:fle
         <p class="legend">Creating the club makes you its admin. Errors show under the field.</p>
       </div>
       <div class="foot">
-        <button class="btn primary" type="button">Create club<small>Criar clube</small></button>
+        <button class="btn primary" type="button">Create club</button>
       </div>
     </div>
   </section>
 
   <!-- 2. Player home and RSVP -->
   <section class="cell" aria-label="Flow 2: player home and RSVP">
-    <div class="cap"><strong>2. Player: next session and RSVP</strong><span class="pt">2. Jogador: próximo treino e confirmação</span></div>
+    <div class="cap"><strong>2. Player: next session and RSVP</strong></div>
     <div class="phone">
-      <div class="top"><div><h2>5x1</h2><small>Home · Início</small></div><span class="chip">Alerts 2</span></div>
+      <div class="top"><div><h2>5x1</h2><small>Home</small></div><span class="chip">Alerts 2</span></div>
       <div class="body">
         <div class="box">
           <b>Training · Tue 20 Oct</b>
@@ -126,22 +118,22 @@ header{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:fle
           <p class="legend" style="margin-top:6px">9 of 12 going · RSVP closes Tue 18:30</p>
         </div>
         <p><b>Your answer:</b> not answered yet</p>
-        <button class="btn primary" type="button">Vou (going)<small>Going</small></button>
-        <button class="btn" type="button">Talvez (maybe)<small>Maybe · does not hold a place</small></button>
-        <button class="btn" type="button">Não vou (not going)<small>Not going</small></button>
+        <button class="btn primary" type="button">Going</button>
+        <button class="btn" type="button">Maybe <span class="legend">· does not hold a place</span></button>
+        <button class="btn" type="button">Not going</button>
         <p class="legend">Confirmation shows once the server saves it. Offline shows a clear error, never a false success.</p>
       </div>
-      <div class="nav"><div><b>Home</b>Início</div><div>Teams<br>Equipes</div><div>Events<br>Eventos</div><div>Profile<br>Perfil</div></div>
+      <div class="nav"><div><b>Home</b></div><div>Teams</div><div>Events</div><div>Profile</div></div>
     </div>
   </section>
 
   <!-- 3. Event detail (admin) -->
   <section class="cell" aria-label="Flow 3: event detail and waitlist (admin)">
-    <div class="cap"><strong>3. Event detail and waitlist (admin)</strong><span class="pt">3. Detalhes do evento e lista de espera (admin)</span></div>
+    <div class="cap"><strong>3. Event detail and waitlist (admin)</strong></div>
     <div class="phone">
       <div class="top"><div><h2>Training · Tue 20 Oct</h2><small>Ravens (women) · 19:30</small></div><span class="chip wait">Waitlist 2</span></div>
       <div class="body">
-        <div class="banner" role="status">Capacity lowered to 10. 12 people are going. New RSVPs go to the waitlist.<br><span class="legend">Capacidade reduzida para 10. Novas confirmações vão para a lista de espera.</span></div>
+        <div class="banner" role="status">Capacity lowered to 10. 12 people are going. New RSVPs go to the waitlist.</div>
         <b>Going · 12 / 10</b>
         <div class="row"><span class="name">Player name</span><span class="chip done">Going</span></div>
         <div class="row"><span class="name">Player name</span><span class="chip done">Going</span></div>
@@ -152,20 +144,20 @@ header{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:fle
         <div class="row"><span class="name">Player name</span><span class="chip">Maybe</span></div>
       </div>
       <div class="foot">
-        <button class="btn" type="button">Edit event<small>Editar evento</small></button>
-        <button class="btn warn" type="button">Cancel event<small>Cancelar evento</small></button>
+        <button class="btn" type="button">Edit event</button>
+        <button class="btn warn" type="button">Cancel event</button>
       </div>
     </div>
   </section>
 
   <!-- 4. Attendance -->
   <section class="cell" aria-label="Flow 4: attendance">
-    <div class="cap"><strong>4. Record attendance (coach or admin)</strong><span class="pt">4. Registrar presença (treinador ou admin)</span></div>
+    <div class="cap"><strong>4. Record attendance (coach or admin)</strong></div>
     <div class="phone">
       <div class="top"><div><h2>Attendance</h2><small>Training · Tue 20 Oct</small></div><span class="chip">11 of 12 marked</span></div>
       <div class="body">
         <p class="legend">Going RSVPs only. Walk-ins are not handled.</p>
-        <div class="row" style="flex-direction:column;align-items:stretch"><span class="name">Player name</span><div class="seg"><button class="on" type="button">Present<br><small>Presente</small></button><button type="button">Absent<br><small>Ausente</small></button><button type="button">Late<br><small>Atrasado</small></button></div></div>
+        <div class="row" style="flex-direction:column;align-items:stretch"><span class="name">Player name</span><div class="seg"><button class="on" type="button">Present</button><button type="button">Absent</button><button type="button">Late</button></div></div>
         <div class="row" style="flex-direction:column;align-items:stretch"><span class="name">Player name</span><div class="seg"><button type="button">Present</button><button class="on" type="button">Absent</button><button type="button">Late</button></div></div>
         <div class="row" style="flex-direction:column;align-items:stretch"><span class="name">Player name</span><div class="seg"><button type="button">Present</button><button type="button">Absent</button><button type="button">Late</button></div></div>
         <div class="row" style="flex-direction:column;align-items:stretch"><span class="name">Player name</span><div class="seg"><button type="button">Present</button><button type="button">Absent</button><button type="button">Late</button></div></div>
@@ -173,7 +165,7 @@ header{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:fle
       </div>
       <div class="foot">
         <p class="legend">11 of 12 marked · 1 left</p>
-        <button class="btn primary" type="button">Save attendance<small>Salvar presença</small></button>
+        <button class="btn primary" type="button">Save attendance</button>
       </div>
     </div>
   </section>
@@ -189,7 +181,7 @@ header{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:fle
     root.setAttribute('data-theme', theme);
     var light = theme === 'light';
     btn.setAttribute('aria-pressed', String(light));
-    btn.textContent = light ? 'Dark mode · Modo escuro' : 'Light mode · Modo claro';
+    btn.textContent = light ? 'Dark mode' : 'Light mode';
   }
   var saved = null;
   try { saved = localStorage.getItem(KEY); } catch (e) {}

@@ -20,7 +20,7 @@ Version 0.1
 | T-07 | User belonging to club A requests club B records | Denied at RLS layer |
 | T-08 | Revoked/expired invitation | Rejected without membership mutation |
 | T-09 | Daylight savings in Europe/Dublin | Correct UTC storage + local display |
-| T-10 | Switch locale | All pages, labels, errors in pt-BR / en |
+| T-10 | Switch locale in Settings | All pages, labels, errors in pt-BR / en; no language switch on public screens |
 | T-11 | No network during RSVP | Clear failure; no false confirmation |
 | T-12 | Remove membership with historical attendance | Privacy rules respected; admin reports consistent |
 | T-13 | Keyboard + screen reader | Core flows operable; button states announced |

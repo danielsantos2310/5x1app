@@ -18,7 +18,7 @@ One real club, IVI, can create its club, manage multiple teams and memberships, 
 | ID | Requirement | Acceptance criterion |
 | --- | --- | --- |
 | AUTH-01 | Email/password signup, login, reset | Reset works without account enumeration; verified auth session required for protected data |
-| I18N-01 | English default and full pt-BR translation | All first-release screens, errors, emails if used, accessibility labels localized |
+| I18N-01 | English on screen; full pt-BR translation chosen in Settings | No pt-BR labels on screens; every first-release string has an English value; pt-BR covers all screens, errors, emails if used and accessibility labels; choice saved to profile |
 | CLUB-01 | Create club with name, logo, timezone | Valid data persisted, creator becomes admin |
 | CLUB-02 | Expiring/revocable invite and request approval | Expired/revoked token denied; requests cannot self-approve |
 | TEAM-01 | Multiple teams per club | Club admin creates/edits team with `division` and `gender_category`; six IVI examples supported |

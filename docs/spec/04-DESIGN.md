@@ -69,5 +69,8 @@ Source: `docs/internal/design/hifi/hifi-player-admin-v0.1.html`. Covers UI-07/UI
 ## Platform wordmark (14 Oct 2026)
 The 5x1 wordmark is drawn from Inter ExtraBold with the text converted to outlines: `docs/internal/brand/5x1-logo-light.svg` (navy 5x, green 1) and `5x1-logo-dark.svg` (off-white 5x, green 1). It is the platform mark on public and platform screens (landing, sign-in). The IVI crest stays on club pages only. This is a first wordmark, not a final brand mark: the brand decision below still applies.
 
+## Sitemap and navigation (proposal, 14 Oct 2026)
+Full site map, route names per screen and navigation by role are in `docs/internal/sitemap.md`. Two decisions are open there: coach navigation, and whether Teams sits in the admin Home tabs or the bottom bar.
+
 ## Brand decision needed
 Define 5x1 independent brand mark (not IVI logo), visual palette, typography, iconography. IVI is the tenant/first launch club; 5x1 owns platform-wide interface.

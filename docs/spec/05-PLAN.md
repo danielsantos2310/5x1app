@@ -23,8 +23,8 @@ Phase 1 is running ahead of its planned dates; dates are not followed, work proc
 | Low-fidelity wireframes: club setup, player RSVP, event waitlist, attendance | Done (v0.2), phone only | `docs/internal/wireframes/` |
 | Design board: five core screens, palette, type, components, navigation (light and dark) | Approved, v0.2 | `docs/internal/design/5x1-design-board-v0.2.html` |
 | Design tokens: palette (light and dark), contrast, typography, spacing, breakpoints | Approved | `docs/internal/design-tokens.md` |
-| High-fidelity: player home, admin overview | Done (v0.1), review pending | `docs/internal/design/hifi/hifi-player-admin-v0.1.html` |
-| High-fidelity: admin approval with team assignment, pending player waiting | Done (v0.1), review pending | `docs/internal/design/hifi/approvals-v0.1.html` |
+| High-fidelity: player home, admin overview | Done (v0.1), review pending | `docs/internal/design/hifi/hifi-player-admin-v0.1.html` with `-light.png` and `-dark.png` captures |
+| High-fidelity: admin approval with team assignment, pending player waiting | Done (v0.1), review pending | `docs/internal/design/hifi/approvals-v0.1.html` with `-light.png` and `-dark.png` captures |
 | High-fidelity: event detail (admin), attendance | Next | — |
 | High-fidelity: landing and sign-in | Not started | — |
 | Sitemap and navigation model | Not started | — |

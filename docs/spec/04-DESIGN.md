@@ -40,7 +40,7 @@ Use semantic HTML, WCAG 2.2 AA as release target, keyboard traversal and focus v
 ## Design deliverables before coding
 1. Sitemap and site navigation model.
 2. Low-fidelity wireframes of F01–F04 on phone, tablet and desktop.
-3. Design tokens (colors, spacing, type, elevation, breakpoints) and club-level logo/avatar rules.
+3. Design tokens (colors, spacing, type, elevation, breakpoints) and club-level logo/avatar rules. Colours and light/dark tokens drafted in `docs/internal/design-tokens.md`; spacing, type scale and breakpoints still open.
 4. High-fidelity screens in English; pt-BR translation checked for text expansion, not shown as labels.
 5. Clickable prototype and five-user usability test including player + coach + admin tasks.
 6. Developer handoff: component variants, states, responsive measurements and accessible labels.
@@ -57,7 +57,10 @@ Source and captures live in `docs/internal/wireframes/`:
 | F03 Events and RSVP | Admin event detail with waitlist, promote/hold, capacity warning | UI-08 |
 | F04 Attendance | One-tap Present / Absent / Late, running count, save | UI-10 |
 
-Status: awaiting approval. Colours follow the IVI palette in `docs/internal/ivi-brand.md`, and are provisional until official values are confirmed. Tablet and desktop layouts are not yet drawn (deliverable 2 above is partly met).
+Status: awaiting approval. The interface palette and light/dark tokens are in `docs/internal/design-tokens.md`, with WCAG contrast checks. Tablet and desktop layouts are not yet drawn (deliverable 2 above is partly met).
+
+## Design boards (14 Oct 2026, light and dark)
+Two boards with five phone screens, a palette, typography, components, navigation and a club brand example. Images: `docs/internal/design/court-side-board-light.png` and `court-side-board-dark.png`. They show Portuguese copy and a PT-BR/EN switch on the landing, which conflict with the agreed rules; the conflicts are listed in `design-tokens.md` for decision.
 
 ## Brand decision needed
 Define 5x1 independent brand mark (not IVI logo), visual palette, typography, iconography. IVI is the tenant/first launch club; 5x1 owns platform-wide interface.

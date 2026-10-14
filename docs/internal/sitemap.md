@@ -1,6 +1,6 @@
 # 5x1 Sitemap and Navigation (v0.1, proposal for approval)
 
-Status: proposal, 14 Oct 2026. Built from `docs/spec/03-FLOWS.md`, `04-DESIGN.md` (UI-01 to UI-13) and the high-fidelity screens in `docs/internal/design/hifi/`. Internal, not published.
+Status: approved for the pilot, 14 Oct 2026 (coach navigation and Teams placement decided, see below). Built from `docs/spec/03-FLOWS.md`, `04-DESIGN.md` (UI-01 to UI-13) and the high-fidelity screens in `docs/internal/design/hifi/`. Internal, not published.
 
 Scope: the internal IVI pilot. Players without a team, and any screen for other clubs or public activities, are out of scope (see `product-spec.md`, decision 34).
 
@@ -83,14 +83,14 @@ Notes:
 
 Route names are a proposal for the build phase. They must be the same in the English and pt-BR routes (`/en/...`, `/pt-BR/...`) as the TRD requires.
 
-## Decisions this proposal depends on
+## Decisions (approved 14 Oct 2026)
 
-1. **Coach navigation.** Proposed: same bottom bar as a player, with attendance reached from the team event. Alternative: a coach-specific Attendance tab. To decide.
-2. **Teams from Home tabs, not the bottom bar.** Proposed, because admins mostly manage approvals and events. To confirm.
+1. **Coach navigation:** same bottom bar as a player (Home, Events, Team, Profile); attendance is opened from the team event.
+2. **Teams placement:** admin Home tabs, not the bottom bar. Bottom bar stays Home, Events, Members, More.
 3. **Notifications from the top bar bell** (not a tab), keeping the bottom bar to four items.
 4. **Pending member sees only the waiting screen**, with no bottom bar (UI-13).
 
 ## Open items
 
-- Tablet (768px) and desktop (1280px) navigation: the bottom bar becomes a side rail. Not drawn yet.
+- Tablet (768px) and desktop (1280px) navigation: the bottom bar becomes a side rail. Drawn in `docs/internal/design/hifi/layouts-tablet-desktop-v0.1.html`.
 - Empty states (no events, no team) for the internal pilot: an approved player always has a team, so the no-team state is out of scope.

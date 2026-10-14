@@ -14,6 +14,24 @@ Version 0.1 | Proposed solo/part-time project schedule
 
 Dates are estimates from the original supplied spec, not commitments. Actual duration is dependent on availability, security/legal review and pilot results.
 
+## Design progress (updated 14 Oct 2026)
+Phase 1 is running ahead of its planned dates; dates are not followed, work proceeds by agreement. Each item below links to its source.
+
+| Deliverable | Status | Where |
+| --- | --- | --- |
+| Decisions register (34 decisions) | Done, kept current | `product-spec.md` |
+| Low-fidelity wireframes: club setup, player RSVP, event waitlist, attendance | Done (v0.2), phone only | `docs/internal/wireframes/` |
+| Design board: five core screens, palette, type, components, navigation (light and dark) | Approved, v0.2 | `docs/internal/design/5x1-design-board-v0.2.html` |
+| Design tokens: palette (light and dark), contrast, typography, spacing, breakpoints | Approved | `docs/internal/design-tokens.md` |
+| High-fidelity: player home, admin overview | Done (v0.1), review pending | `docs/internal/design/hifi/hifi-player-admin-v0.1.html` |
+| High-fidelity: admin approval with team assignment, pending player waiting | Done (v0.1), review pending | `docs/internal/design/hifi/approvals-v0.1.html` |
+| High-fidelity: event detail (admin), attendance | Next | — |
+| High-fidelity: landing and sign-in | Not started | — |
+| Sitemap and navigation model | Not started | — |
+| Tablet (768px) and desktop (1280px) layouts | Not started | — |
+| Clickable prototype and five-user usability test | Not started | — |
+| Developer handoff (component variants, states, accessible labels) | Not started | — |
+
 ## Build dependencies
 1. Repository, lint/typecheck, test pipeline and migration framework.
 2. Database schema, role policy and complete club-isolation tests.

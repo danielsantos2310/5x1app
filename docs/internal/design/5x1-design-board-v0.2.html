@@ -1,8 +1,8 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <title>5x1 Design Board</title>
 <style>
-/* Light is the default; the dark section sets data-theme="dark" and redefines the same tokens. */
-:root{
+/* Each theme is scoped to its own board section via data-board, so the viewer's page theme cannot override them. */
+:root,[data-board="light"]{
   color-scheme:light;
   --bg:#F8FAF7; --card:#F1F6F4; --surface:#FFFFFF; --text:#021C37; --text2:#5B6675; --line:#D9DDE3;
   --green:#09CD71; --on-green:#021C37; --navy:#021C37; --on-navy:#FFFFFF;
@@ -11,7 +11,7 @@
   --wait-bg:#FE6D09; --wait-text:#021C37; --cancel-bg:#F84C04; --cancel-text:#021C37;
   --grey-bg:#E6EBF0; --grey-text:#021C37;
 }
-[data-theme="dark"]{
+[data-board="dark"]{
   color-scheme:dark;
   --bg:#021426; --card:#0A1725; --surface:#06233F; --text:#F8F8F5; --text2:#9AA4AF; --line:#2A4560;
   --green:#09CD71; --on-green:#021C37; --navy:#021C37; --on-navy:#F8F8F5;
@@ -102,7 +102,7 @@ p{margin:0}
 </header>
 
 <!-- ========== LIGHT ========== -->
-<section class="section" data-theme="light" aria-label="Light theme">
+<section class="section" data-board="light" aria-label="Light theme" style="background:var(--bg)">
   <div class="section-head"><div><h2>Light theme</h2><p class="muted small">Off-white surfaces, navy text, green as the primary action.</p></div><span class="label">Light</span></div>
 
   <div class="phones">
@@ -235,7 +235,7 @@ p{margin:0}
 </section>
 
 <!-- ========== DARK ========== -->
-<section class="section" data-theme="dark" aria-label="Dark theme" style="background:var(--bg)">
+<section class="section" data-board="dark" aria-label="Dark theme" style="background:var(--bg)">
   <div class="section-head"><div><h2>Dark theme</h2><p class="muted small">Navy ground, off-white text, the same green action and the same status colours.</p></div><span class="label">Dark</span></div>
 
   <div class="phones">

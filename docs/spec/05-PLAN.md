@@ -26,7 +26,7 @@ Phase 1 is running ahead of its planned dates; dates are not followed, work proc
 | High-fidelity: player home, admin overview | Done (v0.1), review pending | `docs/internal/design/hifi/hifi-player-admin-v0.1.html` with `-light.png` and `-dark.png` captures |
 | High-fidelity: admin approval with team assignment, pending player waiting | Done (v0.1), review pending | `docs/internal/design/hifi/approvals-v0.1.html` with `-light.png` and `-dark.png` captures |
 | High-fidelity: event detail (admin), attendance | Done (v0.1), review pending | `docs/internal/design/hifi/eventatt-v0.1.html` with `-light.png` and `-dark.png` captures |
-| High-fidelity: landing and sign-in | Not started | — |
+| High-fidelity: landing and sign-in | Done (v0.1), review pending | `docs/internal/design/hifi/landing-v0.1.html` with `-light.png` and `-dark.png` captures |
 | Sitemap and navigation model | Not started | — |
 | Tablet (768px) and desktop (1280px) layouts | Not started | — |
 | Clickable prototype and five-user usability test | Not started | — |

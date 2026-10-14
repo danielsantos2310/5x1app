@@ -1,0 +1,153 @@
+<meta name="claude:viewport-fit-sides" content="cover">
+<title>5x1 Landing and Sign-in</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap">
+<style>
+/* Tokens from docs/internal/design-tokens.md. Each theme is scoped to its section. */
+:root,[data-board="light"]{
+  --bg:#F8FAF7; --card:#F1F6F4; --surface:#FFFFFF; --text:#021C37; --text2:#5B6675; --line:#D9DDE3;
+  --green:#09CD71; --on-green:#021C37; --navy:#021C37; --on-navy:#F8F8F5;
+  --btn2-bg:#021C37; --btn2-text:#FFFFFF;
+  --flame:#F84C04;
+}
+[data-board="dark"]{
+  --bg:#021426; --card:#0A1725; --surface:#06233F; --text:#F8F8F5; --text2:#9AA4AF; --line:#2A4560;
+  --green:#09CD71; --on-green:#021C37; --navy:#021C37; --on-navy:#F8F8F5;
+  --btn2-bg:#F8F8F5; --btn2-text:#021C37;
+  --flame:#F84C04;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:16px;line-height:1.5;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-bottom:32px}
+p,h1,h2,h3{margin:0}
+.wrap{max-width:1200px;margin:0 auto}
+.board{padding:32px 0;border-bottom:1px solid var(--line);background:var(--bg);color:var(--text)}
+.label{font-size:13px;font-weight:600;color:var(--text2)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px;align-items:start}
+.phone{width:100%;max-width:360px;margin:0 auto;height:720px;border-radius:32px;border:2px solid var(--line);background:var(--bg);color:var(--text);overflow:hidden;display:flex;flex-direction:column}
+.body{flex:1;min-height:0;overflow:hidden;padding:24px 20px 0;display:flex;flex-direction:column;gap:16px}
+.wordmark{font-weight:800;font-size:44px;letter-spacing:-0.03em;line-height:1}
+h1{font-size:30px;font-weight:700;line-height:1.2;letter-spacing:-0.01em}
+h2{font-size:24px;font-weight:700;line-height:1.25}
+.cap{font-size:14px;color:var(--text2);line-height:1.45}
+.field{display:flex;flex-direction:column;gap:6px}
+.field label{font-size:14px;font-weight:600}
+.input{height:52px;border-radius:14px;border:2px solid var(--line);background:var(--surface);display:flex;align-items:center;padding:0 14px;color:var(--text2);font-size:16px}
+.input.focus{border-color:var(--green)}
+.btn{min-height:52px;border-radius:16px;border:2px solid transparent;font-family:inherit;font-weight:600;font-size:16px;display:flex;align-items:center;justify-content:center;gap:8px;width:100%;cursor:pointer;padding:12px 16px;text-align:center}
+.btn-primary{background:var(--green);color:var(--on-green);border-color:var(--green)}
+.btn-outline{background:transparent;color:var(--text);border-color:var(--text)}
+.link{font-size:15px;font-weight:600;color:var(--text);text-decoration:underline;background:none;border:0;font-family:inherit;padding:8px 0;min-height:44px;text-align:left;cursor:pointer}
+.hero{flex:1;display:flex;flex-direction:column;justify-content:flex-end;gap:12px}
+.foot{padding:16px 20px 24px;display:flex;flex-direction:column;gap:10px}
+.notice{border-radius:14px;border:1px solid var(--line);background:var(--card);padding:12px 14px;font-size:14px;color:var(--text2)}
+.appbar{display:flex;align-items:center;padding:16px 16px 0;min-height:60px}
+.back{display:inline-flex;align-items:center;gap:4px;min-height:44px;font-size:16px;font-weight:600;color:var(--text);background:transparent;border:0;font-family:inherit;padding:0 4px 0 0}
+.notes{max-width:1200px;margin:24px auto 0;color:var(--text2);font-size:14px}
+</style>
+
+<div class="wrap">
+  <header style="padding:32px 0 8px">
+    <h1>5x1 · Landing and sign-in</h1>
+    <p class="cap" style="margin-top:8px;font-size:15px">Public screens: English only, no language switch (language is in Settings after sign-in). Approved tokens, Inter, 16px gutter, 44px minimum targets.</p>
+  </header>
+
+  <!-- ================= LIGHT ================= -->
+  <section class="board" data-board="light" style="background:var(--bg);color:var(--text)" aria-label="Light theme">
+    <div class="wrap">
+      <p class="label" style="margin-bottom:16px">Light</p>
+      <div class="grid">
+
+        <!-- Landing, light: navy brand surface -->
+        <div>
+          <p class="label" style="margin-bottom:12px">Landing</p>
+          <div class="phone" style="background:var(--navy);color:var(--on-navy);border-color:var(--navy)">
+            <div class="body">
+              <div style="flex:1"></div>
+              <div class="wordmark">5x1</div>
+              <p style="font-size:18px;color:#C9D2DC;max-width:280px">Your club, on the palm of your hand.</p>
+              <div style="height:24px"></div>
+            </div>
+            <div class="foot">
+              <button class="btn btn-primary" type="button">Enter</button>
+              <button class="btn" type="button" style="background:transparent;color:var(--on-navy);border-color:var(--on-navy)">Create account</button>
+              <p class="cap" style="text-align:center;color:#C9D2DC">Have an invite link? Open it on this device.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sign in, light -->
+        <div>
+          <p class="label" style="margin-bottom:12px">Sign in</p>
+          <div class="phone" style="background:var(--bg);color:var(--text)">
+            <div class="appbar"><button class="back" type="button" aria-label="Back to landing">‹ Back</button></div>
+            <div class="body">
+              <div>
+                <h2>Sign in</h2>
+                <p class="cap" style="margin-top:4px">Use the email you joined with.</p>
+              </div>
+              <div class="field"><label for="l-email">Email</label><div class="input" id="l-email">pedro@example.com</div></div>
+              <div class="field"><label for="l-pass">Password</label><div class="input" id="l-pass">••••••••••</div></div>
+              <button class="link" type="button" style="align-self:flex-start">Forgot password?</button>
+              <div class="notice" role="status">If an account exists for this email, you will get a reset link.</div>
+            </div>
+            <div class="foot">
+              <button class="btn btn-primary" type="button">Sign in</button>
+              <button class="btn btn-outline" type="button">Create account</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= DARK ================= -->
+  <section class="board" data-board="dark" style="background:var(--bg);color:var(--text)" aria-label="Dark theme">
+    <div class="wrap">
+      <p class="label" style="margin-bottom:16px">Dark</p>
+      <div class="grid">
+
+        <div>
+          <p class="label" style="margin-bottom:12px">Landing</p>
+          <div class="phone" style="background:var(--bg);color:var(--text)">
+            <div class="body">
+              <div style="flex:1"></div>
+              <div class="wordmark">5x1</div>
+              <p style="font-size:18px;color:var(--text2);max-width:280px">Your club, on the palm of your hand.</p>
+              <div style="height:24px"></div>
+            </div>
+            <div class="foot">
+              <button class="btn btn-primary" type="button">Enter</button>
+              <button class="btn btn-outline" type="button">Create account</button>
+              <p class="cap" style="text-align:center">Have an invite link? Open it on this device.</p>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <p class="label" style="margin-bottom:12px">Sign in</p>
+          <div class="phone" style="background:var(--bg);color:var(--text)">
+            <div class="appbar"><button class="back" type="button" aria-label="Back to landing">‹ Back</button></div>
+            <div class="body">
+              <div>
+                <h2>Sign in</h2>
+                <p class="cap" style="margin-top:4px">Use the email you joined with.</p>
+              </div>
+              <div class="field"><label for="d-email">Email</label><div class="input" id="d-email">pedro@example.com</div></div>
+              <div class="field"><label for="d-pass">Password</label><div class="input" id="d-pass">••••••••••</div></div>
+              <button class="link" type="button" style="align-self:flex-start">Forgot password?</button>
+              <div class="notice" role="status">If an account exists for this email, you will get a reset link.</div>
+            </div>
+            <div class="foot">
+              <button class="btn btn-primary" type="button">Sign in</button>
+              <button class="btn btn-outline" type="button">Create account</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <p class="notes">Notes: the reset message does not reveal whether an account exists (AUTH-01). Invite-link sign-up is opened from the link itself, so the landing page only offers Enter and Create account. The landing page has no language switch.</p>
+</div>

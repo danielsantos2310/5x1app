@@ -27,7 +27,7 @@ One real club, IVI, can create its club, manage multiple teams and memberships, 
 | EVT-01 | Create/edit/cancel event for club or team | Fields: type, title, start/end, venue text/map URL, optional capacity (blank = no limit), RSVP cutoff (default 2 hours before start); social events may be `mixed` |
 | RSVP-01 | Going / not going / maybe | One active status per user/event; response can be revised until cutoff |
 | RSVP-02 | Waitlist capacity + automatic promotion | Never exceed capacity even under concurrent responses; promotion follows queue order; admins can promote, hold or remove waitlisted RSVPs, with audit; lowering capacity keeps current going RSVPs and warns the admin |
-| ATT-01 | Mark present / absent / late | Only authorized admin/team coach; changes auditable |
+| ATT-01 | Mark present / absent / late | Admin, or coach for their own team; club-wide social events admin only. Only going RSVPs can be marked; waitlisted and maybe RSVPs must be promoted first; cancelled events are read-only; corrections at any time; every change audited; players see only their own history |
 | NOTE-01 | In-app notifications | Relevant new/change/cancel event notices visible to intended users |
 | PWA-01 | Mobile-first installable PWA | Manifest/icons/HTTPS/installation tested; offline shell does not imply offline RSVP |
 | ACCESS-01 | Accessible responsive screens | WCAG 2.2 AA acceptance checks |

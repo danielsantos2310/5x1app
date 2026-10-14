@@ -56,7 +56,7 @@ One person can hold several roles: a coach can also play, and an admin can also 
 - Teams: create teams with a division and a gender category; assign members to one or more teams.
 - Events: title, type (match, training, social), start and end, venue as text with an optional map link, optional capacity (blank means no limit), and RSVP deadline (pre-filled to 2 hours before the start). Events can be club-wide or for one team. Social events can also be set to `mixed`.
 - RSVP: members mark going, not going or maybe, and see the live list of who is going. Maybe does not hold a place or count against capacity. Members can opt in to the waitlist when an event is full. Promotion from the waitlist is automatic and in order; admins can promote, hold or remove any waitlisted RSVP at any time (for example for payment or team needs). Lowering capacity below the number already going keeps those people going, sends new RSVPs to the waitlist, and shows the admin a warning. After the deadline, members cannot change their RSVP; admins can.
-- Attendance: present, absent or late, recorded by an admin or the team's coach. Attendance can only be recorded for people with a going RSVP. Walk-ins are not handled in the app. Changes are audited.
+- Attendance: present, absent or late. An admin, or a coach for their own team, records it after the session. Club-wide social events are recorded by admins only. Only people with a going RSVP can be marked; walk-ins are not handled in the app. Waitlisted and maybe RSVPs must be promoted to going before they can be marked. Cancelled events are read-only. Admins can correct attendance at any time, and coaches can correct their own team's events; every change is audited. Players can see their own attendance history, and no one else's.
 - Basic in-app notifications. Email is optional.
 - Installable PWA.
 
@@ -165,6 +165,11 @@ Seven phases, each ending at a gate. Dates are proposals for a part-time build.
 | 17 | Waitlist promotion | Automatic and in order, with admin override (promote, hold or remove) |
 | 18 | Lowering capacity below current going | Existing going RSVPs stay; new ones go to the waitlist; admin sees a warning |
 | 19 | Social events gender | Optional; can be set to `mixed`, default open |
+| 20 | Attendance on club-wide social events | Admins only |
+| 21 | Attendance corrections | Any time, with audit; coaches for their own team |
+| 22 | Players and attendance | Players see their own history only |
+| 23 | Waitlisted or maybe RSVPs in attendance | Must be promoted to going before being marked |
+| 24 | Cancelled events | Attendance is read-only |
 | — | Product name | 5x1 |
 | — | Portuguese default | pt-BR |
 | — | Success targets | Confirmed, with definitions in the testing document |

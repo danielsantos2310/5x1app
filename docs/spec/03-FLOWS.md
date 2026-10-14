@@ -46,7 +46,7 @@ flowchart TD
 ```
 
 ## Flow F04 — Attendance
-1. Admin or assigned coach opens event's attendance tab.
+1. Admin, or assigned coach for a team event, opens the event's attendance tab. Club-wide social events are recorded by admins only. Cancelled events are read-only.
 2. Server returns relevant team roster and RSVP status.
 3. Operator marks Present / Absent / Late for people with a going RSVP only. Walk-ins are not handled in the app.
 4. Operator saves batch; backend verifies role and records operator/time.
@@ -67,7 +67,9 @@ flowchart TD
 | View assigned roster | Yes | Yes | Own team (limited fields) |
 | Create/edit team event | Yes | Assigned team | No |
 | RSVP to eligible event | Yes if participant | Yes if participant | Yes |
-| Mark attendance | Yes | Assigned team | No |
+| Mark attendance | Yes | Assigned team (team events only) | No |
+| View own attendance history | Yes | Yes | Yes |
+| View others' attendance | Yes | Assigned team | No |
 | Promote, hold or remove waitlisted RSVP | Yes | Assigned team (proposed) | No |
 | See other club data | Never without membership | Never | Never |
 

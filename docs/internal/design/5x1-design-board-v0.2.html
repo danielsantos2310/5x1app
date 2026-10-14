@@ -1,0 +1,419 @@
+<meta name="claude:viewport-fit-sides" content="cover">
+<title>5x1 Design Board</title>
+<style>
+/* Light is the default; the dark section sets data-theme="dark" and redefines the same tokens. */
+:root{
+  color-scheme:light;
+  --bg:#F8FAF7; --card:#F1F6F4; --surface:#FFFFFF; --text:#021C37; --text2:#5B6675; --line:#D9DDE3;
+  --green:#09CD71; --on-green:#021C37; --navy:#021C37; --on-navy:#FFFFFF;
+  --btn2-bg:#021C37; --btn2-text:#FFFFFF; --outline:#021C37;
+  --orange:#FE6D09; --flame:#F84C04; --offwhite:#F8F8F5;
+  --wait-bg:#FE6D09; --wait-text:#021C37; --cancel-bg:#F84C04; --cancel-text:#021C37;
+  --grey-bg:#E6EBF0; --grey-text:#021C37;
+}
+[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#021426; --card:#0A1725; --surface:#06233F; --text:#F8F8F5; --text2:#9AA4AF; --line:#2A4560;
+  --green:#09CD71; --on-green:#021C37; --navy:#021C37; --on-navy:#F8F8F5;
+  --btn2-bg:#F8F8F5; --btn2-text:#021C37; --outline:#F8F8F5;
+  --orange:#FE6D09; --flame:#F84C04; --offwhite:#F8F8F5;
+  --wait-bg:#FE6D09; --wait-text:#021C37; --cancel-bg:#F84C04; --cancel-text:#021C37;
+  --grey-bg:#1B2D40; --grey-text:#F8F8F5;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-bottom:40px}
+h1{font-size:28px;margin:0;letter-spacing:-0.01em}
+h2{font-size:20px;margin:0 0 4px}
+h3{font-size:16px;margin:0}
+p{margin:0}
+.muted{color:var(--text2)}
+.small{font-size:13px}
+.section{max-width:1280px;margin:0 auto;padding:40px 0;border-bottom:1px solid var(--line)}
+.section-head{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;align-items:baseline;margin-bottom:24px}
+.theme-band{background:var(--bg);color:var(--text);margin:0 -16px;padding:0 16px}
+.label{font-size:12px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--text2)}
+
+/* Phone frame */
+.phones{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:24px;align-items:start}
+.cell{display:flex;flex-direction:column;gap:10px;min-width:0}
+.phone{width:100%;max-width:330px;height:640px;border-radius:32px;border:2px solid var(--line);background:var(--bg);overflow:hidden;display:flex;flex-direction:column;margin:0 auto}
+.phone-body{flex:1;min-height:0;overflow:hidden;padding:14px;display:flex;flex-direction:column;gap:12px}
+.appbar{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:14px 16px 6px}
+.nav{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid var(--line);background:var(--bg);padding:8px 0 12px;font-size:12px;color:var(--text2);text-align:center}
+.nav .on{color:var(--text);font-weight:700}
+.nav svg{display:block;margin:0 auto 2px}
+
+/* Components */
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;min-height:48px;border-radius:14px;border:2px solid transparent;font-family:inherit;font-weight:600;font-size:15px;line-height:1.2;padding:10px 14px;width:100%;cursor:pointer;text-align:center}
+.btn-primary{background:var(--green);color:var(--on-green);border-color:var(--green)}
+.btn-secondary{background:var(--btn2-bg);color:var(--btn2-text);border-color:var(--btn2-bg)}
+.btn-outline{background:transparent;color:var(--text);border-color:var(--outline)}
+.btn-sm{min-height:36px;width:auto;padding:6px 12px;font-size:14px;border-radius:10px}
+.btn-selected{background:var(--green);color:var(--on-green);border-color:var(--green)}
+.choice{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-height:84px;border-radius:14px;border:1px solid var(--line);background:var(--card);color:var(--text);font-family:inherit;font-weight:600;font-size:15px;line-height:1.2;padding:8px 4px;cursor:pointer}
+.choice small{font-size:12px;font-weight:400;color:var(--text2)}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:999px;font-size:12px;font-weight:600;white-space:nowrap}
+.chip-ok{background:var(--green);color:var(--on-green)}
+.chip-wait{background:var(--wait-bg);color:var(--wait-text)}
+.chip-cancel{background:var(--cancel-bg);color:var(--cancel-text)}
+.chip-grey{background:var(--grey-bg);color:var(--grey-text)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:14px}
+.row{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 0;border-bottom:1px solid var(--line);min-width:0}
+.row .name{min-width:0;overflow-wrap:anywhere}
+.date{width:56px;height:60px;border-radius:12px;background:var(--navy);color:var(--on-navy);display:flex;flex-direction:column;align-items:center;justify-content:center;flex:none}
+.date b{font-size:20px;line-height:1}
+.date span{font-size:11px;letter-spacing:0.08em}
+.track{height:8px;background:var(--line);border-radius:6px;overflow:hidden}
+.fill{height:100%;background:var(--green)}
+.seg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.seg button{min-height:44px;border-radius:12px;border:2px solid var(--line);background:var(--surface);color:var(--text);font-family:inherit;font-weight:600;font-size:13px;line-height:1.1;padding:4px 2px;cursor:pointer}
+.seg .on-present{background:var(--green);border-color:var(--green);color:var(--on-green)}
+.seg .on-absent{background:var(--flame);border-color:var(--flame);color:var(--cancel-text)}
+.seg .on-late{background:var(--orange);border-color:var(--orange);color:var(--wait-text)}
+.tabs{display:flex;gap:16px;border-bottom:1px solid var(--line);font-size:14px;color:var(--text2)}
+.tabs .on{color:var(--text);font-weight:700;border-bottom:3px solid var(--green);padding-bottom:6px}
+.search{border:2px solid var(--line);border-radius:12px;height:44px;display:flex;align-items:center;padding:0 12px;color:var(--text2);background:var(--surface);font-size:14px}
+.pill{display:inline-block;padding:2px 10px;border-radius:999px;border:1px solid var(--line);font-size:12px;color:var(--text2)}
+.banner{border:2px solid var(--orange);background:var(--surface);border-radius:14px;padding:10px 12px;font-size:13px}
+.footer{border-top:1px solid var(--line);background:var(--surface);padding:12px 14px;display:flex;flex-direction:column;gap:8px;margin-top:auto}
+.progress-steps{display:flex;flex-direction:column}
+.step{display:flex;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
+.dot{width:26px;height:26px;border-radius:50%;border:2px solid var(--line);display:inline-flex;align-items:center;justify-content:center;font-size:12px;flex:none}
+.dot-done{background:var(--green);border-color:var(--green);color:var(--on-green)}
+.swatch{border-radius:16px;padding:14px;min-height:150px;display:flex;flex-direction:column;justify-content:space-between;border:1px solid var(--line)}
+.swatches{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:14px}
+.tokens{width:100%;border-collapse:collapse;font-size:13px}
+.tokens th,.tokens td{text-align:left;padding:8px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+.tokens th{color:var(--text2);font-weight:600}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px}
+.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12px}
+.crest{width:72px;height:84px;border-radius:12px 12px 36px 36px;background:var(--navy);color:var(--on-navy);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:20px;border:3px solid var(--green);flex:none}
+</style>
+
+<header class="section" style="border-bottom:none">
+  <div class="section-head">
+    <div>
+      <h1>5x1 · Design board</h1>
+      <p class="muted">Rebuilt 14 Oct 2026 with the decisions applied. English only on screen. Light first, dark second.</p>
+    </div>
+    <p class="label">v0.2 · for approval</p>
+  </div>
+</header>
+
+<!-- ========== LIGHT ========== -->
+<section class="section" data-theme="light" aria-label="Light theme">
+  <div class="section-head"><div><h2>Light theme</h2><p class="muted small">Off-white surfaces, navy text, green as the primary action.</p></div><span class="label">Light</span></div>
+
+  <div class="phones">
+    <!-- 1 Landing -->
+    <div class="cell">
+      <p class="label">01 · Landing and sign in</p>
+      <div class="phone" style="background:var(--navy);color:#F8F8F5;border-color:var(--navy)">
+        <div class="phone-body" style="justify-content:flex-end;padding:24px">
+          <div style="flex:1"></div>
+          <h1 style="font-size:44px;font-weight:800">5x1</h1>
+          <p style="font-size:16px;margin-top:8px;color:#C9D2DC">Your club, on the palm of your hand.</p>
+          <div style="height:24px"></div>
+          <button class="btn btn-primary" type="button">Enter</button>
+          <button class="btn" type="button" style="background:transparent;color:#F8F8F5;border-color:#F8F8F5">Create account</button>
+          <p class="small" style="color:#C9D2DC;text-align:center;margin-top:10px">Sign-in and language are set in Settings after you log in.</p>
+        </div>
+      </div>
+      <p class="small muted">No language switch on public screens. Primary action is green with navy text.</p>
+    </div>
+
+    <!-- 2 Player home -->
+    <div class="cell">
+      <p class="label">02 · Player home</p>
+      <div class="phone">
+        <div class="appbar"><span style="font-weight:800;font-size:20px">5x1</span><span class="muted small">Notifications · Profile</span></div>
+        <div class="phone-body" style="padding-top:4px">
+          <div><h2>Hi, João!</h2><p class="small muted">IVI · Men · Division 3</p></div>
+          <div class="card" style="display:flex;flex-direction:column;gap:12px">
+            <div style="display:flex;justify-content:space-between;align-items:center"><span class="chip chip-ok" style="background:var(--navy);color:var(--on-navy)">NEXT TRAINING</span><span class="small" style="font-weight:600">Thu 17 Oct · 19:00</span></div>
+            <div><h3>Team training</h3><p class="small muted">Collinstown Sports Complex</p></div>
+            <div><div style="display:flex;justify-content:space-between" class="small"><span class="muted">Confirmed</span><b>9 / 12</b></div><div class="track" style="margin-top:6px"><div class="fill" style="width:75%"></div></div></div>
+            <p style="font-weight:600;font-size:14px">Will you attend?</p>
+            <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px">
+              <button class="choice btn-selected" type="button" style="background:var(--green);color:var(--on-green);border-color:var(--green)">Going<small style="color:var(--on-green)">Selected</small></button>
+              <button class="choice" type="button">Maybe<small>No place held</small></button>
+              <button class="choice" type="button">Not going</button>
+            </div>
+          </div>
+          <div class="row" style="border:none;padding-bottom:0"><h3>Upcoming events</h3><span class="small muted">All</span></div>
+          <div class="card" style="display:flex;gap:12px;align-items:center;padding:10px"><div class="date"><b>18</b><span>OCT</span></div><div style="flex:1;min-width:0"><b>League match</b><p class="small muted">Sun 13:00 · IVI Arena</p></div><span class="chip chip-grey">Maybe</span></div>
+          <div class="card" style="display:flex;gap:12px;align-items:center;padding:10px"><div class="date"><b>22</b><span>OCT</span></div><div style="flex:1;min-width:0"><b>Technical training</b><p class="small muted">Thu 19:00 · Collinstown</p></div><span class="chip chip-grey">No answer</span></div>
+        </div>
+        <nav class="nav" aria-label="Player navigation">
+          <div class="on">Home</div><div>Events</div><div>Team</div><div>Profile</div>
+        </nav>
+      </div>
+    </div>
+
+    <!-- 3 Admin overview -->
+    <div class="cell">
+      <p class="label">03 · Admin club overview</p>
+      <div class="phone">
+        <div class="appbar"><span style="font-weight:800;font-size:20px">5x1</span><span class="muted small">Notifications · Profile</span></div>
+        <div class="phone-body" style="padding-top:4px">
+          <div style="display:flex;gap:12px;align-items:center"><div class="crest" aria-hidden="true">IVI</div><div style="min-width:0"><h2 style="font-size:18px">IVI</h2><p class="small muted">International Volleyball Ireland</p></div></div>
+          <div class="tabs"><span class="on">Overview</span><span>Teams</span><span>Members</span></div>
+          <div class="card">
+            <div style="display:flex;justify-content:space-between;align-items:center"><h3>Set-up</h3><span class="small muted">2 of 3 done</span></div>
+            <div class="progress-steps" style="margin-top:6px">
+              <div class="step"><span class="dot dot-done">✓</span><span>Add a team</span></div>
+              <div class="step"><span class="dot dot-done">✓</span><span>Create an invite link</span></div>
+              <div class="step"><span class="dot">3</span><span>Schedule the first event</span></div>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+            <div class="card"><b style="font-size:22px">8</b><p class="small muted">Pending approvals</p></div>
+            <div class="card"><b style="font-size:22px">42</b><p class="small muted">Members in total</p></div>
+          </div>
+          <div class="row" style="border:none;padding-bottom:0"><h3>Upcoming events</h3><span class="small muted">All</span></div>
+          <div class="card" style="display:flex;gap:12px;align-items:center;padding:10px"><div class="date"><b>18</b><span>OCT</span></div><div style="flex:1;min-width:0"><b>League match · Div 3 (M)</b><p class="small muted">Sun 13:00 · 12 going</p></div></div>
+        </div>
+        <nav class="nav" aria-label="Admin navigation">
+          <div class="on">Home</div><div>Events</div><div>Members</div><div>More</div>
+        </nav>
+      </div>
+    </div>
+
+    <!-- 4 Event detail -->
+    <div class="cell">
+      <p class="label">04 · Event detail (admin)</p>
+      <div class="phone">
+        <div class="appbar"><span class="small" style="font-weight:700">‹ Back</span><span class="small muted">Share</span></div>
+        <div class="phone-body" style="padding-top:4px">
+          <div><h2>Team training</h2><p class="small muted">Thu 17 Oct · 19:00–21:00 · Collinstown Sports Complex</p></div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap"><span class="pill">Div 3 (M)</span><span class="pill">Training</span></div>
+          <div class="card" style="padding:12px">
+            <div style="display:flex;justify-content:space-between" class="small"><span>Capacity</span><b>9 / 12</b></div>
+            <div class="track" style="margin-top:6px"><div class="fill" style="width:75%"></div></div>
+          </div>
+          <div class="tabs"><span class="on">Confirmed (9)</span><span>Waitlist (2)</span><span>Maybe (3)</span></div>
+          <div class="search">Search player</div>
+          <div class="row"><span class="name">Bruno Alves</span><span class="chip chip-ok">Confirmed</span></div>
+          <div class="row"><span class="name">Caio Mendes</span><span class="chip chip-ok">Confirmed</span></div>
+          <div class="row"><span class="name">Daniel Rocha</span><span class="chip chip-ok">Confirmed</span></div>
+          <div class="banner" role="status">Capacity lowered to 10 · 12 are going. New sign-ups go to the waitlist.</div>
+        </div>
+        <div class="footer">
+          <button class="btn btn-outline" type="button">Edit event</button>
+          <button class="btn btn-primary" type="button">Send in-app reminder</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5 Attendance -->
+    <div class="cell">
+      <p class="label">05 · Attendance (coach or admin)</p>
+      <div class="phone">
+        <div class="appbar"><span class="small" style="font-weight:700">‹ Back</span><span class="small muted">Team training · Thu 17 Oct</span></div>
+        <div class="phone-body" style="padding-top:4px">
+          <h2>Attendance</h2>
+          <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;text-align:center">
+            <div class="card" style="padding:8px 4px"><b>9</b><p class="small muted">Present</p></div>
+            <div class="card" style="padding:8px 4px"><b>1</b><p class="small muted">Absent</p></div>
+            <div class="card" style="padding:8px 4px"><b>1</b><p class="small muted">Late</p></div>
+            <div class="card" style="padding:8px 4px"><b>11/12</b><p class="small muted">Marked</p></div>
+          </div>
+          <div class="row" style="flex-direction:column;align-items:stretch"><span class="name">Bruno Alves</span><div class="seg"><button class="on-present" type="button">Present</button><button type="button">Absent</button><button type="button">Late</button></div></div>
+          <div class="row" style="flex-direction:column;align-items:stretch"><span class="name">Caio Mendes</span><div class="seg"><button class="on-present" type="button">Present</button><button type="button">Absent</button><button type="button">Late</button></div></div>
+          <div class="row" style="flex-direction:column;align-items:stretch"><span class="name">João Pereira</span><div class="seg"><button type="button">Present</button><button class="on-absent" type="button">Absent</button><button type="button">Late</button></div></div>
+          <div class="row" style="flex-direction:column;align-items:stretch"><span class="name">Lucas Martins</span><div class="seg"><button type="button">Present</button><button type="button">Absent</button><button class="on-late" type="button">Late</button></div></div>
+        </div>
+        <div class="footer">
+          <p class="small muted" style="text-align:center">11 of 12 marked · 1 left</p>
+          <button class="btn btn-primary" type="button">Save attendance</button>
+        </div>
+      </div>
+      <p class="small muted">Full words on each button, not letters. No bulk "mark all" in v1.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ========== DARK ========== -->
+<section class="section" data-theme="dark" aria-label="Dark theme" style="background:var(--bg)">
+  <div class="section-head"><div><h2>Dark theme</h2><p class="muted small">Navy ground, off-white text, the same green action and the same status colours.</p></div><span class="label">Dark</span></div>
+
+  <div class="phones">
+    <div class="cell">
+      <p class="label">01 · Landing and sign in</p>
+      <div class="phone" style="background:var(--bg);color:var(--text)">
+        <div class="phone-body" style="justify-content:flex-end;padding:24px">
+          <div style="flex:1"></div>
+          <h1 style="font-size:44px;font-weight:800">5x1</h1>
+          <p style="font-size:16px;margin-top:8px" class="muted">Your club, on the palm of your hand.</p>
+          <div style="height:24px"></div>
+          <button class="btn btn-primary" type="button">Enter</button>
+          <button class="btn btn-outline" type="button">Create account</button>
+          <p class="small muted" style="text-align:center;margin-top:10px">Sign-in and language are set in Settings after you log in.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="cell">
+      <p class="label">02 · Player home</p>
+      <div class="phone">
+        <div class="appbar"><span style="font-weight:800;font-size:20px">5x1</span><span class="muted small">Notifications · Profile</span></div>
+        <div class="phone-body" style="padding-top:4px">
+          <div><h2>Hi, João!</h2><p class="small muted">IVI · Men · Division 3</p></div>
+          <div class="card" style="display:flex;flex-direction:column;gap:12px">
+            <div style="display:flex;justify-content:space-between;align-items:center"><span class="chip" style="background:var(--surface);color:var(--text)">NEXT TRAINING</span><span class="small" style="font-weight:600">Thu 17 Oct · 19:00</span></div>
+            <div><h3>Team training</h3><p class="small muted">Collinstown Sports Complex</p></div>
+            <div><div style="display:flex;justify-content:space-between" class="small"><span class="muted">Confirmed</span><b>9 / 12</b></div><div class="track" style="margin-top:6px"><div class="fill" style="width:75%"></div></div></div>
+            <p style="font-weight:600;font-size:14px">Will you attend?</p>
+            <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px">
+              <button class="choice" type="button" style="background:var(--green);color:var(--on-green);border-color:var(--green)">Going<small style="color:var(--on-green)">Selected</small></button>
+              <button class="choice" type="button">Maybe<small>No place held</small></button>
+              <button class="choice" type="button">Not going</button>
+            </div>
+          </div>
+          <div class="row" style="border:none;padding-bottom:0"><h3>Upcoming events</h3><span class="small muted">All</span></div>
+          <div class="card" style="display:flex;gap:12px;align-items:center;padding:10px"><div class="date"><b>18</b><span>OCT</span></div><div style="flex:1;min-width:0"><b>League match</b><p class="small muted">Sun 13:00 · IVI Arena</p></div><span class="chip chip-grey">Maybe</span></div>
+          <div class="card" style="display:flex;gap:12px;align-items:center;padding:10px"><div class="date"><b>22</b><span>OCT</span></div><div style="flex:1;min-width:0"><b>Technical training</b><p class="small muted">Thu 19:00 · Collinstown</p></div><span class="chip chip-grey">No answer</span></div>
+        </div>
+        <nav class="nav"><div class="on">Home</div><div>Events</div><div>Team</div><div>Profile</div></nav>
+      </div>
+    </div>
+
+    <div class="cell">
+      <p class="label">03 · Admin club overview</p>
+      <div class="phone">
+        <div class="appbar"><span style="font-weight:800;font-size:20px">5x1</span><span class="muted small">Notifications · Profile</span></div>
+        <div class="phone-body" style="padding-top:4px">
+          <div style="display:flex;gap:12px;align-items:center"><div class="crest" aria-hidden="true">IVI</div><div style="min-width:0"><h2 style="font-size:18px">IVI</h2><p class="small muted">International Volleyball Ireland</p></div></div>
+          <div class="tabs"><span class="on">Overview</span><span>Teams</span><span>Members</span></div>
+          <div class="card">
+            <div style="display:flex;justify-content:space-between;align-items:center"><h3>Set-up</h3><span class="small muted">2 of 3 done</span></div>
+            <div class="progress-steps" style="margin-top:6px">
+              <div class="step"><span class="dot dot-done">✓</span><span>Add a team</span></div>
+              <div class="step"><span class="dot dot-done">✓</span><span>Create an invite link</span></div>
+              <div class="step"><span class="dot">3</span><span>Schedule the first event</span></div>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+            <div class="card"><b style="font-size:22px">8</b><p class="small muted">Pending approvals</p></div>
+            <div class="card"><b style="font-size:22px">42</b><p class="small muted">Members in total</p></div>
+          </div>
+          <div class="row" style="border:none;padding-bottom:0"><h3>Upcoming events</h3><span class="small muted">All</span></div>
+          <div class="card" style="display:flex;gap:12px;align-items:center;padding:10px"><div class="date"><b>18</b><span>OCT</span></div><div style="flex:1;min-width:0"><b>League match · Div 3 (M)</b><p class="small muted">Sun 13:00 · 12 going</p></div></div>
+        </div>
+        <nav class="nav"><div class="on">Home</div><div>Events</div><div>Members</div><div>More</div></nav>
+      </div>
+    </div>
+
+    <div class="cell">
+      <p class="label">04 · Event detail (admin)</p>
+      <div class="phone">
+        <div class="appbar"><span class="small" style="font-weight:700">‹ Back</span><span class="small muted">Share</span></div>
+        <div class="phone-body" style="padding-top:4px">
+          <div><h2>Team training</h2><p class="small muted">Thu 17 Oct · 19:00–21:00 · Collinstown Sports Complex</p></div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap"><span class="pill">Div 3 (M)</span><span class="pill">Training</span></div>
+          <div class="card" style="padding:12px">
+            <div style="display:flex;justify-content:space-between" class="small"><span>Capacity</span><b>9 / 12</b></div>
+            <div class="track" style="margin-top:6px"><div class="fill" style="width:75%"></div></div>
+          </div>
+          <div class="tabs"><span class="on">Confirmed (9)</span><span>Waitlist (2)</span><span>Maybe (3)</span></div>
+          <div class="search">Search player</div>
+          <div class="row"><span class="name">Bruno Alves</span><span class="chip chip-ok">Confirmed</span></div>
+          <div class="row"><span class="name">Caio Mendes</span><span class="chip chip-ok">Confirmed</span></div>
+          <div class="row"><span class="name">Daniel Rocha</span><span class="chip chip-ok">Confirmed</span></div>
+          <div class="banner" role="status" style="background:var(--surface);color:var(--text)">Capacity lowered to 10 · 12 are going. New sign-ups go to the waitlist.</div>
+        </div>
+        <div class="footer">
+          <button class="btn btn-outline" type="button">Edit event</button>
+          <button class="btn btn-primary" type="button">Send in-app reminder</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="cell">
+      <p class="label">05 · Attendance (coach or admin)</p>
+      <div class="phone">
+        <div class="appbar"><span class="small" style="font-weight:700">‹ Back</span><span class="small muted">Team training · Thu 17 Oct</span></div>
+        <div class="phone-body" style="padding-top:4px">
+          <h2>Attendance</h2>
+          <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;text-align:center">
+            <div class="card" style="padding:8px 4px"><b>9</b><p class="small muted">Present</p></div>
+            <div class="card" style="padding:8px 4px"><b>1</b><p class="small muted">Absent</p></div>
+            <div class="card" style="padding:8px 4px"><b>1</b><p class="small muted">Late</p></div>
+            <div class="card" style="padding:8px 4px"><b>11/12</b><p class="small muted">Marked</p></div>
+          </div>
+          <div class="row" style="flex-direction:column;align-items:stretch"><span class="name">Bruno Alves</span><div class="seg"><button class="on-present" type="button">Present</button><button type="button">Absent</button><button type="button">Late</button></div></div>
+          <div class="row" style="flex-direction:column;align-items:stretch"><span class="name">Caio Mendes</span><div class="seg"><button class="on-present" type="button">Present</button><button type="button">Absent</button><button type="button">Late</button></div></div>
+          <div class="row" style="flex-direction:column;align-items:stretch"><span class="name">João Pereira</span><div class="seg"><button type="button">Present</button><button class="on-absent" type="button">Absent</button><button type="button">Late</button></div></div>
+          <div class="row" style="flex-direction:column;align-items:stretch"><span class="name">Lucas Martins</span><div class="seg"><button type="button">Present</button><button type="button">Absent</button><button class="on-late" type="button">Late</button></div></div>
+        </div>
+        <div class="footer">
+          <p class="small muted" style="text-align:center">11 of 12 marked · 1 left</p>
+          <button class="btn btn-primary" type="button">Save attendance</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== PALETTE, TYPE, COMPONENTS, NAV, BRAND ========== -->
+<section class="section" aria-label="Palette and tokens">
+  <div class="section-head"><div><h2>Colour palette and tokens</h2><p class="muted small">Light and dark values. Text on green, orange and flame is always navy.</p></div></div>
+  <div class="swatches">
+    <div class="swatch" style="background:#021C37;color:#F8F8F5"><b>Navy</b><span class="mono">#021C37<br>Primary text on light, navy surfaces</span></div>
+    <div class="swatch" style="background:#09CD71;color:#021C37"><b>Green</b><span class="mono">#09CD71<br>Primary action, confirmed</span></div>
+    <div class="swatch" style="background:#FE6D09;color:#021C37"><b>Orange</b><span class="mono">#FE6D09<br>Waitlist, maybe, late</span></div>
+    <div class="swatch" style="background:#F84C04;color:#021C37"><b>Flame</b><span class="mono">#F84C04<br>Cancelled, absent, destructive</span></div>
+    <div class="swatch" style="background:#F8F8F5;color:#021C37"><b>Off-white</b><span class="mono">#F8F8F5<br>Light text, light surfaces</span></div>
+  </div>
+  <div style="height:24px"></div>
+  <table class="tokens">
+    <thead><tr><th>Token</th><th>Light</th><th>Dark</th><th>Use</th></tr></thead>
+    <tbody>
+      <tr><td>Page background</td><td class="mono">#F8FAF7</td><td class="mono">#021426</td><td>Behind all screens</td></tr>
+      <tr><td>Card</td><td class="mono">#F1F6F4</td><td class="mono">#0A1725</td><td>Cards and list rows</td></tr>
+      <tr><td>Surface</td><td class="mono">#FFFFFF</td><td class="mono">#06233F</td><td>Sheets, inputs, footers</td></tr>
+      <tr><td>Text</td><td class="mono">#021C37</td><td class="mono">#F8F8F5</td><td>Headings and body</td></tr>
+      <tr><td>Secondary text</td><td class="mono">#5B6675</td><td class="mono">#9AA4AF</td><td>Captions, helper text</td></tr>
+      <tr><td>Border</td><td class="mono">#D9DDE3</td><td class="mono">#2A4560</td><td>Dividers and outlines</td></tr>
+      <tr><td>Primary action</td><td class="mono">#09CD71 + navy text</td><td class="mono">#09CD71 + navy text</td><td>Going, Enter, Save</td></tr>
+      <tr><td>Secondary action</td><td class="mono">#021C37 + white</td><td class="mono">#F8F8F5 + navy</td><td>Secondary buttons</td></tr>
+    </tbody>
+  </table>
+  <p class="small muted" style="margin-top:12px">Contrast checked in <span class="mono">docs/internal/design-tokens.md</span>. White text on green, orange or flame is not used.</p>
+</section>
+
+<section class="section" aria-label="Typography and components">
+  <div class="section-head"><div><h2>Typography and components</h2><p class="muted small">Typeface is still to be chosen (Inter or similar). Scale below is a draft.</p></div></div>
+  <div class="two">
+    <div class="card" style="display:flex;flex-direction:column;gap:14px">
+      <p class="label">Type scale</p>
+      <div><b style="font-size:30px;line-height:1.1">Heading 1</b><p class="small muted">Bold · 28–32px</p></div>
+      <div><b style="font-size:22px">Heading 2</b><p class="small muted">Semibold · 20–24px</p></div>
+      <div><span style="font-size:16px">Body text for lists, screens and messages.</span><p class="small muted">Regular · 16px</p></div>
+      <div><span style="font-size:13px" class="muted">Caption and helper text</span><p class="small muted">Regular · 13–14px</p></div>
+    </div>
+    <div class="card" style="display:flex;flex-direction:column;gap:14px">
+      <p class="label">Buttons and status</p>
+      <button class="btn btn-primary" type="button">Going</button>
+      <button class="btn btn-secondary" type="button">Save attendance</button>
+      <button class="btn btn-outline" type="button">Edit event</button>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <span class="chip chip-ok">Confirmed</span>
+        <span class="chip chip-wait">Waitlist</span>
+        <span class="chip chip-grey">Maybe</span>
+        <span class="chip chip-cancel">Cancelled</span>
+      </div>
+      <p class="small muted">Every status has a label and an icon; colour is never the only signal.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section" aria-label="Navigation and brand">
+  <div class="section-head"><div><h2>Navigation and club brand</h2><p class="muted small">Bottom navigation on phones. The club crest appears on club pages only.</p></div></div>
+  <div class="two">
+    <div class="card"><p class="label">Player</p><div style="display:grid;grid-template-columns:repeat(4,1fr);text-align:center;font-size:12px;margin-top:10px"><b>Home</b><span class="muted">Events</span><span class="muted">Team</span><span class="muted">Profile</span></div></div>
+    <div class="card"><p class="label">Admin</p><div style="display:grid;grid-template-columns:repeat(4,1fr);text-align:center;font-size:12px;margin-top:10px"><b>Home</b><span class="muted">Events</span><span class="muted">Members</span><span class="muted">More</span></div></div>
+    <div class="card" style="display:flex;gap:16px;align-items:center"><div class="crest" aria-hidden="true">IVI</div><div><b>IVI</b><p class="small muted">International Volleyball Ireland</p><p class="small muted">Crest from docs/internal/assets. Shown on club pages only.</p></div></div>
+  </div>
+</section>

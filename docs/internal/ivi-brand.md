@@ -2,7 +2,9 @@
 
 Status: internal reference. Not published. Colours sampled from the IVI crest supplied on 14 Oct 2026; confirm the official values with IVI before public launch.
 
-![International Volleyball Ireland crest](assets/ivi-logo.jpg)
+![International Volleyball Ireland crest](assets/ivi-crest.png)
+
+The crest in `assets/ivi-crest.png` is the full-colour version supplied on 14 Oct 2026, reduced to 480px with the white background made transparent. The earlier `assets/ivi-logo.jpg` is kept for reference only.
 
 ## Palette
 

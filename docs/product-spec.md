@@ -2,7 +2,7 @@
 
 2026-10-14 · Daniel Santos · Status: decisions recorded, spec in review
 
-This is the summary. The full document package lives in [`docs/spec/`](spec/00-README.md): PRD, TRD, flows, design, plan, backend, testing, and security and privacy. Where the two disagree, the full package is the reference and this summary should be corrected to match.
+This is the summary. The full document package lives in [`docs/spec/`](spec/00-README.md): PRD, TRD, flows, design, plan, backend, testing, and security and privacy. Where the two disagree, the full package is the reference and this summary should be corrected to match. These documents are internal and are not published.
 
 ## Overview and goals
 
@@ -154,7 +154,7 @@ Seven phases, each ending at a gate. Dates are proposals for a part-time build.
 | 6 | Brand for the pilot | IVI's colour palette |
 | 7 | IVI teams and divisions | See the pilot club table above |
 | 8 | Data controller for IVI's data | Deferred to legal review; basic GDPR now |
-| 9 | Where the spec files live | `docs/spec/`, linked from the Pages site |
+| 9 | Where the spec files live | `docs/spec/`, internal only; not published (Pages removed) |
 | — | Product name | 5x1 |
 | — | Portuguese default | pt-BR |
 | — | Success targets | Confirmed, with definitions in the testing document |
@@ -164,7 +164,7 @@ Seven phases, each ending at a gate. Dates are proposals for a part-time build.
 
 ## Open items
 
-- [ ] IVI colour values (hex codes) for the pilot palette.
+- [ ] Confirm IVI's official colour values. Sampled values are in [`docs/internal/ivi-brand.md`](internal/ivi-brand.md).
 - [ ] Confirm that "Regional League" is the name of Div 4.
 - [ ] Data controller for IVI's data, with legal input.
 - [ ] Brand for 5x1 itself, separate from IVI, before public launch.

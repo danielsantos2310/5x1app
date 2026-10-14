@@ -41,11 +41,11 @@ Pilot players are all adults. No one under 18 is in the pilot.
 Roles are assigned per club and per team, not as one global role field:
 
 - **Club admin:** configures the club and teams, approves members, assigns roles, creates and cancels events, reviews attendance.
-- **Coach:** manages events and attendance only for teams they are assigned to.
+- **Coach:** sees and manages only the teams they are assigned to: roster, events and attendance.
 - **Player:** sees their teams, RSVPs to events they are invited to, and views their attendance where allowed.
 - **Guardian:** not in v1. Guardian access and linked minor profiles come in v2.
 
-One person can hold several roles, for example a coach who also plays. Team access is checked on the server, never by hiding buttons.
+One person can hold several roles: a coach can also play, and an admin can also play on a team. Team access is checked on the server, never by hiding buttons.
 
 ## Scope for v1
 
@@ -100,7 +100,7 @@ The model is in [backend design](spec/06-BACKEND.md). Main changes from the firs
 
 - **Club memberships** and **club role assignments** are separate tables, so one person can hold several roles.
 - **Team memberships** link people to teams with a membership type (player or coach).
-- **Teams** have `division` (free text, not a fixed list) and `gender_category`.
+- **Teams** have `division` (free text, not a fixed list) and `gender_category` (men or women). There is no season field in v1.
 - **Events** can have a `team_id`; when it is empty, the event is club-wide.
 - **RSVPs** and **attendance** are unique per person per event, and cannot reference another club's data.
 - Every tenant table carries `club_id`, and constraints stop a row from pointing at another club's data.
@@ -155,6 +155,10 @@ Seven phases, each ending at a gate. Dates are proposals for a part-time build.
 | 7 | IVI teams and divisions | See the pilot club table above |
 | 8 | Data controller for IVI's data | Deferred to legal review; basic GDPR now |
 | 9 | Where the spec files live | `docs/spec/`, internal only; not published (Pages removed) |
+| 10 | Season field on teams | Not in v1 |
+| 11 | Gender categories | Men and women for teams; `mixed` only for social events |
+| 12 | Coach visibility | Own assigned teams only: roster, events and attendance |
+| 13 | Admin also a player | Yes |
 | — | Product name | 5x1 |
 | — | Portuguese default | pt-BR |
 | — | Success targets | Confirmed, with definitions in the testing document |

@@ -191,7 +191,7 @@ select.input{padding-right:10px}
     eventErr: '',
     newEvent: {title:'', date:'', time:'', place:'', cap:''},
     photoTarget: null,
-    signinAs: 'player',
+    setupKey: null,
     memberId: null,
     draft: {name:'', email:'', role:'player', adult:false},
     signupErr: ''
@@ -318,11 +318,7 @@ select.input{padding-right:10px}
       '<div class="field"><label for="em">Email</label><div class="input" id="em" style="display:flex;align-items:center;color:var(--text2)">joao@example.com</div></div>' +
       '<div class="field"><label for="pw">Password</label><div class="input" id="pw" style="display:flex;align-items:center;color:var(--text2)">••••••••••</div></div>' +
       '<button class="btn" type="button" data-msg="Password reset is not in the prototype." style="justify-content:flex-start;min-height:44px;color:var(--text);text-decoration:underline;border:0;padding:0">Forgot password?</button>' +
-      '<div class="card" style="background:var(--surface)"><p class="tiny"><b>Prototype only.</b> There is no real sign-in yet. Choose who you are signing in as.</p>' +
-      '<div class="field"><span class="label" id="asLbl">I am signing in as</span><div class="choices" role="group" aria-labelledby="asLbl">' +
-        '<button class="choice" type="button" data-signin-as="player" aria-pressed="' + (S.signinAs === 'player') + '">Player</button>' +
-        '<button class="choice" type="button" data-signin-as="coach" aria-pressed="' + (S.signinAs === 'coach') + '">Coach</button>' +
-      '</div></div>' +
+      '<div class="card" style="background:var(--surface)"><p class="tiny"><b>Prototype only.</b> There is no real sign-in yet. Choose how you are signing in.</p>' +
       '<button class="btn btn-primary" type="button" data-role="member">Continue as player / coach</button>' +
       '<button class="btn btn-outline" type="button" data-role="admin">Continue as admin</button></div>' +
       '</div>';
@@ -612,28 +608,30 @@ select.input{padding-right:10px}
       field('su-name', 'Full name', 'data-draft="name" autocomplete="name" value="' + escHtml(d.name) + '"') +
       field('su-email', 'Email', 'data-draft="email" type="email" autocomplete="email" value="' + escHtml(d.email) + '"') +
       field('su-pw', 'Password', 'type="password" autocomplete="new-password"') +
-      '<div class="field"><span class="label" id="roleLbl">I am joining as</span><div class="choices" role="group" aria-labelledby="roleLbl">' +
-        '<button class="choice" type="button" data-draft-role="player" aria-pressed="' + (d.role === 'player') + '">Player</button>' +
-        '<button class="choice" type="button" data-draft-role="coach" aria-pressed="' + (d.role === 'coach') + '">Coach</button>' +
-      '</div></div>' +
       '<label class="row" style="min-height:48px;border:0;align-items:flex-start;gap:10px;cursor:pointer"><input type="checkbox" data-draft="adult"' + (d.adult ? ' checked' : '') + ' style="width:22px;height:22px;margin-top:2px;flex:none"><span>I am 18 or older. Sign-up for under-18s is not open yet.</span></label>' +
       (S.signupErr ? '<p class="status" role="alert" style="color:var(--text)">' + escHtml(S.signupErr) + '</p>' : '') +
       '<button class="btn btn-primary" type="button" data-signup-continue>Continue</button>' +
       '</div>';
   }
   function vSetup(){
-    const me = S.me || S.draft.name || 'New member';
-    const isPlayer = S.role !== 'coach';
-    const p = prof(me);
+    const dr = S.draft;
+    const key = S.setupKey || 'New member';
+    const isPlayer = dr.role !== 'coach';
+    const p = prof(key);
     return head('Complete your profile', null) + '<div class="main" style="padding-top:8px">' +
-      '<p class="cap">Step 2 of 2. Add a photo and your details. You can change them later in Profile.</p>' +
-      '<div class="card" style="align-items:center;text-align:center;gap:10px">' + photoButtons(me) +
-        '<div><b style="font-size:18px">' + escHtml(me) + '</b><p class="tiny">' + escHtml(p.email) + '</p><p class="tiny">' + (isPlayer ? 'Player' : 'Coach') + ' · IVI</p></div></div>' +
+      '<p class="cap">Add your name, your role and a photo. An admin then approves you and assigns your team.</p>' +
+      '<div class="card" style="align-items:center;text-align:center;gap:10px">' + photoButtons(key) + '</div>' +
+      '<div class="field"><label for="su-name">Full name</label><input class="input" id="su-name" data-draft="name" autocomplete="name" value="' + escHtml(dr.name) + '" style="color:var(--text);background:var(--surface);width:100%"></div>' +
+      '<div class="field"><span class="label" id="roleLbl">I am a</span><div class="choices" role="group" aria-labelledby="roleLbl">' +
+        '<button class="choice" type="button" data-setup-role="player" aria-pressed="' + (isPlayer) + '">Player</button>' +
+        '<button class="choice" type="button" data-setup-role="coach" aria-pressed="' + (!isPlayer) + '">Coach</button>' +
+      '</div></div>' +
       (isPlayer
-        ? '<div class="field"><label for="pos">Position</label><select class="input" id="pos" data-position="' + escHtml(me) + '">' +
+        ? '<div class="field"><label for="pos">Position</label><select class="input" id="pos" data-position="' + escHtml(key) + '">' +
             POSITIONS.map(x => '<option' + (x === p.position ? ' selected' : '') + '>' + x + '</option>').join('') + '</select></div>' +
           '<p class="tiny">Height, weight, address and emergency contact are optional. Only club admins can see them.</p>'
         : '') +
+      (S.signupErr ? '<p class="status" role="alert" style="color:var(--text)">' + escHtml(S.signupErr) + '</p>' : '') +
       '<button class="btn btn-primary" type="button" data-setup-finish>Finish setup</button>' +
       '</div>';
   }
@@ -715,19 +713,27 @@ select.input{padding-right:10px}
     if (!el) return;
     const d = el.dataset;
     if (d.themeSet) return;
-    if (d.signinAs){ S.signinAs = d.signinAs; refresh(); return; }
-    if (d.draftRole){ S.draft.role = d.draftRole; refresh(); return; }
+    if (d.setupRole){ S.draft.role = d.setupRole; refresh(); return; }
     if (d.signupContinue !== undefined){
       const dr = S.draft;
       if (!dr.name.trim()) S.signupErr = 'Enter your full name.';
       else if (!/^\S+@\S+\.\S+$/.test(dr.email)) S.signupErr = 'Enter a valid email address.';
       else if (!dr.adult) S.signupErr = 'You must be 18 or older to join for now.';
-      else { S.me = dr.name.trim(); S.role = dr.role; prof(S.me).email = dr.email; S.signupErr = ''; go('setup'); return; }
+      else { S.setupKey = null; S.signupErr = ''; go('setup'); return; }
       refresh(); return;
     }
-    if (d.setupFinish !== undefined){ go('waiting'); return; }
+    if (d.setupFinish !== undefined){
+      const name = S.draft.name.trim();
+      if (!name){ S.signupErr = 'Enter your full name.'; refresh(); return; }
+      const key = S.setupKey || 'New member';
+      if (key !== name){ S.profiles[name] = prof(key); delete S.profiles[key]; }
+      prof(name).email = S.draft.email || prof(name).email || '';
+      S.me = name; S.role = S.draft.role; S.setupKey = null; S.signupErr = '';
+      go('waiting'); return;
+    }
     if (d.approveNew !== undefined){ go('home'); return; }
-    if (d.role){ setRole(d.role === 'admin' ? 'admin' : S.signinAs); go('home'); return; }
+    if (d.role === 'member'){ S.draft = {name:'', email:'', role:'player', adult:true}; S.setupKey = null; S.signupErr = ''; go('setup'); return; }
+    if (d.role === 'admin'){ setRole('admin'); go('home'); return; }
     if (d.member){ S.memberId = d.member; go('club-member'); return; }
     if (d.go){ go(d.go); return; }
     if (d.openEvent){

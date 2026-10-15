@@ -8,7 +8,7 @@ Version 0.1 | Proposed; migration SQL to be generated after approval
 | clubs | id PK, name, logo_path, timezone, data_region, created_by, deleted_at | `data_region` declarative, not proof of physical storage |
 | club_memberships | id, club_id FK, user_id FK, status, joined_at | Unique `(club_id, user_id)` active membership |
 | club_role_assignments | id, membership_id FK, role | `admin`, `coach`, `player` roles can coexist |
-| teams | id, club_id FK, name, division, gender_category, archived_at | Do not hard-code only Div 2/3/4 for all future clubs |
+| teams | id, club_id FK, name, division, logo_url nullable, archived_at | Do not hard-code only Div 2/3/4 for all future clubs |
 | team_memberships | id, club_id, team_id, user_id, membership_type, status | `player` and `coach` team associations; FKs ensure same club |
 | invites | id, club_id, token_hash, expires_at, revoked_at, max_uses, used_count | Never store reusable plaintext token in logs |
 | join_requests | id, club_id, user_id, status, reviewed_by, reviewed_at | Pending/approved/declined |

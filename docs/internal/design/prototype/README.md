@@ -17,6 +17,7 @@ File: `index.html` (one page, no build step). Open it in a browser, or use the "
 - **Promote into a full event**: the admin is asked to raise capacity first (decision 39).
 - **Coach permissions** apply to the coach's own team only (decision 40). Approvals stay with admins.
 - **Admin profiles**: several admins, each with a profile (decision 41).
+- **Team labels**: division and team name only, e.g. "Div 4 · Ravens". Team gender is removed (decision 42); gender still applies to social events (decision 19).
 - **Approval** needs at least one team; the approve button stays disabled until one is picked (decision 32).
 - **Attendance** marks only confirmed players, one tap per person, with a running count. Save is enabled once someone is marked. No bulk "mark all".
 - **Create event**: title, date, time and venue are required. Capacity is optional. The RSVP deadline defaults to 2 hours before the start.

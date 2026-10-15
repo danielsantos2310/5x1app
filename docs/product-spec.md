@@ -53,7 +53,7 @@ One person can hold several roles: a coach can also play, and an admin can also 
 
 - Accounts: sign up, log in, reset password, in English; pt-BR available in Settings.
 - Club: create a club with a name, logo and timezone; invite by expiring or revocable link; approve join requests.
-- Teams: create teams with a division and a gender category; assign members to one or more teams.
+- Teams: create teams with a division and a name; assign members to one or more teams.
 - Events: title, type (match, training, social), start and end, venue as text with an optional map link, optional capacity (blank means no limit), and RSVP deadline (pre-filled to 2 hours before the start). Events can be club-wide or for one team. Social events can also be set to `mixed`.
 - RSVP: members mark going, not going or maybe, and see the live list of who is going. Maybe does not hold a place or count against capacity. Members can opt in to the waitlist when an event is full. Promotion from the waitlist is automatic and in order; admins can promote, hold or remove any waitlisted RSVP at any time (for example for payment or team needs). Lowering capacity below the number already going keeps those people going, sends new RSVPs to the waitlist, and shows the admin a warning. After the deadline, members cannot change their RSVP; admins can.
 - Attendance: present, absent or late. An admin, or a coach for their own team, records it after the session. Club-wide social events are recorded by admins only. Only people with a going RSVP can be marked; walk-ins are not handled in the app. Waitlisted and maybe RSVPs must be promoted to going before they can be marked. Cancelled events are read-only. Admins can correct attendance at any time, and coaches can correct their own team's events; every change is audited. Players can see their own attendance history, and no one else's.
@@ -83,7 +83,7 @@ Each requirement has an ID and is traced to flows, screens, tables and tests in 
 | I18N-01 | Language | English on screen; full pt-BR chosen in Settings; the choice is saved to the profile. |
 | CLUB-01 | Club | Create a club with a name, logo and timezone; the creator becomes admin. |
 | CLUB-02 | Club | Invite links can be expired or revoked; join requests need admin approval. |
-| TEAM-01 | Teams | Several teams per club, each with a division and a gender category. |
+| TEAM-01 | Teams | Several teams per club, each with a division and a name. |
 | ROST-01 | Roster | Assign members to one or more teams; duplicates are rejected. |
 | ROLE-01 | Roles | Several roles per person; admin and coach rights enforced on the server. |
 | EVT-01 | Events | Create, edit and cancel events for the club or one team. Capacity is optional; the RSVP deadline defaults to 2 hours before the start. Social events may be `mixed`. |
@@ -100,7 +100,7 @@ The model is in [backend design](spec/06-BACKEND.md). Main changes from the firs
 
 - **Club memberships** and **club role assignments** are separate tables, so one person can hold several roles.
 - **Team memberships** link people to teams with a membership type (player or coach).
-- **Teams** have `division` (free text, not a fixed list) and `gender_category` (men or women). There is no season field in v1.
+- **Teams** have `division` (free text, not a fixed list) and `name`. There is no gender field and no season field in v1; gender applies only to social events (decision 19).
 - **Events** can have a `team_id`; when it is empty, the event is club-wide.
 - **RSVPs** and **attendance** are unique per person per event, and cannot reference another club's data.
 - Every tenant table carries `club_id`, and constraints stop a row from pointing at another club's data.
@@ -187,6 +187,7 @@ Seven phases, each ending at a gate. Dates are proposals for a part-time build.
 | 39 | Promote into a full event | The admin is asked to raise capacity first; approved 15 Oct 2026 |
 | 40 | Coach permissions | A coach has most admin powers for their own teams only: add existing club members to the roster and remove them, create and edit team events, take attendance, manage the waitlist. Approving new sign-ups, club settings and invitations stay with admins. Proposed 15 Oct 2026, prototype built; to confirm with IVI |
 | 41 | Admin profiles and photos | Each club admin has a profile. A club can have several admins. Players, coaches and admins can add a profile photo; players and coaches can set a position. Proposed 15 Oct 2026; to confirm with IVI |
+| 42 | Team gender removed | Teams carry division and name only; the team label is "Div 4 · Ravens". Gender stays only on social events (decision 19). Decided 15 Oct 2026 |
 | — | Product name | 5x1 |
 | — | Language on screen | English only; pt-BR chosen in Settings (14 Oct 2026: pt-BR labels removed from screens) |
 | — | Success targets | Confirmed, with definitions in the testing document |

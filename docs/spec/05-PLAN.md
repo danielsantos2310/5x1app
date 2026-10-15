@@ -63,7 +63,7 @@ Phase 1 is running ahead of its planned dates; dates are not followed, work proc
 ## Milestone checks
 - M0: Approved documents and roles/residency decisions.
 - M1: User can create account, switch locale, access an installable mobile app.
-- M2: Admin configures IVI with six distinct team records across applicable division/gender categories.
+- M2: Admin configures IVI with six distinct team records across applicable divisions.
 - M3: RSVPs are atomic and isolate clubs; coaches cannot manipulate another team.
 - M4: Pilot observations meet success targets and privacy requirements.
 - M5: Release checklist completed; rollback and incident response defined.

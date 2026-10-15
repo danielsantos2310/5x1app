@@ -60,7 +60,7 @@ h3{font-size:17px;font-weight:700}
 @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .logo-l{display:none} :root:not([data-theme="light"]) .logo-d{display:block} }
 .logo.big{height:76px;margin:0 auto}
 .crest{width:56px;height:auto;flex:none;display:block}
-.navbar{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid var(--line);background:var(--bg);padding:6px 0 10px}
+.navbar{display:grid;grid-template-columns:repeat(var(--tabs,4),minmax(0,1fr));border-top:1px solid var(--line);background:var(--bg);padding:6px 0 10px}
 .navbar button{min-height:52px;border:0;background:transparent;color:var(--text2);font-size:12px;font-weight:600;cursor:pointer;padding:0}
 .navbar button[aria-current="page"]{color:var(--text);font-weight:700;box-shadow:inset 0 3px 0 var(--green)}
 
@@ -163,7 +163,7 @@ select.input{padding-right:10px}
     me: null,
     view: 'landing',
     profiles: {
-      'João Pereira':  {position:'Outside hitter', photo:null, email:'joao@example.com'},
+      'João Pereira':  {position:'Outside hitter', photo:null, email:'joao@example.com', details:{height:'186', weight:'82', address:'12 Main Street, Dublin 8', emName:'Maria Pereira', emPhone:'+353 1 000 0000', emAddress:'4 Harbour Road, Dublin 4'}},
       'Daniel Santos': {position:'Not set', photo:null, email:'daniel@example.com'},
       'Ana Costa':     {position:'Not set', photo:null, email:'ana@example.com'}
     },
@@ -190,7 +190,9 @@ select.input{padding-right:10px}
     rsvpMsg: '',
     eventErr: '',
     newEvent: {title:'', date:'', time:'', place:'', cap:''},
-    photoTarget: null
+    photoTarget: null,
+    signinAs: 'player',
+    memberId: null
   };
 
   const $ = (s, r) => (r || document).querySelector(s);
@@ -198,6 +200,8 @@ select.input{padding-right:10px}
   const isStaff = () => S.role === 'coach' || S.role === 'admin';
   const initials = n => n.split(' ').map(w => w[0]).slice(0,2).join('').toUpperCase();
   const prof = n => S.profiles[n] || (S.profiles[n] = {position:'Not set', photo:null, email:''});
+  const DETAIL_KEYS = ['height','weight','address','emName','emPhone','emAddress'];
+  const det = n => { const p = prof(n); if (!p.details) p.details = {}; DETAIL_KEYS.forEach(k => { if (p.details[k] === undefined) p.details[k] = ''; }); return p.details; };
   function avatar(n, cls){
     const p = prof(n);
     return '<span class="avatar ' + (cls || '') + '" aria-hidden="true">' + (p.photo ? '<img src="' + p.photo + '" alt="">' : initials(n)) + '</span>';
@@ -279,11 +283,11 @@ select.input{padding-right:10px}
   const NAV = {
     player: [['home','Home'],['events','Events'],['team','Team'],['profile','Profile']],
     coach:  [['home','Home'],['events','Events'],['team','Team'],['profile','Profile']],
-    admin:  [['home','Home'],['events','Events'],['members','Members'],['more','More']]
+    admin:  [['home','Home'],['events','Events'],['members','Members'],['club','Club'],['profile','Profile']]
   };
   function navbar(active){
     const set = NAV[S.role];
-    return '<nav class="navbar" aria-label="' + (S.role === 'admin' ? 'Admin' : 'Player') + ' navigation">' +
+    return '<nav class="navbar" style="--tabs:' + set.length + '" aria-label="' + (S.role === 'admin' ? 'Admin' : 'Player') + ' navigation">' +
       set.map(([id, label]) => '<button type="button" data-go="' + id + '"' + (active === id ? ' aria-current="page"' : '') + '>' + label + '</button>').join('') +
       '</nav>';
   }
@@ -312,7 +316,11 @@ select.input{padding-right:10px}
       '<div class="field"><label for="pw">Password</label><div class="input" id="pw" style="display:flex;align-items:center;color:var(--text2)">••••••••••</div></div>' +
       '<button class="btn" type="button" data-msg="Password reset is not in the prototype." style="justify-content:flex-start;min-height:44px;color:var(--text);text-decoration:underline;border:0;padding:0">Forgot password?</button>' +
       '<div class="card" style="background:var(--surface)"><p class="tiny"><b>Prototype only.</b> There is no real sign-in yet. Choose who you are signing in as.</p>' +
-      '<button class="btn btn-primary" type="button" data-role="coach">Continue as player / coach</button>' +
+      '<div class="field"><span class="label" id="asLbl">I am signing in as</span><div class="choices" role="group" aria-labelledby="asLbl">' +
+        '<button class="choice" type="button" data-signin-as="player" aria-pressed="' + (S.signinAs === 'player') + '">Player</button>' +
+        '<button class="choice" type="button" data-signin-as="coach" aria-pressed="' + (S.signinAs === 'coach') + '">Coach</button>' +
+      '</div></div>' +
+      '<button class="btn btn-primary" type="button" data-role="member">Continue as player / coach</button>' +
       '<button class="btn btn-outline" type="button" data-role="admin">Continue as admin</button></div>' +
       '</div>';
   }
@@ -447,25 +455,35 @@ select.input{padding-right:10px}
       ? '<div class="card"><h3>Add a club member</h3><p class="tiny">Existing club members only. New sign-ups are approved by an admin first.</p>' +
         S.pool.map(n => '<div class="row" style="min-height:48px;border:0;padding:4px 0">' + avatar(n) + '<span class="name">' + n + '</span><button class="btn btn-primary btn-sm" type="button" data-roster-add="' + n + '">Add</button></div>').join('') + '</div>'
       : '';
-    return head(canManage ? 'Team' : 'Team', ['home','Home']) + '<div class="main" style="padding-top:8px">' +
+    return head('Team', S.role === 'admin' ? ['club','Club'] : null) + '<div class="main" style="padding-top:8px">' +
       '<div class="card" style="flex-direction:row;align-items:center;gap:14px">' +
         '<span class="teamlogo" aria-hidden="true">' + (t.logo ? '<img src="' + t.logo + '" alt="">' : 'D3') + '</span>' +
         '<div style="flex:1;min-width:0"><h3 style="font-size:18px">' + t.name + '</h3><p class="tiny">' + t.roster.length + ' players · IVI</p></div>' +
       '</div>' +
       (canManage ? '<button class="btn btn-outline btn-sm" type="button" data-pick-logo style="align-self:flex-start">' + (t.logo ? 'Change team logo' : 'Add team logo') + '</button>' : '') +
       pickList +
-      '<h3>Roster</h3>' + rosterRows + '</div>' + navbar('team');
+      '<h3>Roster</h3>' + rosterRows + '</div>' + navbar(S.role === 'admin' ? 'club' : 'team');
   }
 
+  function detailField(key, label, type){
+    const v = det(S.me)[key] || '';
+    return '<div class="field"><label for="d-' + key + '">' + label + '</label><input class="input" id="d-' + key + '" data-detail="' + key + '" type="' + (type || 'text') + '" value="' + v.replace(/"/g, '&quot;') + '" style="color:var(--text);background:var(--surface);width:100%"></div>';
+  }
   function vProfile(){
     if (S.role === 'admin') return vAProfile();
     const p = prof(S.me);
-    return head('Profile', ['home','Home']) + '<div class="main" style="padding-top:8px">' +
+    const isPlayer = S.role === 'player';
+    return head('Profile', null) + '<div class="main" style="padding-top:8px">' +
       '<div class="card" style="flex-direction:row;align-items:center;gap:14px">' + avatar(S.me, 'lg') +
-        '<div style="min-width:0"><b style="font-size:18px">' + S.me + '</b><p class="tiny">' + p.email + '</p><p class="tiny">' + (S.role === 'coach' ? 'Player · Coach, ' + MY_TEAM : 'Player, ' + MY_TEAM) + '</p></div></div>' +
+        '<div style="min-width:0"><b style="font-size:18px">' + S.me + '</b><p class="tiny">' + p.email + '</p><p class="tiny">' + (isPlayer ? 'Player, ' : 'Coach, ') + MY_TEAM + '</p></div></div>' +
       photoButtons(S.me) +
-      '<div class="field"><label for="pos">Position</label><select class="input" id="pos" data-position="' + S.me + '">' +
-        POSITIONS.map(x => '<option' + (x === p.position ? ' selected' : '') + '>' + x + '</option>').join('') + '</select></div>' +
+      (isPlayer
+        ? '<div class="field"><label for="pos">Position</label><select class="input" id="pos" data-position="' + S.me + '">' +
+            POSITIONS.map(x => '<option' + (x === p.position ? ' selected' : '') + '>' + x + '</option>').join('') + '</select></div>' +
+          '<p class="tiny">Only club admins can see these details. You can see what you entered.</p>' +
+          '<div class="card"><h3>Personal details</h3>' + detailField('height', 'Height (cm)', 'number') + detailField('weight', 'Weight (kg)', 'number') + detailField('address', 'Address') + '</div>' +
+          '<div class="card"><h3>Emergency contact</h3>' + detailField('emName', 'Contact name') + detailField('emPhone', 'Contact phone', 'tel') + detailField('emAddress', 'Contact address') + '</div>'
+        : '') +
       '<div class="row"><span class="name">Language</span><span class="tiny">English</span></div>' +
       '<p class="tiny">Change the language in Settings. Public screens stay in English.</p>' +
       '<button class="btn btn-outline" type="button" data-signout>Sign out</button>' +
@@ -473,7 +491,7 @@ select.input{padding-right:10px}
   }
   function vAProfile(){
     const p = prof(S.me);
-    return head('Profile', ['home','Home']) + '<div class="main" style="padding-top:8px">' +
+    return head('Profile', null) + '<div class="main" style="padding-top:8px">' +
       '<div class="card" style="flex-direction:row;align-items:center;gap:14px">' + avatar(S.me, 'lg') +
         '<div style="min-width:0"><b style="font-size:18px">' + S.me + '</b><p class="tiny">Club admin · IVI</p><p class="tiny">' + p.email + '</p></div></div>' +
       photoButtons(S.me) +
@@ -528,22 +546,60 @@ select.input{padding-right:10px}
   }
   S.teamOptions = () => ['Div 2 Vixens','Div 2 Dinosaurs','Div 3 Lynnx','Div 3 Dragons','Div 4 Regional League Phoenix','Div 4 Regional League Ravens'];
 
-  function vMore(){
-    return head('More', ['home','Overview']) + '<div class="main">' +
+  function clubRow(attrs, label){
+    return '<button class="row" type="button" ' + attrs + ' style="background:none;border-left:0;border-right:0;border-top:0;color:var(--text);text-align:left;cursor:pointer;font-size:16px"><span class="name">' + label + '</span><span aria-hidden="true">›</span></button>';
+  }
+  function vClub(){
+    return head('Club', null) + '<div class="main">' +
       '<h3>Club admins</h3><p class="tiny">Each admin has their own profile and sees the whole club.</p>' +
       S.admins.map(n => '<div class="row" style="min-height:56px">' + avatar(n) + '<span class="name">' + n + (n === S.me ? ' (you)' : '') + '</span></div>').join('') +
       '<button class="btn btn-outline" type="button" data-msg="Invite an admin: coming in the next pass.">Invite an admin</button>' +
-      '<button class="row" type="button" data-go="profile" style="background:none;border-left:0;border-right:0;border-top:0;color:var(--text);text-align:left;cursor:pointer;font-size:16px"><span class="name">My profile</span><span aria-hidden="true">›</span></button>' +
-      '<button class="row" type="button" data-go="team" style="background:none;border-left:0;border-right:0;border-top:0;color:var(--text);text-align:left;cursor:pointer;font-size:16px"><span class="name">Team roster</span><span aria-hidden="true">›</span></button>' +
-      '<button class="row" type="button" data-msg="Club settings: coming in the next pass." style="background:none;border-left:0;border-right:0;border-top:0;color:var(--text);text-align:left;cursor:pointer;font-size:16px"><span class="name">Club settings</span><span aria-hidden="true">›</span></button>' +
-      '<button class="row" type="button" data-msg="Invitations: coming in the next pass." style="background:none;border-left:0;border-right:0;border-top:0;color:var(--text);text-align:left;cursor:pointer;font-size:16px"><span class="name">Invitations</span><span aria-hidden="true">›</span></button>' +
+      '<h3 style="margin-top:6px">Manage</h3>' +
+      clubRow('data-go="team"', 'Team roster') +
+      clubRow('data-go="club-members"', 'Club members') +
+      clubRow('data-go="club-settings"', 'Club settings') +
+      clubRow('data-go="invitations"', 'Invitations') +
       '<button class="btn btn-outline" type="button" data-signout>Sign out</button>' +
-      '</div>' + navbar('more');
+      '</div>' + navbar('club');
+  }
+  function vClubSettings(){
+    return head('Club settings', ['club','Club']) + '<div class="main" style="padding-top:8px">' +
+      '<div class="card" style="flex-direction:row;align-items:center;gap:14px">' + CREST + '<div style="min-width:0"><b style="font-size:18px">International Volleyball Ireland</b><p class="tiny">IVI</p></div></div>' +
+      '<div class="row"><span class="name">Club name</span><span class="tiny">IVI</span></div>' +
+      '<div class="row"><span class="name">Default RSVP deadline</span><span class="tiny">2 hours before start</span></div>' +
+      '<div class="row"><span class="name">Team logo</span><span class="tiny">Set per team</span></div>' +
+      '<p class="tiny">Editing settings comes in the next pass.</p>' +
+      '</div>' + navbar('club');
+  }
+  function vInvitations(){
+    return head('Invitations', ['club','Club']) + '<div class="main" style="padding-top:8px">' +
+      '<div class="card"><h3>Invite link</h3><p class="tiny">Anyone with the link can ask to join. An admin approves each new member and assigns a team.</p>' +
+      '<button class="btn btn-primary" type="button" data-msg="Invite link copied (prototype).">Copy invite link</button></div>' +
+      '<h3>Sent invites</h3><p class="cap">No open invites in the prototype.</p>' +
+      '</div>' + navbar('club');
+  }
+  function vClubMembers(){
+    const rows = S.team.roster.map(n => '<button class="row" type="button" data-member="' + n + '" style="background:none;border-left:0;border-right:0;border-top:0;color:var(--text);text-align:left;cursor:pointer;font-size:16px">' + avatar(n) + '<span class="name">' + n + '</span><span aria-hidden="true">›</span></button>').join('');
+    return head('Club members', ['club','Club']) + '<div class="main" style="padding-top:8px">' +
+      '<p class="tiny">Tap a member to see their details. Personal and emergency details are visible to club admins only.</p>' +
+      rows + '</div>' + navbar('club');
+  }
+  function vClubMember(){
+    const n = S.memberId || S.team.roster[0];
+    const d = det(n);
+    const v = (k, u) => d[k] ? d[k] + (u || '') : '<span class="tiny">Not given</span>';
+    const line = (label, k, u) => '<div class="row"><span class="name">' + label + '</span><span style="text-align:right">' + v(k, u) + '</span></div>';
+    return head(n, ['club-members','Club members']) + '<div class="main" style="padding-top:8px">' +
+      '<div class="card" style="flex-direction:row;align-items:center;gap:14px">' + avatar(n, 'lg') + '<div style="min-width:0"><b style="font-size:18px">' + n + '</b><p class="tiny">' + MY_TEAM + '</p></div></div>' +
+      '<p class="tiny">Visible to club admins only.</p>' +
+      '<h3>Personal details</h3>' + line('Height', 'height', ' cm') + line('Weight', 'weight', ' kg') + line('Address', 'address') +
+      '<h3>Emergency contact</h3>' + line('Name', 'emName') + line('Phone', 'emPhone') + line('Address', 'emAddress') +
+      '</div>' + navbar('club');
   }
 
   const VIEWS = {
     landing: vLanding, signin: vSignin, home: vHome, events: vEvents, event: vEvent, 'new-event': vNewEvent,
-    attendance: vAttendance, team: vTeam, profile: vProfile, members: vMembers, more: vMore
+    attendance: vAttendance, team: vTeam, profile: vProfile, members: vMembers, club: vClub, 'club-settings': vClubSettings, invitations: vInvitations, 'club-members': vClubMembers, 'club-member': vClubMember
   };
 
   function dialogHtml(){
@@ -563,8 +619,8 @@ select.input{padding-right:10px}
     return [
       ['landing','Landing',null,'landing'],['signin','Sign in',null,'signin'],
       ['p-home','Player · Home','player','home'],['p-events','Player · Events','player','events'],['p-team','Player · Team (read only)','player','team'],['p-profile','Player · Profile','player','profile'],
-      ['c-home','Coach · Home','coach','home'],['c-team','Coach · Team (manage roster)','coach','team'],['c-event','Coach · Event detail','coach','event'],['c-new','Coach · Create event','coach','new-event'],['c-att','Coach · Attendance','coach','attendance'],['c-profile','Coach · Profile (photo, position)','coach','profile'],
-      ['a-home','Admin · Overview','admin','home'],['a-members','Admin · Approvals','admin','members'],['a-events','Admin · Events','admin','events'],['a-event','Admin · Event detail (waitlist)','admin','event'],['a-att','Admin · Attendance','admin','attendance'],['a-profile','Admin · Profile','admin','profile'],['a-more','Admin · More (admins list)','admin','more']
+      ['c-home','Coach · Home','coach','home'],['c-team','Coach · Team (manage roster)','coach','team'],['c-event','Coach · Event detail','coach','event'],['c-new','Coach · Create event','coach','new-event'],['c-att','Coach · Attendance','coach','attendance'],['c-profile','Coach · Profile (photo only)','coach','profile'],
+      ['a-home','Admin · Overview','admin','home'],['a-members','Admin · Approvals','admin','members'],['a-events','Admin · Events','admin','events'],['a-event','Admin · Event detail (waitlist)','admin','event'],['a-att','Admin · Attendance','admin','attendance'],['a-profile','Admin · Profile','admin','profile'],['a-club','Admin · Club','admin','club'],['a-club-team','Admin · Team roster','admin','team'],['a-club-members','Admin · Club members','admin','club-members'],['a-member','Admin · Member details (admins only)','admin','club-member'],['a-club-settings','Admin · Club settings','admin','club-settings'],['a-invites','Admin · Invitations','admin','invitations']
     ];
   }
   function setRole(role){
@@ -598,7 +654,9 @@ select.input{padding-right:10px}
     if (!el) return;
     const d = el.dataset;
     if (d.themeSet) return;
-    if (d.role){ setRole(d.role === 'admin' ? 'admin' : 'coach'); go('home'); return; }
+    if (d.signinAs){ S.signinAs = d.signinAs; refresh(); return; }
+    if (d.role){ setRole(d.role === 'admin' ? 'admin' : S.signinAs); go('home'); return; }
+    if (d.member){ S.memberId = d.member; go('club-member'); return; }
     if (d.go){ go(d.go); return; }
     if (d.openEvent){
       S.cur = d.openEvent;
@@ -645,6 +703,7 @@ select.input{padding-right:10px}
       t.value = '';
       return;
     }
+    if (t.dataset && t.dataset.detail){ det(S.me)[t.dataset.detail] = t.value; toast('Saved.'); refresh(); return; }
     if (t.dataset && t.dataset.position){ prof(t.dataset.position).position = t.value; toast('Position saved: ' + t.value + '.'); refresh(); }
   });
 

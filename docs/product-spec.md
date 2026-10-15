@@ -186,8 +186,10 @@ Seven phases, each ending at a gate. Dates are proposals for a part-time build.
 | 38 | Waitlist hold | Hold keeps a waitlisted RSVP on the waitlist and skips them in automatic promotion until an admin releases them; approved 15 Oct 2026 |
 | 39 | Promote into a full event | The admin is asked to raise capacity first; approved 15 Oct 2026 |
 | 40 | Coach permissions | A coach has most admin powers for their own teams only: add existing club members to the roster and remove them, create and edit team events, take attendance, manage the waitlist. Approving new sign-ups, club settings and invitations stay with admins. Proposed 15 Oct 2026, prototype built; to confirm with IVI |
-| 41 | Admin profiles and photos | Each club admin has a profile. A club can have several admins. Players, coaches and admins can add a profile photo; players and coaches can set a position. Proposed 15 Oct 2026; to confirm with IVI |
+| 41 | Admin profiles and photos | Each club admin has a profile. A club can have several admins. Players, coaches and admins can add a profile photo. Only players set a position; coaches and admins do not. Proposed 15 Oct 2026; to confirm with IVI |
 | 42 | Team gender removed | Teams carry division and name only; the team label is "Div 4 · Ravens". Gender stays only on social events (decision 19). Decided 15 Oct 2026 |
+| 43 | Player details | Players can record height, weight, address, emergency contact name and phone, and emergency contact address. These details are visible only to club admins (a player sees the entries they made). Planned for a later release; prototype shows the form and the admin view. Proposed 15 Oct 2026 |
+| 44 | Admin navigation | Admin bar: Home, Events, Members, Club, Profile. Club holds the team roster, club members, club settings, invitations and the club admins list. Sub-screens return to Club. Proposed 15 Oct 2026 |
 | — | Product name | 5x1 |
 | — | Language on screen | English only; pt-BR chosen in Settings (14 Oct 2026: pt-BR labels removed from screens) |
 | — | Success targets | Confirmed, with definitions in the testing document |

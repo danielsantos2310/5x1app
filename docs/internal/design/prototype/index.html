@@ -179,7 +179,9 @@ select.input{padding-right:10px}
         waitlist:[{name:'Lucas Martins', held:false},{name:'Ethan Ferreira', held:false}],
         maybe:['Marco Silva','Nando Reis','Otávio Braga'], att:{}, attSaved:false, mine:null, tab:'confirmed'},
       {id:'ev2', title:'League match', date:'Sun 18 Oct', time:'13:00', place:'IVI Arena', team:MY_TEAM, cap:null,
-        confirmed:[], waitlist:[], maybe:['João Pereira'], att:{}, attSaved:false, mine:'maybe', tab:'confirmed'}
+        confirmed:[], waitlist:[], maybe:['João Pereira'], att:{}, attSaved:false, mine:'maybe', tab:'confirmed'},
+      {id:'ev3', title:'Technical training', date:'Thu 22 Oct', time:'19:00', place:'Collinstown Sports Complex', team:MY_TEAM, cap:null,
+        confirmed:[], waitlist:[], maybe:[], att:{}, attSaved:false, mine:null, tab:'confirmed'}
     ],
     cur: 'ev1',
     removingEvent: null,
@@ -308,6 +310,7 @@ select.input{padding-right:10px}
       '<p class="cap">Use the email you joined with.</p>' +
       '<div class="field"><label for="em">Email</label><div class="input" id="em" style="display:flex;align-items:center;color:var(--text2)">joao@example.com</div></div>' +
       '<div class="field"><label for="pw">Password</label><div class="input" id="pw" style="display:flex;align-items:center;color:var(--text2)">••••••••••</div></div>' +
+      '<button class="btn" type="button" data-msg="Password reset is not in the prototype." style="justify-content:flex-start;min-height:44px;color:var(--text);text-decoration:underline;border:0;padding:0">Forgot password?</button>' +
       '<div class="card" style="background:var(--surface)"><p class="tiny"><b>Prototype only.</b> There is no real sign-in yet. Choose who you are signing in as.</p>' +
       '<button class="btn btn-primary" type="button" data-role="coach">Continue as player / coach</button>' +
       '<button class="btn btn-outline" type="button" data-role="admin">Continue as admin</button></div>' +
@@ -533,6 +536,7 @@ select.input{padding-right:10px}
       '<button class="row" type="button" data-go="profile" style="background:none;border-left:0;border-right:0;border-top:0;color:var(--text);text-align:left;cursor:pointer;font-size:16px"><span class="name">My profile</span><span aria-hidden="true">›</span></button>' +
       '<button class="row" type="button" data-go="team" style="background:none;border-left:0;border-right:0;border-top:0;color:var(--text);text-align:left;cursor:pointer;font-size:16px"><span class="name">Team roster</span><span aria-hidden="true">›</span></button>' +
       '<button class="row" type="button" data-msg="Club settings: coming in the next pass." style="background:none;border-left:0;border-right:0;border-top:0;color:var(--text);text-align:left;cursor:pointer;font-size:16px"><span class="name">Club settings</span><span aria-hidden="true">›</span></button>' +
+      '<button class="row" type="button" data-msg="Invitations: coming in the next pass." style="background:none;border-left:0;border-right:0;border-top:0;color:var(--text);text-align:left;cursor:pointer;font-size:16px"><span class="name">Invitations</span><span aria-hidden="true">›</span></button>' +
       '<button class="btn btn-outline" type="button" data-signout>Sign out</button>' +
       '</div>' + navbar('more');
   }

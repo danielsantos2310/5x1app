@@ -192,6 +192,9 @@ select.input{padding-right:10px}
     newEvent: {title:'', date:'', time:'', place:'', cap:''},
     photoTarget: null,
     setupKey: null,
+    pdraft: null,
+    theme: 'auto',
+    lang: 'en',
     memberId: null,
     draft: {name:'', email:'', role:'player', adult:false},
     signupErr: ''
@@ -464,26 +467,39 @@ select.input{padding-right:10px}
       '<h3>Roster</h3>' + rosterRows + '</div>' + navbar(S.role === 'admin' ? 'club' : 'team');
   }
 
+  function pget(k){
+    if (S.pdraft && k in S.pdraft) return S.pdraft[k];
+    return k === 'position' ? prof(S.me).position : det(S.me)[k];
+  }
   function detailField(key, label, type){
-    const v = det(S.me)[key] || '';
-    return '<div class="field"><label for="d-' + key + '">' + label + '</label><input class="input" id="d-' + key + '" data-detail="' + key + '" type="' + (type || 'text') + '" value="' + v.replace(/"/g, '&quot;') + '" style="color:var(--text);background:var(--surface);width:100%"></div>';
+    return '<div class="field"><label for="d-' + key + '">' + label + '</label><input class="input" id="d-' + key + '" data-detail="' + key + '" type="' + (type || 'text') + '" value="' + escHtml(pget(key) || '') + '" style="color:var(--text);background:var(--surface);width:100%"></div>';
+  }
+  function themeLabel(){ return {auto:'System', light:'Light', dark:'Dark'}[S.theme] || 'System'; }
+  function langLabel(){ return S.lang === 'pt-BR' ? 'Português (Brasil)' : 'English'; }
+  function settingsRow(){
+    return '<button class="row" type="button" data-go="settings" style="background:none;border-left:0;border-right:0;border-top:0;color:var(--text);text-align:left;cursor:pointer;font-size:16px;width:100%">' +
+      '<span class="name">Settings</span><span class="tiny">' + themeLabel() + ' · ' + langLabel() + '</span><span aria-hidden="true">›</span></button>';
+  }
+  function saveBar(){
+    const dirty = !!(S.pdraft && Object.keys(S.pdraft).length);
+    return '<div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><span class="tiny" role="status">' + (dirty ? 'Unsaved changes' : 'All changes saved') + '</span>' +
+      '<button class="btn btn-primary btn-sm" type="button" data-profile-save' + (dirty ? '' : ' disabled') + ' style="width:auto">Save changes</button></div>';
   }
   function vProfile(){
     if (S.role === 'admin') return vAProfile();
-    const p = prof(S.me);
     const isPlayer = S.role === 'player';
     return head('Profile', null) + '<div class="main" style="padding-top:8px">' +
       '<div class="card" style="align-items:center;text-align:center;gap:10px">' + photoButtons(S.me) +
-        '<div style="min-width:0"><b style="font-size:18px">' + S.me + '</b><p class="tiny">' + p.email + '</p><p class="tiny">' + (isPlayer ? 'Player, ' : 'Coach, ') + MY_TEAM + '</p></div></div>' +
+        '<div><b style="font-size:18px">' + escHtml(S.me) + '</b><p class="tiny">' + escHtml(prof(S.me).email) + '</p><p class="tiny">' + (isPlayer ? 'Player' : 'Coach') + ', ' + MY_TEAM + '</p></div></div>' +
       (isPlayer
-        ? '<div class="field"><label for="pos">Position</label><select class="input" id="pos" data-position="' + S.me + '">' +
-            POSITIONS.map(x => '<option' + (x === p.position ? ' selected' : '') + '>' + x + '</option>').join('') + '</select></div>' +
+        ? '<div class="field"><label for="pos">Position</label><select class="input" id="pos" data-position="' + escHtml(S.me) + '">' +
+            POSITIONS.map(x => '<option' + (x === pget('position') ? ' selected' : '') + '>' + x + '</option>').join('') + '</select></div>' +
           '<p class="tiny">Only club admins can see these details. You can see what you entered.</p>' +
           '<div class="card"><h3>Personal details</h3>' + detailField('height', 'Height (cm)', 'number') + detailField('weight', 'Weight (kg)', 'number') + detailField('address', 'Address') + '</div>' +
           '<div class="card"><h3>Emergency contact</h3>' + detailField('emName', 'Contact name') + detailField('emPhone', 'Contact phone', 'tel') + detailField('emAddress', 'Contact address') + '</div>'
         : '') +
-      '<div class="row"><span class="name">Language</span><span class="tiny">English</span></div>' +
-      '<p class="tiny">Change the language in Settings. Public screens stay in English.</p>' +
+      saveBar() +
+      settingsRow() +
       '<button class="btn btn-outline" type="button" data-signout>Sign out</button>' +
       '</div>' + navbar('profile');
   }
@@ -491,11 +507,22 @@ select.input{padding-right:10px}
     const p = prof(S.me);
     return head('Profile', null) + '<div class="main" style="padding-top:8px">' +
       '<div class="card" style="align-items:center;text-align:center;gap:10px">' + photoButtons(S.me) +
-        '<div style="min-width:0"><b style="font-size:18px">' + S.me + '</b><p class="tiny">Club admin · IVI</p><p class="tiny">' + p.email + '</p></div></div>' +
-      '<div class="row"><span class="name">Language</span><span class="tiny">English</span></div>' +
+        '<div><b style="font-size:18px">' + escHtml(S.me) + '</b><p class="tiny">Club admin · IVI</p><p class="tiny">' + escHtml(p.email) + '</p></div></div>' +
+      settingsRow() +
       '<button class="btn btn-outline" type="button" data-signout>Sign out</button>' +
       '</div>' + navbar('profile');
   }
+  function vSettings(){
+    const themeOpts = [['auto','System'],['light','Light'],['dark','Dark']];
+    const langOpts = [['en','English'],['pt-BR','Português (Brasil)']];
+    return head('Settings', ['profile','Profile']) + '<div class="main" style="padding-top:8px">' +
+      '<h3>Theme</h3><p class="tiny">Follows your device unless you choose a theme.</p>' +
+      '<div class="choices" role="group" aria-label="Theme">' + themeOpts.map(([v,l]) => '<button class="choice" type="button" data-theme-pick="' + v + '" aria-pressed="' + (S.theme === v) + '">' + l + '</button>').join('') + '</div>' +
+      '<h3>Language</h3><p class="tiny">Português (Brasil) is planned. Screens stay in English until it is built.</p>' +
+      '<div class="choices" role="group" aria-label="Language" style="grid-template-columns:1fr 1fr">' + langOpts.map(([v,l]) => '<button class="choice" type="button" data-lang-pick="' + v + '" aria-pressed="' + (S.lang === v) + '">' + l + '</button>').join('') + '</div>' +
+      '</div>' + navbar('profile');
+  }
+
   function photoButtons(n){
     const has = !!prof(n).photo;
     const badge = has ? '<span aria-hidden="true" style="position:absolute;right:-2px;bottom:-2px;width:30px;height:30px;border-radius:50%;background:var(--navy);color:var(--on-navy);border:2px solid var(--bg);display:flex;align-items:center;justify-content:center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></span>' : '';
@@ -648,7 +675,7 @@ select.input{padding-right:10px}
   }
 
   const VIEWS = {
-    landing: vLanding, signin: vSignin, signup: vSignup, setup: vSetup, waiting: vWaiting, home: vHome, events: vEvents, event: vEvent, 'new-event': vNewEvent,
+    landing: vLanding, signin: vSignin, settings: vSettings, signup: vSignup, setup: vSetup, waiting: vWaiting, home: vHome, events: vEvents, event: vEvent, 'new-event': vNewEvent,
     attendance: vAttendance, team: vTeam, profile: vProfile, members: vMembers, club: vClub, 'club-settings': vClubSettings, invitations: vInvitations, 'club-members': vClubMembers, 'club-member': vClubMember
   };
 
@@ -677,9 +704,9 @@ select.input{padding-right:10px}
   function jumpOptions(){
     return [
       ['landing','Landing',null,'landing'],['signin','Sign in',null,'signin'],
-      ['p-home','Player · Home','player','home'],['p-events','Player · Events','player','events'],['p-team','Player · Team (read only)','player','team'],['p-profile','Player · Profile','player','profile'],
+      ['p-home','Player · Home','player','home'],['p-events','Player · Events','player','events'],['p-team','Player · Team (read only)','player','team'],['p-profile','Player · Profile','player','profile'],['p-settings','Player · Settings','player','settings'],
       ['signup','Sign up (new member)',null,'signup'],['setup','Complete profile (new member)',null,'setup'],['waiting','Waiting for approval',null,'waiting'],['c-home','Coach · Home','coach','home'],['c-team','Coach · Team (manage roster)','coach','team'],['c-event','Coach · Event detail','coach','event'],['c-new','Coach · Create event','coach','new-event'],['c-att','Coach · Attendance','coach','attendance'],['c-profile','Coach · Profile (photo only)','coach','profile'],
-      ['a-home','Admin · Overview','admin','home'],['a-members','Admin · Approvals','admin','members'],['a-events','Admin · Events','admin','events'],['a-event','Admin · Event detail (waitlist)','admin','event'],['a-att','Admin · Attendance','admin','attendance'],['a-profile','Admin · Profile','admin','profile'],['a-club','Admin · Club','admin','club'],['a-club-team','Admin · Team roster','admin','team'],['a-club-members','Admin · Club members','admin','club-members'],['a-member','Admin · Member details (admins only)','admin','club-member'],['a-club-settings','Admin · Club settings','admin','club-settings'],['a-invites','Admin · Invitations','admin','invitations']
+      ['a-home','Admin · Overview','admin','home'],['a-members','Admin · Approvals','admin','members'],['a-events','Admin · Events','admin','events'],['a-event','Admin · Event detail (waitlist)','admin','event'],['a-att','Admin · Attendance','admin','attendance'],['a-profile','Admin · Profile','admin','profile'],['a-settings','Admin · Settings','admin','settings'],['a-club','Admin · Club','admin','club'],['a-club-team','Admin · Team roster','admin','team'],['a-club-members','Admin · Club members','admin','club-members'],['a-member','Admin · Member details (admins only)','admin','club-member'],['a-club-settings','Admin · Club settings','admin','club-settings'],['a-invites','Admin · Invitations','admin','invitations']
     ];
   }
   function setRole(role){
@@ -700,6 +727,7 @@ select.input{padding-right:10px}
   }
   function go(view, focus){
     S.view = view; S.dialog = null; S.removingEvent = null; S.removingRoster = null; S.approveMsg = '';
+    if (view !== 'profile' && view !== 'settings') S.pdraft = null;
     if (view !== 'home' && view !== 'event' && view !== 'attendance') S.rsvpMsg = '';
     if (view === 'new-event'){ S.newEvent = {title:'', date:'', time:'', place:'', cap:''}; S.eventErr = ''; }
     render(focus !== false);
@@ -762,6 +790,13 @@ select.input{padding-right:10px}
     if (d.rosterRemoveYes){ const n = d.rosterRemoveYes; removeFromTeam(n); S.removingRoster = null; toast(n + ' removed from ' + S.team.name + '.'); refresh(); return; }
     if (d.rosterRemoveNo !== undefined){ S.removingRoster = null; refresh(); return; }
     if (d.photoMenu){ S.dialog = {type:'photo', name:d.photoMenu}; refresh(); return; }
+    if (d.profileSave !== undefined){
+      const dr = S.pdraft || {};
+      Object.keys(dr).forEach(k => { if (k === 'position') prof(S.me).position = dr[k]; else det(S.me)[k] = dr[k]; });
+      S.pdraft = null; toast('Profile saved.'); refresh(); return;
+    }
+    if (d.themePick){ setTheme(d.themePick); refresh(); return; }
+    if (d.langPick){ S.lang = d.langPick; toast(d.langPick === 'pt-BR' ? 'Português is planned. Screens stay in English for now.' : 'Language: English.'); refresh(); return; }
     if (d.photoCancel !== undefined){ S.dialog = null; refresh(); return; }
     if (d.pickPhoto){ S.dialog = null; S.photoTarget = d.pickPhoto; document.getElementById('photoIn').click(); return; }
     if (d.removePhoto){ prof(d.removePhoto).photo = null; S.dialog = null; toast('Photo removed.'); refresh(); return; }
@@ -784,7 +819,9 @@ select.input{padding-right:10px}
       return;
     }
     if (t.dataset && t.dataset.draft){ S.draft[t.dataset.draft] = t.type === 'checkbox' ? t.checked : t.value; return; }
+    if (t.dataset && t.dataset.detail && S.view === 'profile'){ S.pdraft = Object.assign({}, S.pdraft, {[t.dataset.detail]: t.value}); refresh(); return; }
     if (t.dataset && t.dataset.detail){ det(S.me)[t.dataset.detail] = t.value; toast('Saved.'); refresh(); return; }
+    if (t.dataset && t.dataset.position && S.view === 'profile'){ S.pdraft = Object.assign({}, S.pdraft, {position: t.value}); refresh(); return; }
     if (t.dataset && t.dataset.position){ prof(t.dataset.position).position = t.value; toast('Position saved: ' + t.value + '.'); refresh(); }
   });
 
@@ -817,6 +854,7 @@ select.input{padding-right:10px}
 
   /* ---------- Theme ---------- */
   function setTheme(v){
+    S.theme = v;
     if (v === 'auto') document.documentElement.removeAttribute('data-theme'); else document.documentElement.setAttribute('data-theme', v);
     document.querySelectorAll('[data-theme-set]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.themeSet === v)));
   }

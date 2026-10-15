@@ -19,6 +19,7 @@ File: `index.html` (one page, no build step). Open it in a browser, or use the "
 - **Admin profiles**: several admins, each with a profile (decision 41). Only players have a position.
 - **Player details** (planned, decision 43): height, weight, address and emergency contact are on the player profile. Only club admins see them, through Club › Club members. The prototype has no real access control.
 - **New member** (decision 45): sign-in has one player/coach entry and one admin entry. The player/coach entry goes to Complete your profile, where the person enters their name and chooses Player or Coach. Create account goes to the same step. Then Waiting for approval. Sign-in uses no real account data.
+- **Profile save and settings** (decision 46): profile details save with Save changes; Settings (on Profile) holds theme and language. Português (Brasil) is planned; the prototype stores the choice and shows English.
 - **Profile photo**: the photo circle is the control. With no photo, tapping the circle adds one. With a photo, a small camera badge on the corner opens Upload new photo, Remove photo or Cancel.
 - **Admin navigation** (decision 44): Home, Events, Members, Club, Profile. Team roster, club members, club settings and invitations open from Club and go back to Club.
 - **Team labels**: division and team name only, e.g. "Div 4 · Ravens". Team gender is removed (decision 42); gender still applies to social events (decision 19).

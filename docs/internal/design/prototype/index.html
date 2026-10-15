@@ -28,13 +28,14 @@ html,body{margin:0;height:100%}
 body{background:#E9EDE8;color:var(--text);font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:16px;line-height:1.5;padding:16px}
 @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) body{background:#010B17} }
 :root[data-theme="dark"] body{background:#010B17}
-button,select{font-family:inherit}
+button,select,input{font-family:inherit}
 :focus-visible{outline:3px solid var(--green);outline-offset:2px}
 h1,h2,h3,p{margin:0}
 h2{font-size:24px;font-weight:700;line-height:1.25}
 h3{font-size:17px;font-weight:700}
 .cap{font-size:14px;color:var(--text2);line-height:1.45}
 .label{font-size:13px;font-weight:600;color:var(--text2)}
+.tiny{font-size:13px;color:var(--text2)}
 
 /* Prototype controls (outside the phone) */
 .bar{max-width:1040px;margin:0 auto 16px;display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}
@@ -42,15 +43,15 @@ h3{font-size:17px;font-weight:700}
 .seg{display:inline-flex;border:1px solid var(--line);border-radius:12px;overflow:hidden}
 .seg button{min-height:44px;padding:0 14px;border:0;background:var(--surface);color:var(--text);font-weight:600;cursor:pointer}
 .seg button[aria-pressed="true"]{background:var(--green);color:var(--on-green)}
-.jump{min-height:44px;border-radius:12px;border:1px solid var(--line);background:var(--surface);color:var(--text);padding:0 10px;font-size:15px}
-.note{max-width:1040px;margin:0 auto 16px}
+.jump{min-height:44px;border-radius:12px;border:1px solid var(--line);background:var(--surface);color:var(--text);padding:0 10px;font-size:15px;max-width:100%}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 
 /* Phone */
 .stage{display:flex;justify-content:center}
 .phone{position:relative;width:360px;height:740px;border-radius:32px;border:2px solid var(--line);background:var(--bg);color:var(--text);overflow:hidden;display:flex;flex-direction:column}
-@media (max-width:480px){ body{padding:0} .bar,.note{padding:0 8px} .phone{width:100%;height:calc(100dvh - 0px);border-radius:0;border:0} }
+@media (max-width:480px){ body{padding:0} .bar{padding:8px} .phone{width:100%;height:100dvh;border-radius:0;border:0} }
 .main{flex:1;min-height:0;overflow-y:auto;padding:16px 16px 24px;display:flex;flex-direction:column;gap:14px}
-.appbar{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:56px;padding:12px 16px 0;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.appbar{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:56px;padding:12px 16px 0}
 .back{min-height:44px;border:0;background:transparent;color:var(--text);font-weight:600;font-size:16px;padding:0 6px 0 0;cursor:pointer}
 .logo{height:30px;width:auto;display:block}
 .logo-d{display:none}
@@ -62,6 +63,13 @@ h3{font-size:17px;font-weight:700}
 .navbar{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid var(--line);background:var(--bg);padding:6px 0 10px}
 .navbar button{min-height:52px;border:0;background:transparent;color:var(--text2);font-size:12px;font-weight:600;cursor:pointer;padding:0}
 .navbar button[aria-current="page"]{color:var(--text);font-weight:700;box-shadow:inset 0 3px 0 var(--green)}
+
+/* Avatars and logos */
+.avatar{width:36px;height:36px;border-radius:50%;background:var(--card);border:1px solid var(--line);display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex:none;overflow:hidden;color:var(--text)}
+.avatar.lg{width:56px;height:56px;font-size:18px}
+.avatar img{width:100%;height:100%;object-fit:cover;display:block}
+.teamlogo{width:56px;height:56px;border-radius:14px;background:var(--navy);color:var(--on-navy);border:1px solid var(--line);display:inline-flex;align-items:center;justify-content:center;font-weight:800;font-size:18px;flex:none;overflow:hidden}
+.teamlogo img{width:100%;height:100%;object-fit:cover;display:block}
 
 /* Components */
 .btn{display:flex;align-items:center;justify-content:center;gap:8px;min-height:52px;width:100%;border-radius:16px;border:2px solid transparent;font-weight:600;font-size:16px;padding:10px 14px;cursor:pointer;text-align:center;background:transparent;color:var(--text)}
@@ -81,7 +89,6 @@ h3{font-size:17px;font-weight:700}
 .fill{height:100%;background:var(--green)}
 .row{display:flex;align-items:center;gap:12px;min-height:56px;padding:8px 0;border-bottom:1px solid var(--line)}
 .row .name{flex:1;min-width:0;font-weight:600;font-size:15px}
-.avatar{width:36px;height:36px;border-radius:50%;background:var(--card);border:1px solid var(--line);display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex:none}
 .tabs{display:flex;gap:16px;border-bottom:1px solid var(--line)}
 .tabs button{min-height:44px;border:0;background:transparent;color:var(--text2);font-size:15px;font-weight:600;padding:0 0 8px;cursor:pointer;border-bottom:3px solid transparent}
 .tabs button[aria-pressed="true"]{color:var(--text);border-bottom-color:var(--green)}
@@ -106,14 +113,12 @@ h3{font-size:17px;font-weight:700}
 .footer{border-top:1px solid var(--line);background:var(--surface);padding:12px 16px;display:flex;flex-direction:column;gap:8px}
 .field{display:flex;flex-direction:column;gap:6px}
 .field label{font-size:14px;font-weight:600}
-.input{height:52px;border-radius:14px;border:2px solid var(--line);background:var(--surface);display:flex;align-items:center;padding:0 14px;color:var(--text2);font-size:16px}
-.toast{position:absolute;left:12px;right:12px;bottom:76px;background:var(--navy);color:var(--on-navy);border-radius:14px;padding:12px 14px;font-size:14px;font-weight:600;box-shadow:0 6px 18px rgba(0,0,0,.25);display:none}
+.input{min-height:52px;width:100%;border-radius:14px;border:2px solid var(--line);background:var(--surface);color:var(--text);padding:0 14px;font-size:16px}
+select.input{padding-right:10px}
+.toast{position:absolute;left:12px;right:12px;bottom:76px;background:var(--navy);color:var(--on-navy);border-radius:14px;padding:12px 14px;font-size:14px;font-weight:600;box-shadow:0 6px 18px rgba(0,0,0,.25);display:none;z-index:4}
 .toast.show{display:block}
 .dialog-wrap{position:absolute;inset:0;background:var(--dim);display:flex;align-items:center;justify-content:center;padding:20px;z-index:5}
 .dialog{background:var(--surface);color:var(--text);border:1px solid var(--line);border-radius:20px;padding:18px;display:flex;flex-direction:column;gap:14px;width:100%}
-.mono{font-size:12px;color:var(--text2)}
-.tiny{font-size:13px;color:var(--text2)}
-.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 </style>
 </head>
 <body>
@@ -121,11 +126,11 @@ h3{font-size:17px;font-weight:700}
 <div class="bar">
   <div>
     <h1>5x1 · Clickable prototype</h1>
-    <p class="cap">v0.1 · English only · Prototype data, no sign-in. Tap through the flows; nothing is saved.</p>
+    <p class="cap">v0.2 · English only · Prototype data, no sign-in. Nothing is saved between visits.</p>
   </div>
   <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
     <label class="label" for="jump">Jump to</label>
-    <select id="jump" class="jump" aria-describedby="jumpNote"></select>
+    <select id="jump" class="jump"></select>
     <div class="seg" role="group" aria-label="Theme">
       <button type="button" data-theme-set="auto" aria-pressed="true">System</button>
       <button type="button" data-theme-set="light" aria-pressed="false">Light</button>
@@ -133,128 +138,159 @@ h3{font-size:17px;font-weight:700}
     </div>
   </div>
 </div>
-<p id="jumpNote" class="sr-only">Choose a screen to open it directly.</p>
 
 <div class="stage">
-  <div class="phone" id="phone" aria-live="off">
+  <div class="phone" id="phone">
     <div id="screen" style="flex:1;min-height:0;display:flex;flex-direction:column"></div>
     <div class="toast" id="toast" role="status"></div>
     <div id="layer"></div>
   </div>
 </div>
+<input type="file" id="photoIn" accept="image/*" hidden>
 
 <script>
 (function(){
   const LOGO = '<img class="logo logo-l" src="../../brand/5x1-logo-light.svg" alt="5x1"><img class="logo logo-d" src="../../brand/5x1-logo-dark.svg" alt="" aria-hidden="true">';
   const LOGO_BIG = LOGO.replace('class="logo logo-l"', 'class="logo big logo-l"').replace('class="logo logo-d"', 'class="logo big logo-d"');
   const CREST = '<img class="crest" src="../../assets/ivi-crest.png" alt="International Volleyball Ireland crest">';
+  const POSITIONS = ['Not set','Setter','Outside hitter','Opposite','Middle blocker','Libero','Defensive specialist'];
+  const ROLE_ME = {player:'João Pereira', coach:'João Pereira', admin:'Daniel Santos'};
+  const MY_TEAM = 'Div 3 Dragons';
 
-  const TEAMS = ['Div 2 Vixens','Div 2 Dinosaurs','Div 3 Lynnx','Div 3 Dragons','Div 4 Regional League Phoenix','Div 4 Regional League Ravens'];
-  const SCREENS = [
-    ['landing','Landing'],['signin','Sign in'],
-    ['p-home','Player · Home'],['p-events','Player · Events'],['p-team','Player · Team'],['p-profile','Player · Profile'],
-    ['a-home','Admin · Overview'],['a-members','Admin · Approvals'],['a-events','Admin · Events'],['a-event','Admin · Event detail (waitlist)'],['attendance','Attendance'],['a-more','Admin · More']
-  ];
-
+  /* ---------- State (prototype data only) ---------- */
   const S = {
     role: null,
+    me: null,
     view: 'landing',
-    me: 'João Pereira',
-    cap: 10,
-    confirmed: ['Bruno Alves','Caio Mendes','Daniel Rocha','Felipe Nunes','Gustavo Lima','Hugo Teixeira','Igor Souza','João Pereira','Kleber Dias'],
-    waitlist: [{name:'Lucas Martins', held:false},{name:'Ethan Ferreira', held:false}],
-    maybe: ['Marco Silva','Nando Reis','Otávio Braga'],
-    pending: ['Sofia Ribeiro','Tomás Moreira'],
+    profiles: {
+      'João Pereira':  {position:'Outside hitter', photo:null, email:'joao@example.com'},
+      'Daniel Santos': {position:'Not set', photo:null, email:'daniel@example.com'},
+      'Ana Costa':     {position:'Not set', photo:null, email:'ana@example.com'}
+    },
+    admins: ['Daniel Santos','Ana Costa'],
+    team: {name: MY_TEAM, logo: null, roster: ['Bruno Alves','Caio Mendes','Daniel Rocha','Felipe Nunes','Gustavo Lima','Hugo Teixeira','Igor Souza','João Pereira','Kleber Dias','Lucas Martins','Ethan Ferreira','Marco Silva']},
+    pool: ['Otávio Braga','Nando Reis'],          // approved club members not yet on this team
+    pending: ['Sofia Ribeiro','Tomás Moreira'],   // new sign-ups waiting for admin approval
     approving: {},
-    tab: 'confirmed',
-    att: {},
-    attSaved: false,
-    rsvpMsg: '',
-    mine: null,
+    approveMsg: '',
+    events: [
+      {id:'ev1', title:'Team training', date:'Thu 17 Oct', time:'19:00–21:00', place:'Collinstown Sports Complex', team:MY_TEAM, cap:10,
+        confirmed:['Bruno Alves','Caio Mendes','Daniel Rocha','Felipe Nunes','Gustavo Lima','Hugo Teixeira','Igor Souza','João Pereira','Kleber Dias'],
+        waitlist:[{name:'Lucas Martins', held:false},{name:'Ethan Ferreira', held:false}],
+        maybe:['Marco Silva','Nando Reis','Otávio Braga'], att:{}, attSaved:false, mine:null, tab:'confirmed'},
+      {id:'ev2', title:'League match', date:'Sun 18 Oct', time:'13:00', place:'IVI Arena', team:MY_TEAM, cap:null,
+        confirmed:[], waitlist:[], maybe:['João Pereira'], att:{}, attSaved:false, mine:'maybe', tab:'confirmed'}
+    ],
+    cur: 'ev1',
+    removingEvent: null,
+    removingRoster: null,
     dialog: null,
-    removing: null,
-    approveMsg: ''
+    rsvpMsg: '',
+    eventErr: '',
+    newEvent: {title:'', date:'', time:'', place:'', cap:''},
+    photoTarget: null
   };
 
   const $ = (s, r) => (r || document).querySelector(s);
+  const E = () => S.events.find(e => e.id === S.cur);
+  const isStaff = () => S.role === 'coach' || S.role === 'admin';
   const initials = n => n.split(' ').map(w => w[0]).slice(0,2).join('').toUpperCase();
+  const prof = n => S.profiles[n] || (S.profiles[n] = {position:'Not set', photo:null, email:''});
+  function avatar(n, cls){
+    const p = prof(n);
+    return '<span class="avatar ' + (cls || '') + '" aria-hidden="true">' + (p.photo ? '<img src="' + p.photo + '" alt="">' : initials(n)) + '</span>';
+  }
   let toastTimer = null;
   function toast(msg){
     const t = $('#toast'); t.textContent = msg; t.classList.add('show');
     clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('show'), 2600);
   }
 
-  /* ---------- Rules (from docs/spec: RSVP-01, RSVP-02, ATT-01, decisions 38-39) ---------- */
-  function promoteAuto(){
+  /* ---------- Rules (docs/spec: RSVP-01, RSVP-02, ATT-01; decisions 32, 38, 39) ---------- */
+  function promoteAuto(e){
     const moved = [];
-    while (S.confirmed.length < S.cap){
-      const i = S.waitlist.findIndex(w => !w.held);      // held people are skipped by automatic promotion
+    while (e.cap == null || e.confirmed.length < e.cap){
+      const i = e.waitlist.findIndex(w => !w.held);           // held people are skipped
       if (i < 0) break;
-      const [w] = S.waitlist.splice(i, 1);
-      S.confirmed.push(w.name); moved.push(w.name);
+      const [w] = e.waitlist.splice(i, 1);
+      e.confirmed.push(w.name); moved.push(w.name);
+      if (e.cap == null) break;
     }
     return moved;
   }
-  function myState(){
-    if (S.confirmed.includes(S.me)) return 'going';
-    const w = S.waitlist.findIndex(x => x.name === S.me);
+  function myState(e){
+    if (e.confirmed.includes(S.me)) return 'going';
+    const w = e.waitlist.findIndex(x => x.name === S.me);
     if (w >= 0) return 'waitlist:' + (w + 1);
-    if (S.maybe.includes(S.me)) return 'maybe';
+    if (e.maybe.includes(S.me)) return 'maybe';
     return 'none';
   }
   function rsvp(choice){
-    S.mine = choice;
-    const before = S.confirmed.includes(S.me);
-    S.confirmed = S.confirmed.filter(n => n !== S.me);
-    S.waitlist = S.waitlist.filter(w => w.name !== S.me);
-    S.maybe = S.maybe.filter(n => n !== S.me);
+    const e = E();
+    const wasGoing = e.confirmed.includes(S.me);
+    e.confirmed = e.confirmed.filter(n => n !== S.me);
+    e.waitlist = e.waitlist.filter(w => w.name !== S.me);
+    e.maybe = e.maybe.filter(n => n !== S.me);
+    e.mine = choice;
     let msg = '';
     if (choice === 'going'){
-      if (S.confirmed.length < S.cap){ S.confirmed.push(S.me); msg = "You're going."; }
-      else { S.waitlist.push({name:S.me, held:false}); msg = "Event is full. You're waitlist #" + S.waitlist.length + '.'; }
+      if (e.cap == null || e.confirmed.length < e.cap){ e.confirmed.push(S.me); msg = "You're going."; }
+      else { e.waitlist.push({name:S.me, held:false}); msg = "Event is full. You're waitlist #" + e.waitlist.length + '.'; }
     } else if (choice === 'maybe'){
-      S.maybe.push(S.me); msg = 'Maybe. This does not hold a place.';
+      e.maybe.push(S.me); msg = 'Maybe. This does not hold a place.';
     } else {
       msg = 'Not going.';
     }
-    if (before && choice !== 'going'){
-      const moved = promoteAuto();
+    if (wasGoing && choice !== 'going'){
+      const moved = promoteAuto(e);
       if (moved.length) msg += ' ' + moved.join(' and ') + (moved.length > 1 ? ' move' : ' moves') + ' up from the waitlist.';
     }
     S.rsvpMsg = msg;
   }
-  function adminPromote(name){
-    const w = S.waitlist.findIndex(x => x.name === name);
+  function adminPromote(e, name){
+    const w = e.waitlist.findIndex(x => x.name === name);
     if (w < 0) return;
-    if (S.confirmed.length >= S.cap){ S.dialog = {type:'raise', name}; return; }
-    S.waitlist.splice(w, 1); S.confirmed.push(name);
+    if (e.cap != null && e.confirmed.length >= e.cap){ S.dialog = {type:'raise', name, ev:e.id}; return; }
+    e.waitlist.splice(w, 1); e.confirmed.push(name);
     toast(name + ' is confirmed.');
   }
   function raiseAndPromote(){
-    const name = S.dialog.name;
-    S.cap += 1;
-    const w = S.waitlist.findIndex(x => x.name === name);
-    if (w >= 0){ S.waitlist.splice(w, 1); S.confirmed.push(name); }
+    const e = S.events.find(x => x.id === S.dialog.ev), name = S.dialog.name;
+    e.cap += 1;
+    const w = e.waitlist.findIndex(x => x.name === name);
+    if (w >= 0){ e.waitlist.splice(w, 1); e.confirmed.push(name); }
     S.dialog = null;
-    toast('Capacity raised to ' + S.cap + '. ' + name + ' is confirmed.');
+    toast('Capacity raised to ' + e.cap + '. ' + name + ' is confirmed.');
   }
-  function markCount(){ return S.confirmed.filter(n => S.att[n]).length; }
+  function markCount(e){ return e.confirmed.filter(n => e.att[n]).length; }
+  function removeFromTeam(name){
+    S.team.roster = S.team.roster.filter(n => n !== name);
+    S.pool.push(name); S.pool.sort();
+    S.events.forEach(e => {
+      e.confirmed = e.confirmed.filter(n => n !== name);
+      e.waitlist = e.waitlist.filter(w => w.name !== name);
+      e.maybe = e.maybe.filter(n => n !== name);
+    });
+  }
 
-  /* ---------- Screens ---------- */
-  const nav = {
-    player: [['p-home','Home'],['p-events','Events'],['p-team','Team'],['p-profile','Profile']],
-    admin:  [['a-home','Home'],['a-events','Events'],['a-members','Members'],['a-more','More']]
+  /* ---------- Navigation ---------- */
+  const NAV = {
+    player: [['home','Home'],['events','Events'],['team','Team'],['profile','Profile']],
+    coach:  [['home','Home'],['events','Events'],['team','Team'],['profile','Profile']],
+    admin:  [['home','Home'],['events','Events'],['members','Members'],['more','More']]
   };
-  function navbar(active, set){
-    return '<nav class="navbar" aria-label="' + (set === 'player' ? 'Player' : 'Admin') + ' navigation">' +
-      nav[set].map(([id, label]) => '<button type="button" data-go="' + id + '"' + (active === id ? ' aria-current="page"' : '') + '>' + label + '</button>').join('') +
+  function navbar(active){
+    const set = NAV[S.role];
+    return '<nav class="navbar" aria-label="' + (S.role === 'admin' ? 'Admin' : 'Player') + ' navigation">' +
+      set.map(([id, label]) => '<button type="button" data-go="' + id + '"' + (active === id ? ' aria-current="page"' : '') + '>' + label + '</button>').join('') +
       '</nav>';
   }
   function head(title, back){
-    return '<div class="appbar">' + (back ? '<button class="back" type="button" data-go="' + back[0] + '">‹ ' + back[1] + '</button>' : '<span>' + LOGO + '</span>') + (back ? '<span></span>' : '') + '</div>' +
+    return '<div class="appbar">' + (back ? '<button class="back" type="button" data-go="' + back[0] + '">‹ ' + back[1] + '</button>' : '<span>' + LOGO + '</span>') + '<span></span></div>' +
       '<h2 tabindex="-1" id="sTitle" style="padding:0 16px">' + title + '</h2>';
   }
 
+  /* ---------- Screens ---------- */
   function vLanding(){
     return '<div class="main" style="justify-content:flex-end;padding:24px">' +
       '<div style="flex:1"></div>' +
@@ -270,26 +306,39 @@ h3{font-size:17px;font-weight:700}
     return head('Sign in', ['landing','Back']) +
       '<div class="main">' +
       '<p class="cap">Use the email you joined with.</p>' +
-      '<div class="field"><label for="em">Email</label><div class="input" id="em">joao@example.com</div></div>' +
-      '<div class="field"><label for="pw">Password</label><div class="input" id="pw">••••••••••</div></div>' +
-      '<button class="btn" type="button" style="justify-content:flex-start;min-height:44px;color:var(--text);text-decoration:underline;border:0;padding:0">Forgot password?</button>' +
-      '<div class="card" style="background:var(--surface)"><p class="tiny"><b>Prototype only.</b> There is no real sign-in yet. Choose a role to continue.</p>' +
-      '<button class="btn btn-primary" type="button" data-role="player">Continue as player</button>' +
+      '<div class="field"><label for="em">Email</label><div class="input" id="em" style="display:flex;align-items:center;color:var(--text2)">joao@example.com</div></div>' +
+      '<div class="field"><label for="pw">Password</label><div class="input" id="pw" style="display:flex;align-items:center;color:var(--text2)">••••••••••</div></div>' +
+      '<div class="card" style="background:var(--surface)"><p class="tiny"><b>Prototype only.</b> There is no real sign-in yet. Choose who you are signing in as.</p>' +
+      '<button class="btn btn-primary" type="button" data-role="coach">Continue as player / coach</button>' +
       '<button class="btn btn-outline" type="button" data-role="admin">Continue as admin</button></div>' +
       '</div>';
   }
 
-  function vPHome(){
-    const st = myState();
-    const pressed = {going: st === 'going' || st.startsWith('waitlist'), maybe: st === 'maybe', not: st === 'none' && S.mine === 'not'};
-    const chip = st === 'going' ? '<span class="chip chip-ok">Going</span>' : st.startsWith('waitlist') ? '<span class="chip chip-wait">Waitlist #' + st.split(':')[1] + '</span>' : st === 'maybe' ? '<span class="chip chip-grey">Maybe</span>' : S.mine === 'not' ? '<span class="chip chip-grey">Not going</span>' : '<span class="chip chip-grey">No answer</span>';
+  function vHome(){
+    if (S.role === 'admin') return vAHome();
+    const e = S.events[0];
+    const st = myState(e);
+    const pressed = {going: st === 'going' || st.startsWith('waitlist'), maybe: st === 'maybe', not: st === 'none' && e.mine === 'not'};
+    const chip = st === 'going' ? '<span class="chip chip-ok">Going</span>'
+      : st.startsWith('waitlist') ? '<span class="chip chip-wait">Waitlist #' + st.split(':')[1] + '</span>'
+      : st === 'maybe' ? '<span class="chip chip-grey">Maybe</span>'
+      : e.mine === 'not' ? '<span class="chip chip-grey">Not going</span>' : '<span class="chip chip-grey">No answer</span>';
+    const coachTools = S.role === 'coach' ?
+      '<div class="card"><h3>Coach tools</h3><p class="tiny">For ' + MY_TEAM + '.</p>' +
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">' +
+        '<button class="btn btn-sm outline" type="button" data-go="team">Manage roster</button>' +
+        '<button class="btn btn-sm outline" type="button" data-go="new-event">Create event</button>' +
+        '<button class="btn btn-sm outline" type="button" data-open-event="ev1" data-then="attendance">Take attendance</button>' +
+        '<button class="btn btn-sm outline" type="button" data-open-event="ev1">Waitlist</button>' +
+      '</div></div>' : '';
     return '<div class="appbar"><span>' + LOGO + '</span><button class="btn btn-sm outline" type="button" data-msg="No new notifications.">Notifications</button></div>' +
       '<div class="main">' +
-      '<div><h2 tabindex="-1" id="sTitle">Hi, João!</h2><p class="cap">IVI · Div 3 Dragons</p></div>' +
+      '<div style="display:flex;gap:12px;align-items:center">' + avatar(S.me, 'lg') +
+        '<div style="min-width:0"><h2 tabindex="-1" id="sTitle">Hi, ' + S.me.split(' ')[0] + '!</h2><p class="cap">IVI · ' + MY_TEAM + (S.role === 'coach' ? ' · Coach' : '') + '</p></div></div>' +
       '<div class="card">' +
-        '<div style="display:flex;justify-content:space-between;align-items:center"><span class="chip" style="background:var(--navy);color:var(--on-navy)">NEXT TRAINING</span><span style="font-weight:600;font-size:14px">Thu 17 Oct · 19:00</span></div>' +
-        '<div><h3>Team training</h3><p class="cap">Collinstown Sports Complex · 19:00–21:00</p></div>' +
-        '<div><div style="display:flex;justify-content:space-between;font-size:14px"><span class="cap">Confirmed</span><b>' + S.confirmed.length + ' / ' + S.cap + '</b></div><div class="track" style="margin-top:6px"><div class="fill" style="width:' + Math.round(S.confirmed.length / S.cap * 100) + '%"></div></div></div>' +
+        '<div style="display:flex;justify-content:space-between;align-items:center"><span class="chip" style="background:var(--navy);color:var(--on-navy)">NEXT TRAINING</span><span style="font-weight:600;font-size:14px">' + e.date + ' · ' + e.time.split('–')[0] + '</span></div>' +
+        '<div><h3>' + e.title + '</h3><p class="cap">' + e.place + '</p></div>' +
+        '<div><div style="display:flex;justify-content:space-between;font-size:14px"><span class="cap">Confirmed</span><b>' + e.confirmed.length + ' / ' + e.cap + '</b></div><div class="track" style="margin-top:6px"><div class="fill" style="width:' + Math.min(100, Math.round(e.confirmed.length / e.cap * 100)) + '%"></div></div></div>' +
         '<div style="display:flex;justify-content:space-between;align-items:center"><span style="font-weight:600">Your answer</span>' + chip + '</div>' +
         '<div class="choices" role="group" aria-label="Will you attend?">' +
           '<button class="choice" type="button" data-rsvp="going" aria-pressed="' + pressed.going + '">Going</button>' +
@@ -298,86 +347,34 @@ h3{font-size:17px;font-weight:700}
         '</div>' +
         '<p class="status" role="status" aria-live="polite">' + (S.rsvpMsg || '') + '</p>' +
       '</div>' +
-      '<div style="display:flex;justify-content:space-between;align-items:center"><h3>Upcoming</h3><button class="btn btn-sm outline" type="button" data-go="p-events">All events</button></div>' +
-      '<div class="card" style="flex-direction:row;align-items:center;padding:10px"><div class="date"><b>18</b><span>OCT</span></div><div style="flex:1;min-width:0"><b>League match</b><p class="cap">Sun 13:00 · IVI Arena</p></div><span class="chip chip-grey">Maybe</span></div>' +
-      '<div class="card" style="flex-direction:row;align-items:center;padding:10px"><div class="date"><b>22</b><span>OCT</span></div><div style="flex:1;min-width:0"><b>Technical training</b><p class="cap">Thu 19:00 · Collinstown</p></div><span class="chip chip-grey">No answer</span></div>' +
-      '</div>' + navbar('p-home','player');
-  }
-  function vPEvents(){
-    return head('Events') + '<div class="main">' +
-      '<button class="event-row" type="button" data-go="p-home"><div class="date"><b>17</b><span>OCT</span></div><div style="flex:1;min-width:0"><b>Team training</b><p class="cap">Thu 19:00 · ' + S.confirmed.length + ' of ' + S.cap + ' confirmed</p></div><span class="chip chip-ok">Going</span></button>' +
-      '<button class="event-row" type="button" data-go="p-home"><div class="date"><b>18</b><span>OCT</span></div><div style="flex:1;min-width:0"><b>League match</b><p class="cap">Sun 13:00 · IVI Arena</p></div><span class="chip chip-grey">Maybe</span></button>' +
-      '<button class="event-row" type="button" data-go="p-home"><div class="date"><b>22</b><span>OCT</span></div><div style="flex:1;min-width:0"><b>Technical training</b><p class="cap">Thu 19:00 · Collinstown</p></div><span class="chip chip-grey">No answer</span></button>' +
-      '</div>' + navbar('p-events','player');
-  }
-  function vPTeam(){
-    return head('Team') + '<div class="main">' +
-      '<div class="card"><h3>Div 3 Dragons</h3><p class="cap">' + S.confirmed.length + ' players confirmed for training</p></div>' +
-      S.confirmed.map(n => '<div class="row"><span class="avatar" aria-hidden="true">' + initials(n) + '</span><span class="name">' + n + '</span></div>').join('') +
-      '</div>' + navbar('p-team','player');
-  }
-  function vPProfile(){
-    return head('Profile') + '<div class="main">' +
-      '<div class="card"><b style="font-size:18px">João Pereira</b><p class="cap">joao@example.com</p></div>' +
-      '<div class="row"><span class="name">Language</span><span class="tiny">English</span></div>' +
-      '<p class="tiny">Change the language in Settings. Public screens stay in English.</p>' +
-      '<button class="btn btn-outline" type="button" data-signout>Sign out</button>' +
-      '</div>' + navbar('p-profile','player');
+      coachTools +
+      '<div style="display:flex;justify-content:space-between;align-items:center"><h3>Upcoming</h3><button class="btn btn-sm outline" type="button" data-go="events">All events</button></div>' +
+      S.events.slice(1).map(x => '<button class="event-row" type="button" data-open-event="' + x.id + '"><div class="date"><b>' + x.date.split(' ')[1] + '</b><span>' + x.date.split(' ')[0].toUpperCase() + '</span></div><div style="flex:1;min-width:0"><b>' + x.title + '</b><p class="cap">' + x.time + ' · ' + x.place + '</p></div><span class="chip chip-grey">' + (x.maybe.includes(S.me) ? 'Maybe' : 'No answer') + '</span></button>').join('') +
+      '</div>' + navbar('home');
   }
 
-  function vAHome(){
-    const done = 2;
-    return '<div class="appbar"><span>' + LOGO + '</span><button class="btn btn-sm outline" type="button" data-msg="No new notifications.">Notifications</button></div>' +
-      '<div class="main">' +
-      '<div style="display:flex;gap:12px;align-items:center">' + CREST + '<div><h2 tabindex="-1" id="sTitle" style="font-size:20px">IVI</h2><p class="cap">International Volleyball Ireland</p></div></div>' +
-      '<div class="card"><div style="display:flex;justify-content:space-between;align-items:center"><h3>Set-up</h3><span class="tiny">' + done + ' of 3 done</span></div>' +
-        '<div class="row" style="min-height:44px"><span class="avatar" aria-hidden="true">✓</span><span class="name">Add a team</span></div>' +
-        '<div class="row" style="min-height:44px"><span class="avatar" aria-hidden="true">✓</span><span class="name">Create an invite link</span></div>' +
-        '<div class="row" style="min-height:44px;border:0"><span class="avatar" aria-hidden="true">3</span><span class="name">Schedule the first event</span></div>' +
-      '</div>' +
-      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">' +
-        '<button class="card" type="button" data-go="a-members" style="text-align:left;color:var(--text);cursor:pointer"><b style="font-size:22px">' + S.pending.length + '</b><span class="cap">Pending approvals</span></button>' +
-        '<div class="card"><b style="font-size:22px">42</b><span class="cap">Members in total</span></div>' +
-      '</div>' +
-      '<div style="display:flex;justify-content:space-between;align-items:center"><h3>Upcoming</h3><button class="btn btn-sm outline" type="button" data-go="a-events">All events</button></div>' +
-      '<button class="event-row" type="button" data-go="a-event"><div class="date"><b>17</b><span>OCT</span></div><div style="flex:1;min-width:0"><b>Team training</b><p class="cap">Thu 19:00 · ' + S.confirmed.length + ' confirmed · ' + S.waitlist.length + ' waitlisted</p></div></button>' +
-      '</div>' + navbar('a-home','admin');
-  }
-  function vAMembers(){
-    const rows = S.pending.map(n => {
-      const picked = S.approving[n] || [];
-      return '<div class="card" style="margin-bottom:4px"><div style="display:flex;align-items:center;gap:12px"><span class="avatar" aria-hidden="true">' + initials(n) + '</span><b style="flex:1">' + n + '</b></div>' +
-        '<p class="tiny" id="t-' + initials(n) + '">Assign at least one team</p>' +
-        '<div style="display:flex;flex-wrap:wrap;gap:6px" role="group" aria-labelledby="t-' + initials(n) + '">' +
-          TEAMS.map(t => '<button class="btn-sm ' + (picked.includes(t) ? 'on' : 'outline') + '" type="button" data-team="' + n + '|' + t + '" aria-pressed="' + picked.includes(t) + '" style="min-height:44px;border:2px solid var(--line);border-radius:12px;background:' + (picked.includes(t) ? 'var(--green)' : 'var(--surface)') + ';color:' + (picked.includes(t) ? 'var(--on-green)' : 'var(--text)') + ';padding:8px 10px;font-size:14px;font-weight:600;cursor:pointer">' + t + '</button>').join('') +
-        '</div>' +
-        '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">' +
-          '<button class="btn btn-primary btn-sm" type="button" data-approve="' + n + '"' + (picked.length ? '' : ' disabled') + '>Approve' + (picked.length ? ' and assign' : '') + '</button>' +
-          '<button class="btn btn-outline btn-sm" type="button" data-decline="' + n + '">Decline</button>' +
-        '</div></div>';
+  function vEvents(){
+    const list = S.events.map(x => {
+      const st = myState(x);
+      const label = st === 'going' ? '<span class="chip chip-ok">Going</span>' : st.startsWith('waitlist') ? '<span class="chip chip-wait">Waitlist</span>' : st === 'maybe' ? '<span class="chip chip-grey">Maybe</span>' : '<span class="chip chip-grey">No answer</span>';
+      return '<button class="event-row" type="button" data-open-event="' + x.id + '"><div class="date"><b>' + x.date.split(' ')[1] + '</b><span>' + x.date.split(' ')[0].toUpperCase() + '</span></div><div style="flex:1;min-width:0"><b>' + x.title + '</b><p class="cap">' + x.time.split('–')[0] + ' · ' + x.confirmed.length + (x.cap ? ' of ' + x.cap : '') + ' confirmed</p></div>' + (S.role === 'admin' ? '' : label) + '</button>';
     }).join('');
-    return head('Approvals', ['a-home','Overview']) + '<div class="main">' +
-      '<p class="cap">Approval and team assignment happen in one step. A player can join several teams.</p>' +
-      '<p class="status" role="status" aria-live="polite">' + (S.approveMsg || '') + '</p>' +
-      (rows || '<div class="card"><p>No one is waiting.</p><p class="tiny">New sign-ups appear here.</p></div>') +
-      '</div>' + navbar('a-members','admin');
+    return head('Events') + '<div class="main">' +
+      (isStaff() ? '<button class="btn btn-primary" type="button" data-go="new-event">Create event</button>' : '') +
+      list + '</div>' + navbar('events');
   }
-  function vAEvents(){
-    return head('Events', ['a-home','Overview']) + '<div class="main">' +
-      '<button class="event-row" type="button" data-go="a-event"><div class="date"><b>17</b><span>OCT</span></div><div style="flex:1;min-width:0"><b>Team training</b><p class="cap">Thu 19:00 · ' + S.confirmed.length + ' of ' + S.cap + ' confirmed</p></div></button>' +
-      '<button class="event-row" type="button" data-go="a-event"><div class="date"><b>18</b><span>OCT</span></div><div style="flex:1;min-width:0"><b>League match</b><p class="cap">Sun 13:00 · IVI Arena</p></div></button>' +
-      '</div>' + navbar('a-events','admin');
-  }
-  function vAEvent(){
-    const t = S.tab;
+
+  function vEvent(){
+    const e = E();
+    const t = e.tab;
     let list = '';
     if (t === 'confirmed'){
-      list = S.confirmed.map(n => '<div class="row"><span class="avatar" aria-hidden="true">' + initials(n) + '</span><span class="name">' + n + '</span><span class="chip chip-ok">Confirmed</span></div>').join('');
+      list = e.confirmed.map(n => '<div class="row">' + avatar(n) + '<span class="name">' + n + '</span><span class="chip chip-ok">Confirmed</span></div>').join('') || '<p class="cap">No one is confirmed yet.</p>';
     } else if (t === 'waitlist'){
-      list = S.waitlist.map((w, i) => {
+      list = e.waitlist.map((w, i) => {
         const n = w.name;
-        const removing = S.removing === n;
-        return '<div class="card" style="margin-bottom:4px"><div style="display:flex;align-items:center;gap:12px"><span class="avatar" aria-hidden="true">' + initials(n) + '</span><span class="name" style="flex:1;font-weight:600">' + n + '</span><span class="chip chip-wait">Waitlist #' + (i + 1) + '</span></div>' +
+        const removing = e.removingWL === n;
+        return '<div class="card" style="margin-bottom:4px"><div style="display:flex;align-items:center;gap:12px">' + avatar(n) + '<span class="name" style="flex:1;font-weight:600">' + n + '</span><span class="chip chip-wait">Waitlist #' + (i + 1) + '</span></div>' +
           (w.held ? '<p class="tiny">On hold: skipped by automatic promotion.</p>' : '') +
           (removing
             ? '<p class="tiny">Remove ' + n + ' from the waitlist?</p><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><button class="btn btn-danger btn-sm" type="button" data-remove-yes="' + n + '">Remove</button><button class="btn btn-outline btn-sm" type="button" data-remove-no>Keep</button></div>'
@@ -385,107 +382,294 @@ h3{font-size:17px;font-weight:700}
           '</div>';
       }).join('') || '<p class="cap">No one is on the waitlist.</p>';
     } else {
-      list = S.maybe.map(n => '<div class="row"><span class="avatar" aria-hidden="true">' + initials(n) + '</span><span class="name">' + n + '</span><span class="chip chip-grey">Maybe</span></div>').join('');
+      list = e.maybe.map(n => '<div class="row">' + avatar(n) + '<span class="name">' + n + '</span><span class="chip chip-grey">Maybe</span></div>').join('') || '<p class="cap">No maybe answers.</p>';
     }
-    return head('Team training', ['a-events','Events']) + '<div class="main" style="padding-top:8px">' +
-      '<p class="cap">Thu 17 Oct · 19:00–21:00 · Collinstown Sports Complex</p>' +
-      '<div class="card" style="padding:12px 14px"><div style="display:flex;justify-content:space-between;font-size:14px"><span>Capacity</span><b>' + S.confirmed.length + ' of ' + S.cap + ' confirmed</b></div><div class="track"><div class="fill" style="width:' + Math.min(100, Math.round(S.confirmed.length / S.cap * 100)) + '%"></div></div></div>' +
-      (S.waitlist.length ? '<div class="banner" role="note"><span aria-hidden="true">!</span><span>Capacity is ' + S.cap + '. New sign-ups go to the waitlist.</span></div>' : '') +
+    const cap = e.cap == null ? 'No capacity limit' : e.confirmed.length + ' of ' + e.cap + ' confirmed';
+    const pct = e.cap == null ? 0 : Math.min(100, Math.round(e.confirmed.length / e.cap * 100));
+    return head(e.title, ['events','Events']) + '<div class="main" style="padding-top:8px">' +
+      '<p class="cap">' + e.date + ' · ' + e.time + ' · ' + e.place + '</p>' +
+      '<div class="card" style="padding:12px 14px"><div style="display:flex;justify-content:space-between;font-size:14px"><span>Capacity</span><b>' + cap + '</b></div>' + (e.cap == null ? '' : '<div class="track"><div class="fill" style="width:' + pct + '%"></div></div>') + '</div>' +
+      (e.waitlist.length && e.cap != null ? '<div class="banner" role="note"><span aria-hidden="true">!</span><span>Capacity is ' + e.cap + '. New sign-ups go to the waitlist.</span></div>' : '') +
       '<div class="tabs" role="group" aria-label="List">' +
-        '<button type="button" data-tab="confirmed" aria-pressed="' + (t === 'confirmed') + '">Confirmed (' + S.confirmed.length + ')</button>' +
-        '<button type="button" data-tab="waitlist" aria-pressed="' + (t === 'waitlist') + '">Waitlist (' + S.waitlist.length + ')</button>' +
-        '<button type="button" data-tab="maybe" aria-pressed="' + (t === 'maybe') + '">Maybe (' + S.maybe.length + ')</button>' +
-      '</div>' +
-      list +
-      '</div>' +
-      '<div class="footer"><button class="btn btn-primary" type="button" data-go="attendance">Take attendance</button><button class="btn btn-outline" type="button" data-msg="Reminder sent in the app.">Send in-app reminder</button></div>';
+        '<button type="button" data-etab="confirmed" aria-pressed="' + (t === 'confirmed') + '">Confirmed (' + e.confirmed.length + ')</button>' +
+        '<button type="button" data-etab="waitlist" aria-pressed="' + (t === 'waitlist') + '">Waitlist (' + e.waitlist.length + ')</button>' +
+        '<button type="button" data-etab="maybe" aria-pressed="' + (t === 'maybe') + '">Maybe (' + e.maybe.length + ')</button>' +
+      '</div>' + list + '</div>' +
+      '<div class="footer"><button class="btn btn-primary" type="button" data-go="attendance">Take attendance</button>' +
+        '<button class="btn btn-outline" type="button" data-msg="Reminder sent in the app.">Send in-app reminder</button></div>';
   }
+
+  function vNewEvent(){
+    const f = S.newEvent;
+    return head('New event', ['events','Events']) + '<form class="main" id="newEventForm" novalidate style="padding-top:8px">' +
+      '<p class="cap">For ' + MY_TEAM + '. Event type: training.</p>' +
+      '<div class="field"><label for="ne-title">Title</label><input class="input" id="ne-title" name="title" value="' + f.title + '" required aria-describedby="ne-err"></div>' +
+      '<div class="field"><label for="ne-date">Date</label><input class="input" id="ne-date" name="date" value="' + f.date + '" placeholder="e.g. Thu 24 Oct" required></div>' +
+      '<div class="field"><label for="ne-time">Time</label><input class="input" id="ne-time" name="time" value="' + f.time + '" placeholder="e.g. 19:00–21:00" required></div>' +
+      '<div class="field"><label for="ne-place">Venue</label><input class="input" id="ne-place" name="place" value="' + f.place + '" required></div>' +
+      '<div class="field"><label for="ne-cap">Capacity (optional)</label><input class="input" id="ne-cap" name="cap" inputmode="numeric" value="' + f.cap + '" placeholder="Leave blank for no limit"></div>' +
+      '<p class="tiny">The RSVP deadline is 2 hours before the start, unless you change it.</p>' +
+      '<p class="status" id="ne-err" role="alert" style="color:var(--flame)">' + (S.eventErr || '') + '</p>' +
+      '<button class="btn btn-primary" type="submit">Create event</button>' +
+      '</form>';
+  }
+
   function vAttendance(){
-    const n = S.confirmed.length, marked = markCount();
-    const count = v => S.confirmed.filter(x => S.att[x] === v).length;
-    return head('Attendance', ['a-event','Team training']) + '<div class="main" style="padding-top:8px">' +
+    const e = E(), n = e.confirmed.length, marked = markCount(e);
+    const count = v => e.confirmed.filter(x => e.att[x] === v).length;
+    return head('Attendance', ['event','Back']) + '<div class="main" style="padding-top:8px">' +
       '<div class="stats"><div class="card"><b>' + count('present') + '</b><span class="tiny">Present</span></div><div class="card"><b>' + count('absent') + '</b><span class="tiny">Absent</span></div><div class="card"><b>' + count('late') + '</b><span class="tiny">Late</span></div><div class="card"><b>' + marked + '/' + n + '</b><span class="tiny">Marked</span></div></div>' +
       '<p class="tiny">Only confirmed players can be marked. One tap per person.</p>' +
-      S.confirmed.map(x => '<div class="row" style="flex-direction:column;align-items:stretch;gap:8px"><span class="name">' + x + '</span><div class="seg3" role="group" aria-label="Status for ' + x + '">' +
-        ['present','absent','late'].map(v => '<button type="button" class="' + v + '" data-att="' + x + '|' + v + '" aria-pressed="' + (S.att[x] === v) + '">' + (v[0].toUpperCase() + v.slice(1)) + '</button>').join('') +
+      e.confirmed.map(x => '<div class="row" style="flex-direction:column;align-items:stretch;gap:8px"><span class="name">' + x + '</span><div class="seg3" role="group" aria-label="Status for ' + x + '">' +
+        ['present','absent','late'].map(v => '<button type="button" class="' + v + '" data-att="' + x + '|' + v + '" aria-pressed="' + (e.att[x] === v) + '">' + (v[0].toUpperCase() + v.slice(1)) + '</button>').join('') +
         '</div></div>').join('') +
       '</div>' +
-      '<div class="footer"><p class="tiny" style="text-align:center">' + marked + ' of ' + n + ' marked' + (S.attSaved ? ' · saved' : '') + '</p><button class="btn btn-primary" type="button" data-save' + (marked ? '' : ' disabled') + '>Save attendance</button></div>';
+      '<div class="footer"><p class="tiny" style="text-align:center">' + marked + ' of ' + n + ' marked' + (e.attSaved ? ' · saved' : '') + '</p><button class="btn btn-primary" type="button" data-save' + (marked ? '' : ' disabled') + '>Save attendance</button></div>';
   }
-  function vANoMore(){
-    return head('More', ['a-home','Overview']) + '<div class="main">' +
-      '<button class="row" type="button" data-msg="Club settings: coming in the next pass." style="background:none;border-left:0;border-right:0;border-top:0;color:var(--text);text-align:left;cursor:pointer;font-size:16px"><span class="name">Club settings</span><span aria-hidden="true">›</span></button>' +
-      '<button class="row" type="button" data-msg="Invitations: coming in the next pass." style="background:none;border-left:0;border-right:0;border-top:0;color:var(--text);text-align:left;cursor:pointer;font-size:16px"><span class="name">Invitations</span><span aria-hidden="true">›</span></button>' +
+
+  function vTeam(){
+    const t = S.team;
+    const canManage = isStaff();
+    const rosterRows = t.roster.map(n => {
+      const p = prof(n);
+      const removing = S.removingRoster === n;
+      return '<div class="card" style="margin-bottom:2px"><div style="display:flex;align-items:center;gap:12px">' + avatar(n) +
+        '<div style="flex:1;min-width:0"><b>' + n + '</b><p class="tiny">' + (p.position || 'Not set') + '</p></div></div>' +
+        (canManage ? (removing
+          ? '<p class="tiny">Remove ' + n + ' from ' + t.name + '? They will be taken off upcoming events.</p><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><button class="btn btn-danger btn-sm" type="button" data-roster-remove-yes="' + n + '">Remove</button><button class="btn btn-outline btn-sm" type="button" data-roster-remove-no>Keep</button></div>'
+          : (n === S.me ? '' : '<button class="btn btn-outline btn-sm" type="button" data-roster-remove="' + n + '">Remove from team</button>'))
+        : '') + '</div>';
+    }).join('');
+    const pickList = canManage && S.pool.length
+      ? '<div class="card"><h3>Add a club member</h3><p class="tiny">Existing club members only. New sign-ups are approved by an admin first.</p>' +
+        S.pool.map(n => '<div class="row" style="min-height:48px;border:0;padding:4px 0">' + avatar(n) + '<span class="name">' + n + '</span><button class="btn btn-primary btn-sm" type="button" data-roster-add="' + n + '">Add</button></div>').join('') + '</div>'
+      : '';
+    return head(canManage ? 'Team' : 'Team', ['home','Home']) + '<div class="main" style="padding-top:8px">' +
+      '<div class="card" style="flex-direction:row;align-items:center;gap:14px">' +
+        '<span class="teamlogo" aria-hidden="true">' + (t.logo ? '<img src="' + t.logo + '" alt="">' : 'D3') + '</span>' +
+        '<div style="flex:1;min-width:0"><h3 style="font-size:18px">' + t.name + '</h3><p class="tiny">' + t.roster.length + ' players · IVI</p></div>' +
+      '</div>' +
+      (canManage ? '<button class="btn btn-outline btn-sm" type="button" data-pick-logo style="align-self:flex-start">' + (t.logo ? 'Change team logo' : 'Add team logo') + '</button>' : '') +
+      pickList +
+      '<h3>Roster</h3>' + rosterRows + '</div>' + navbar('team');
+  }
+
+  function vProfile(){
+    if (S.role === 'admin') return vAProfile();
+    const p = prof(S.me);
+    return head('Profile', ['home','Home']) + '<div class="main" style="padding-top:8px">' +
+      '<div class="card" style="flex-direction:row;align-items:center;gap:14px">' + avatar(S.me, 'lg') +
+        '<div style="min-width:0"><b style="font-size:18px">' + S.me + '</b><p class="tiny">' + p.email + '</p><p class="tiny">' + (S.role === 'coach' ? 'Player · Coach, ' + MY_TEAM : 'Player, ' + MY_TEAM) + '</p></div></div>' +
+      photoButtons(S.me) +
+      '<div class="field"><label for="pos">Position</label><select class="input" id="pos" data-position="' + S.me + '">' +
+        POSITIONS.map(x => '<option' + (x === p.position ? ' selected' : '') + '>' + x + '</option>').join('') + '</select></div>' +
+      '<div class="row"><span class="name">Language</span><span class="tiny">English</span></div>' +
+      '<p class="tiny">Change the language in Settings. Public screens stay in English.</p>' +
       '<button class="btn btn-outline" type="button" data-signout>Sign out</button>' +
-      '</div>' + navbar('a-more','admin');
+      '</div>' + navbar('profile');
+  }
+  function vAProfile(){
+    const p = prof(S.me);
+    return head('Profile', ['home','Home']) + '<div class="main" style="padding-top:8px">' +
+      '<div class="card" style="flex-direction:row;align-items:center;gap:14px">' + avatar(S.me, 'lg') +
+        '<div style="min-width:0"><b style="font-size:18px">' + S.me + '</b><p class="tiny">Club admin · IVI</p><p class="tiny">' + p.email + '</p></div></div>' +
+      photoButtons(S.me) +
+      '<div class="row"><span class="name">Language</span><span class="tiny">English</span></div>' +
+      '<button class="btn btn-outline" type="button" data-signout>Sign out</button>' +
+      '</div>' + navbar('profile');
+  }
+  function photoButtons(n){
+    return '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">' +
+      '<button class="btn btn-outline btn-sm" type="button" data-pick-photo="' + n + '">' + (prof(n).photo ? 'Change photo' : 'Add photo') + '</button>' +
+      (prof(n).photo ? '<button class="btn btn-outline btn-sm" type="button" data-remove-photo="' + n + '">Remove photo</button>' : '<span></span>') +
+      '</div>';
+  }
+
+  function vAHome(){
+    const e = S.events[0];
+    return '<div class="appbar"><span>' + LOGO + '</span><button class="btn btn-sm outline" type="button" data-msg="No new notifications.">Notifications</button></div>' +
+      '<div class="main">' +
+      '<div style="display:flex;gap:12px;align-items:center">' + CREST + '<div><h2 tabindex="-1" id="sTitle" style="font-size:20px">IVI</h2><p class="cap">International Volleyball Ireland</p></div></div>' +
+      '<div class="card"><div style="display:flex;justify-content:space-between;align-items:center"><h3>Set-up</h3><span class="tiny">2 of 3 done</span></div>' +
+        '<div class="row" style="min-height:44px"><span class="avatar" aria-hidden="true">✓</span><span class="name">Add a team</span></div>' +
+        '<div class="row" style="min-height:44px"><span class="avatar" aria-hidden="true">✓</span><span class="name">Create an invite link</span></div>' +
+        '<div class="row" style="min-height:44px;border:0"><span class="avatar" aria-hidden="true">3</span><span class="name">Schedule the first event</span></div>' +
+      '</div>' +
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">' +
+        '<button class="card" type="button" data-go="members" style="text-align:left;color:var(--text);cursor:pointer"><b style="font-size:22px">' + S.pending.length + '</b><span class="cap">Pending approvals</span></button>' +
+        '<div class="card"><b style="font-size:22px">42</b><span class="cap">Members in total</span></div>' +
+      '</div>' +
+      '<div style="display:flex;justify-content:space-between;align-items:center"><h3>Upcoming</h3><button class="btn btn-sm outline" type="button" data-go="events">All events</button></div>' +
+      '<button class="event-row" type="button" data-open-event="' + e.id + '"><div class="date"><b>17</b><span>OCT</span></div><div style="flex:1;min-width:0"><b>' + e.title + '</b><p class="cap">Thu 19:00 · ' + e.confirmed.length + ' confirmed · ' + e.waitlist.length + ' waitlisted</p></div></button>' +
+      '</div>' + navbar('home');
+  }
+  function vMembers(){
+    const rows = S.pending.map(n => {
+      const picked = S.approving[n] || [];
+      const tid = 't-' + n.replace(/\W/g, '');
+      return '<div class="card" style="margin-bottom:4px"><div style="display:flex;align-items:center;gap:12px">' + avatar(n) + '<b style="flex:1">' + n + '</b></div>' +
+        '<p class="tiny" id="' + tid + '">Assign at least one team</p>' +
+        '<div style="display:flex;flex-wrap:wrap;gap:6px" role="group" aria-labelledby="' + tid + '">' +
+          S.teamOptions().map(t => '<button type="button" data-team="' + n + '|' + t + '" aria-pressed="' + picked.includes(t) + '" style="min-height:44px;border:2px solid var(--line);border-radius:12px;background:' + (picked.includes(t) ? 'var(--green)' : 'var(--surface)') + ';color:' + (picked.includes(t) ? 'var(--on-green)' : 'var(--text)') + ';padding:8px 10px;font-size:14px;font-weight:600;cursor:pointer">' + t + '</button>').join('') +
+        '</div>' +
+        '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">' +
+          '<button class="btn btn-primary btn-sm" type="button" data-approve="' + n + '"' + (picked.length ? '' : ' disabled') + '>Approve' + (picked.length ? ' and assign' : '') + '</button>' +
+          '<button class="btn btn-outline btn-sm" type="button" data-decline="' + n + '">Decline</button>' +
+        '</div></div>';
+    }).join('');
+    return head('Approvals', ['home','Overview']) + '<div class="main">' +
+      '<p class="cap">Approval and team assignment happen in one step. A player can join several teams.</p>' +
+      '<p class="status" role="status" aria-live="polite">' + (S.approveMsg || '') + '</p>' +
+      (rows || '<div class="card"><p>No one is waiting.</p><p class="tiny">New sign-ups appear here.</p></div>') +
+      '</div>' + navbar('members');
+  }
+  S.teamOptions = () => ['Div 2 Vixens','Div 2 Dinosaurs','Div 3 Lynnx','Div 3 Dragons','Div 4 Regional League Phoenix','Div 4 Regional League Ravens'];
+
+  function vMore(){
+    return head('More', ['home','Overview']) + '<div class="main">' +
+      '<h3>Club admins</h3><p class="tiny">Each admin has their own profile and sees the whole club.</p>' +
+      S.admins.map(n => '<div class="row" style="min-height:56px">' + avatar(n) + '<span class="name">' + n + (n === S.me ? ' (you)' : '') + '</span></div>').join('') +
+      '<button class="btn btn-outline" type="button" data-msg="Invite an admin: coming in the next pass.">Invite an admin</button>' +
+      '<button class="row" type="button" data-go="profile" style="background:none;border-left:0;border-right:0;border-top:0;color:var(--text);text-align:left;cursor:pointer;font-size:16px"><span class="name">My profile</span><span aria-hidden="true">›</span></button>' +
+      '<button class="row" type="button" data-go="team" style="background:none;border-left:0;border-right:0;border-top:0;color:var(--text);text-align:left;cursor:pointer;font-size:16px"><span class="name">Team roster</span><span aria-hidden="true">›</span></button>' +
+      '<button class="row" type="button" data-msg="Club settings: coming in the next pass." style="background:none;border-left:0;border-right:0;border-top:0;color:var(--text);text-align:left;cursor:pointer;font-size:16px"><span class="name">Club settings</span><span aria-hidden="true">›</span></button>' +
+      '<button class="btn btn-outline" type="button" data-signout>Sign out</button>' +
+      '</div>' + navbar('more');
   }
 
   const VIEWS = {
-    'landing': vLanding, 'signin': vSignin,
-    'p-home': vPHome, 'p-events': vPEvents, 'p-team': vPTeam, 'p-profile': vPProfile,
-    'a-home': vAHome, 'a-members': vAMembers, 'a-events': vAEvents, 'a-event': vAEvent, 'attendance': vAttendance, 'a-more': vANoMore
+    landing: vLanding, signin: vSignin, home: vHome, events: vEvents, event: vEvent, 'new-event': vNewEvent,
+    attendance: vAttendance, team: vTeam, profile: vProfile, members: vMembers, more: vMore
   };
 
   function dialogHtml(){
     if (!S.dialog) return '';
-    if (S.dialog.type === 'raise'){
-      const n = S.dialog.name;
-      return '<div class="dialog-wrap"><div class="dialog" role="dialog" aria-modal="true" aria-labelledby="dlgT">' +
-        '<h3 id="dlgT">Confirmed places are full</h3>' +
-        '<p>' + S.confirmed.length + ' of ' + S.cap + ' places are confirmed. Raise capacity to ' + (S.cap + 1) + ' and promote ' + n + '?</p>' +
-        '<p class="tiny">The admin is asked to raise capacity first. The change is recorded.</p>' +
-        '<button class="btn btn-primary" type="button" data-raise-yes>Raise to ' + (S.cap + 1) + ' and promote</button>' +
-        '<button class="btn btn-outline" type="button" data-raise-no>Cancel</button>' +
-      '</div></div>';
-    }
-    return '';
+    const e = S.events.find(x => x.id === S.dialog.ev);
+    const n = S.dialog.name;
+    return '<div class="dialog-wrap"><div class="dialog" role="dialog" aria-modal="true" aria-labelledby="dlgT">' +
+      '<h3 id="dlgT">Confirmed places are full</h3>' +
+      '<p>' + e.confirmed.length + ' of ' + e.cap + ' places are confirmed. Raise capacity to ' + (e.cap + 1) + ' and promote ' + n + '?</p>' +
+      '<p class="tiny">The admin is asked to raise capacity first. The change is recorded.</p>' +
+      '<button class="btn btn-primary" type="button" data-raise-yes>Raise to ' + (e.cap + 1) + ' and promote</button>' +
+      '<button class="btn btn-outline" type="button" data-raise-no>Cancel</button>' +
+    '</div></div>';
+  }
+
+  function jumpOptions(){
+    return [
+      ['landing','Landing',null,'landing'],['signin','Sign in',null,'signin'],
+      ['p-home','Player · Home','player','home'],['p-events','Player · Events','player','events'],['p-team','Player · Team (read only)','player','team'],['p-profile','Player · Profile','player','profile'],
+      ['c-home','Coach · Home','coach','home'],['c-team','Coach · Team (manage roster)','coach','team'],['c-event','Coach · Event detail','coach','event'],['c-new','Coach · Create event','coach','new-event'],['c-att','Coach · Attendance','coach','attendance'],['c-profile','Coach · Profile (photo, position)','coach','profile'],
+      ['a-home','Admin · Overview','admin','home'],['a-members','Admin · Approvals','admin','members'],['a-events','Admin · Events','admin','events'],['a-event','Admin · Event detail (waitlist)','admin','event'],['a-att','Admin · Attendance','admin','attendance'],['a-profile','Admin · Profile','admin','profile'],['a-more','Admin · More (admins list)','admin','more']
+    ];
+  }
+  function setRole(role){
+    S.role = role; S.me = ROLE_ME[role];
   }
 
   function render(focusTitle){
     const sc = document.getElementById('screen');
+    if (!S.view) S.view = 'landing';
     sc.innerHTML = (VIEWS[S.view] || vLanding)();
     document.getElementById('layer').innerHTML = dialogHtml();
     const jump = document.getElementById('jump');
-    jump.innerHTML = SCREENS.map(([id, label]) => '<option value="' + id + '"' + (id === S.view ? ' selected' : '') + '>' + label + '</option>').join('');
+    const opts = jumpOptions();
+    const current = opts.find(o => o[2] === S.role && o[3] === S.view) || opts.find(o => o[3] === S.view && o[2] === null) || opts[0];
+    jump.innerHTML = opts.map(o => '<option value="' + o[0] + '"' + (o === current ? ' selected' : '') + '>' + o[1] + '</option>').join('');
     if (focusTitle){ const h = document.getElementById('sTitle') || sc.querySelector('h2'); if (h) h.focus(); }
     if (S.dialog){ const d = document.querySelector('#layer [role="dialog"] button'); if (d) d.focus(); }
   }
   function go(view, focus){
-    S.view = view; S.dialog = null; S.removing = null; S.approveMsg = ''; S.rsvpMsg = S.view.startsWith('p-') ? S.rsvpMsg : '';
-    if (view === 'a-event' || view === 'attendance') S.tab = S.tab || 'confirmed';
+    S.view = view; S.dialog = null; S.removingEvent = null; S.removingRoster = null; S.approveMsg = '';
+    if (view !== 'home' && view !== 'event' && view !== 'attendance') S.rsvpMsg = '';
+    if (view === 'new-event'){ S.newEvent = {title:'', date:'', time:'', place:'', cap:''}; S.eventErr = ''; }
     render(focus !== false);
     document.getElementById('screen').scrollTop = 0;
   }
   function refresh(){ render(false); }
 
-  /* ---------- Events (single delegated listener) ---------- */
-  document.addEventListener('click', function(e){
-    const el = e.target.closest('button, [data-go]');
+  /* ---------- Events (delegated) ---------- */
+  document.addEventListener('click', function(ev){
+    const el = ev.target.closest('button, [data-go]');
     if (!el) return;
     const d = el.dataset;
     if (d.themeSet) return;
-    if (d.role){ S.role = d.role; go(d.role === 'admin' ? 'a-home' : 'p-home'); return; }
+    if (d.role){ setRole(d.role === 'admin' ? 'admin' : 'coach'); go('home'); return; }
     if (d.go){ go(d.go); return; }
-    if (d.signout !== undefined){ S.role = null; go('landing'); return; }
+    if (d.openEvent){
+      S.cur = d.openEvent;
+      if (d.then) { go(d.then); return; }
+      go('event'); return;
+    }
+    if (d.signout !== undefined){ S.role = null; S.me = null; go('landing'); return; }
     if (d.msg !== undefined){ toast(d.msg); return; }
     if (d.rsvp){ rsvp(d.rsvp); refresh(); return; }
-    if (d.tab){ S.tab = d.tab; S.removing = null; refresh(); return; }
-    if (d.promote){ adminPromote(d.promote); refresh(); return; }
-    if (d.hold){ const w = S.waitlist.find(x => x.name === d.hold); if (w){ w.held = !w.held; toast(w.held ? d.hold + ' is on hold.' : d.hold + ' is released.'); } refresh(); return; }
-    if (d.remove){ S.removing = d.remove; refresh(); return; }
-    if (d.removeYes){ S.waitlist = S.waitlist.filter(x => x.name !== d.removeYes); S.removing = null; toast(d.removeYes + ' removed from the waitlist.'); refresh(); return; }
-    if (d.removeNo !== undefined){ S.removing = null; refresh(); return; }
+    if (d.etab){ E().tab = d.etab; E().removingWL = null; refresh(); return; }
+    if (d.promote){ adminPromote(E(), d.promote); refresh(); return; }
+    if (d.hold){ const w = E().waitlist.find(x => x.name === d.hold); if (w){ w.held = !w.held; toast(w.held ? d.hold + ' is on hold.' : d.hold + ' is released.'); } refresh(); return; }
+    if (d.remove){ E().removingWL = d.remove; refresh(); return; }
+    if (d.removeYes){ const e = E(); e.waitlist = e.waitlist.filter(x => x.name !== d.removeYes); e.removingWL = null; toast(d.removeYes + ' removed from the waitlist.'); refresh(); return; }
+    if (d.removeNo !== undefined){ E().removingWL = null; refresh(); return; }
     if (d.raiseYes !== undefined){ raiseAndPromote(); refresh(); return; }
     if (d.raiseNo !== undefined){ S.dialog = null; refresh(); return; }
     if (d.team){ const [n, t] = d.team.split('|'); const cur = S.approving[n] || []; S.approving[n] = cur.includes(t) ? cur.filter(x => x !== t) : cur.concat(t); refresh(); return; }
     if (d.approve){ const picked = S.approving[d.approve] || []; if (picked.length){ S.pending = S.pending.filter(x => x !== d.approve); S.approveMsg = d.approve + ' approved and assigned to ' + picked.join(', ') + '.'; toast(S.approveMsg); delete S.approving[d.approve]; } refresh(); return; }
     if (d.decline){ S.pending = S.pending.filter(x => x !== d.decline); S.approveMsg = 'Request declined.'; refresh(); return; }
-    if (d.att){ const [n, v] = d.att.split('|'); S.att[n] = S.att[n] === v ? undefined : v; S.attSaved = false; refresh(); return; }
-    if (d.save !== undefined){ S.attSaved = true; toast('Attendance saved for ' + markCount() + ' players.'); refresh(); return; }
+    if (d.att){ const [n, v] = d.att.split('|'); const e = E(); e.att[n] = e.att[n] === v ? undefined : v; e.attSaved = false; refresh(); return; }
+    if (d.save !== undefined){ const e = E(); e.attSaved = true; toast('Attendance saved for ' + markCount(e) + ' players.'); refresh(); return; }
+    if (d.rosterAdd){ S.pool = S.pool.filter(x => x !== d.rosterAdd); S.team.roster.push(d.rosterAdd); toast(d.rosterAdd + ' added to ' + S.team.name + '.'); refresh(); return; }
+    if (d.rosterRemove){ S.removingRoster = d.rosterRemove; refresh(); return; }
+    if (d.rosterRemoveYes){ const n = d.rosterRemoveYes; removeFromTeam(n); S.removingRoster = null; toast(n + ' removed from ' + S.team.name + '.'); refresh(); return; }
+    if (d.rosterRemoveNo !== undefined){ S.removingRoster = null; refresh(); return; }
+    if (d.pickPhoto){ S.photoTarget = d.pickPhoto; document.getElementById('photoIn').click(); return; }
+    if (d.removePhoto){ prof(d.removePhoto).photo = null; toast('Photo removed.'); refresh(); return; }
+    if (d.pickLogo !== undefined){ S.photoTarget = 'team'; document.getElementById('photoIn').click(); return; }
   });
-  document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && S.dialog){ S.dialog = null; refresh(); } });
 
-  document.getElementById('jump').addEventListener('change', function(e){ go(e.target.value); });
+  document.addEventListener('change', function(ev){
+    const t = ev.target;
+    if (t.id === 'photoIn' && t.files && t.files[0]){
+      const file = t.files[0];
+      const reader = new FileReader();
+      reader.onload = () => {
+        if (S.photoTarget === 'team') S.team.logo = reader.result;
+        else prof(S.photoTarget).photo = reader.result;
+        toast('Photo updated.');
+        refresh();
+      };
+      reader.readAsDataURL(file);
+      t.value = '';
+      return;
+    }
+    if (t.dataset && t.dataset.position){ prof(t.dataset.position).position = t.value; toast('Position saved: ' + t.value + '.'); refresh(); }
+  });
+
+  document.addEventListener('submit', function(ev){
+    if (ev.target.id !== 'newEventForm') return;
+    ev.preventDefault();
+    const f = new FormData(ev.target);
+    const v = {title:(f.get('title')||'').trim(), date:(f.get('date')||'').trim(), time:(f.get('time')||'').trim(), place:(f.get('place')||'').trim(), cap:(f.get('cap')||'').trim()};
+    S.newEvent = v;
+    const missing = ['title','date','time','place'].filter(k => !v[k]);
+    if (missing.length){ S.eventErr = 'Fill in ' + missing.join(', ') + ' to continue.'; refresh(); return; }
+    if (v.cap && !/^\d+$/.test(v.cap)){ S.eventErr = 'Capacity must be a whole number, or leave it blank.'; refresh(); return; }
+    const id = 'ev' + (S.events.length + 1);
+    S.events.push({id, title:v.title, date:v.date, time:v.time, place:v.place, team:MY_TEAM, cap: v.cap ? parseInt(v.cap, 10) : null,
+      confirmed:[], waitlist:[], maybe:[], att:{}, attSaved:false, mine:null, tab:'confirmed'});
+    S.cur = id; S.eventErr = '';
+    toast('Event created. RSVP deadline: 2 hours before the start.');
+    go('event');
+  });
+
+  document.addEventListener('keydown', function(ev){ if (ev.key === 'Escape' && S.dialog){ S.dialog = null; refresh(); } });
+
+  document.getElementById('jump').addEventListener('change', function(ev){
+    const o = jumpOptions().find(x => x[0] === ev.target.value);
+    if (!o) return;
+    if (o[2]) setRole(o[2]);
+    else { S.role = null; S.me = null; }
+    go(o[3]);
+  });
 
   /* ---------- Theme ---------- */
   function setTheme(v){
@@ -494,6 +678,7 @@ h3{font-size:17px;font-weight:700}
   }
   document.querySelectorAll('[data-theme-set]').forEach(b => b.addEventListener('click', () => setTheme(b.dataset.themeSet)));
 
+  S.view = 'landing';
   render(false);
 })();
 </script>

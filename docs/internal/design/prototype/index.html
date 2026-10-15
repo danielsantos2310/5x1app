@@ -192,7 +192,9 @@ select.input{padding-right:10px}
     newEvent: {title:'', date:'', time:'', place:'', cap:''},
     photoTarget: null,
     signinAs: 'player',
-    memberId: null
+    memberId: null,
+    draft: {name:'', email:'', role:'player', adult:false},
+    signupErr: ''
   };
 
   const $ = (s, r) => (r || document).querySelector(s);
@@ -200,6 +202,7 @@ select.input{padding-right:10px}
   const isStaff = () => S.role === 'coach' || S.role === 'admin';
   const initials = n => n.split(' ').map(w => w[0]).slice(0,2).join('').toUpperCase();
   const prof = n => S.profiles[n] || (S.profiles[n] = {position:'Not set', photo:null, email:''});
+  const escHtml = v => String(v == null ? '' : v).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[c]);
   const DETAIL_KEYS = ['height','weight','address','emName','emPhone','emAddress'];
   const det = n => { const p = prof(n); if (!p.details) p.details = {}; DETAIL_KEYS.forEach(k => { if (p.details[k] === undefined) p.details[k] = ''; }); return p.details; };
   function avatar(n, cls){
@@ -304,7 +307,7 @@ select.input{padding-right:10px}
       '<p style="font-size:18px;text-align:center;color:var(--text2)">Your club, on the palm of your hand.</p>' +
       '<div style="height:16px"></div>' +
       '<button class="btn btn-primary" type="button" data-go="signin">Sign in</button>' +
-      '<button class="btn btn-outline" type="button" data-go="signin">Create account</button>' +
+      '<button class="btn btn-outline" type="button" data-go="signup">Create account</button>' +
       '<p class="cap" style="text-align:center">Have an invite link? Open it on this device.</p>' +
       '</div>';
   }
@@ -601,8 +604,53 @@ select.input{padding-right:10px}
       '</div>' + navbar('club');
   }
 
+  function vSignup(){
+    const d = S.draft;
+    const field = (id, label, attrs) => '<div class="field"><label for="' + id + '">' + label + '</label><input class="input" id="' + id + '" ' + attrs + ' style="color:var(--text);background:var(--surface);width:100%"></div>';
+    return head('Create account', ['landing','Back']) + '<div class="main">' +
+      '<p class="cap">Create your account, then complete your profile. A club admin approves you before you see team details.</p>' +
+      field('su-name', 'Full name', 'data-draft="name" autocomplete="name" value="' + escHtml(d.name) + '"') +
+      field('su-email', 'Email', 'data-draft="email" type="email" autocomplete="email" value="' + escHtml(d.email) + '"') +
+      field('su-pw', 'Password', 'type="password" autocomplete="new-password"') +
+      '<div class="field"><span class="label" id="roleLbl">I am joining as</span><div class="choices" role="group" aria-labelledby="roleLbl">' +
+        '<button class="choice" type="button" data-draft-role="player" aria-pressed="' + (d.role === 'player') + '">Player</button>' +
+        '<button class="choice" type="button" data-draft-role="coach" aria-pressed="' + (d.role === 'coach') + '">Coach</button>' +
+      '</div></div>' +
+      '<label class="row" style="min-height:48px;border:0;align-items:flex-start;gap:10px;cursor:pointer"><input type="checkbox" data-draft="adult"' + (d.adult ? ' checked' : '') + ' style="width:22px;height:22px;margin-top:2px;flex:none"><span>I am 18 or older. Sign-up for under-18s is not open yet.</span></label>' +
+      (S.signupErr ? '<p class="status" role="alert" style="color:var(--text)">' + escHtml(S.signupErr) + '</p>' : '') +
+      '<button class="btn btn-primary" type="button" data-signup-continue>Continue</button>' +
+      '</div>';
+  }
+  function vSetup(){
+    const me = S.me || S.draft.name || 'New member';
+    const isPlayer = S.role !== 'coach';
+    const p = prof(me);
+    return head('Complete your profile', null) + '<div class="main" style="padding-top:8px">' +
+      '<p class="cap">Step 2 of 2. Add a photo and your details. You can change them later in Profile.</p>' +
+      '<div class="card" style="align-items:center;text-align:center;gap:10px">' + photoButtons(me) +
+        '<div><b style="font-size:18px">' + escHtml(me) + '</b><p class="tiny">' + escHtml(p.email) + '</p><p class="tiny">' + (isPlayer ? 'Player' : 'Coach') + ' · IVI</p></div></div>' +
+      (isPlayer
+        ? '<div class="field"><label for="pos">Position</label><select class="input" id="pos" data-position="' + escHtml(me) + '">' +
+            POSITIONS.map(x => '<option' + (x === p.position ? ' selected' : '') + '>' + x + '</option>').join('') + '</select></div>' +
+          '<p class="tiny">Height, weight, address and emergency contact are optional. Only club admins can see them.</p>'
+        : '') +
+      '<button class="btn btn-primary" type="button" data-setup-finish>Finish setup</button>' +
+      '</div>';
+  }
+  function vWaiting(){
+    const me = S.me || S.draft.name || 'New member';
+    return '<div class="appbar"><span>' + LOGO + '</span><span></span></div>' +
+      '<div class="main" style="justify-content:center;gap:16px">' +
+      '<h2 tabindex="-1" id="sTitle">Waiting for approval</h2>' +
+      '<p>Thanks, ' + escHtml(me.split(' ')[0]) + '. An admin of IVI will review your sign-up and assign your team.</p>' +
+      '<div class="card"><p class="tiny">Until an admin approves you, you see only this message. No team, events or members are shown.</p></div>' +
+      '<button class="btn btn-primary" type="button" data-approve-new>Prototype: simulate approval</button>' +
+      '<button class="btn btn-outline" type="button" data-signout>Sign out</button>' +
+      '</div>';
+  }
+
   const VIEWS = {
-    landing: vLanding, signin: vSignin, home: vHome, events: vEvents, event: vEvent, 'new-event': vNewEvent,
+    landing: vLanding, signin: vSignin, signup: vSignup, setup: vSetup, waiting: vWaiting, home: vHome, events: vEvents, event: vEvent, 'new-event': vNewEvent,
     attendance: vAttendance, team: vTeam, profile: vProfile, members: vMembers, club: vClub, 'club-settings': vClubSettings, invitations: vInvitations, 'club-members': vClubMembers, 'club-member': vClubMember
   };
 
@@ -632,7 +680,7 @@ select.input{padding-right:10px}
     return [
       ['landing','Landing',null,'landing'],['signin','Sign in',null,'signin'],
       ['p-home','Player · Home','player','home'],['p-events','Player · Events','player','events'],['p-team','Player · Team (read only)','player','team'],['p-profile','Player · Profile','player','profile'],
-      ['c-home','Coach · Home','coach','home'],['c-team','Coach · Team (manage roster)','coach','team'],['c-event','Coach · Event detail','coach','event'],['c-new','Coach · Create event','coach','new-event'],['c-att','Coach · Attendance','coach','attendance'],['c-profile','Coach · Profile (photo only)','coach','profile'],
+      ['signup','Sign up (new member)',null,'signup'],['setup','Complete profile (new member)',null,'setup'],['waiting','Waiting for approval',null,'waiting'],['c-home','Coach · Home','coach','home'],['c-team','Coach · Team (manage roster)','coach','team'],['c-event','Coach · Event detail','coach','event'],['c-new','Coach · Create event','coach','new-event'],['c-att','Coach · Attendance','coach','attendance'],['c-profile','Coach · Profile (photo only)','coach','profile'],
       ['a-home','Admin · Overview','admin','home'],['a-members','Admin · Approvals','admin','members'],['a-events','Admin · Events','admin','events'],['a-event','Admin · Event detail (waitlist)','admin','event'],['a-att','Admin · Attendance','admin','attendance'],['a-profile','Admin · Profile','admin','profile'],['a-club','Admin · Club','admin','club'],['a-club-team','Admin · Team roster','admin','team'],['a-club-members','Admin · Club members','admin','club-members'],['a-member','Admin · Member details (admins only)','admin','club-member'],['a-club-settings','Admin · Club settings','admin','club-settings'],['a-invites','Admin · Invitations','admin','invitations']
     ];
   }
@@ -668,6 +716,17 @@ select.input{padding-right:10px}
     const d = el.dataset;
     if (d.themeSet) return;
     if (d.signinAs){ S.signinAs = d.signinAs; refresh(); return; }
+    if (d.draftRole){ S.draft.role = d.draftRole; refresh(); return; }
+    if (d.signupContinue !== undefined){
+      const dr = S.draft;
+      if (!dr.name.trim()) S.signupErr = 'Enter your full name.';
+      else if (!/^\S+@\S+\.\S+$/.test(dr.email)) S.signupErr = 'Enter a valid email address.';
+      else if (!dr.adult) S.signupErr = 'You must be 18 or older to join for now.';
+      else { S.me = dr.name.trim(); S.role = dr.role; prof(S.me).email = dr.email; S.signupErr = ''; go('setup'); return; }
+      refresh(); return;
+    }
+    if (d.setupFinish !== undefined){ go('waiting'); return; }
+    if (d.approveNew !== undefined){ go('home'); return; }
     if (d.role){ setRole(d.role === 'admin' ? 'admin' : S.signinAs); go('home'); return; }
     if (d.member){ S.memberId = d.member; go('club-member'); return; }
     if (d.go){ go(d.go); return; }
@@ -676,7 +735,7 @@ select.input{padding-right:10px}
       if (d.then) { go(d.then); return; }
       go('event'); return;
     }
-    if (d.signout !== undefined){ S.role = null; S.me = null; go('landing'); return; }
+    if (d.signout !== undefined){ S.role = null; S.me = null; S.draft = {name:'', email:'', role:'player', adult:false}; S.signupErr = ''; go('landing'); return; }
     if (d.msg !== undefined){ toast(d.msg); return; }
     if (d.rsvp){ rsvp(d.rsvp); refresh(); return; }
     if (d.etab){ E().tab = d.etab; E().removingWL = null; refresh(); return; }
@@ -718,6 +777,7 @@ select.input{padding-right:10px}
       t.value = '';
       return;
     }
+    if (t.dataset && t.dataset.draft){ S.draft[t.dataset.draft] = t.type === 'checkbox' ? t.checked : t.value; return; }
     if (t.dataset && t.dataset.detail){ det(S.me)[t.dataset.detail] = t.value; toast('Saved.'); refresh(); return; }
     if (t.dataset && t.dataset.position){ prof(t.dataset.position).position = t.value; toast('Position saved: ' + t.value + '.'); refresh(); }
   });

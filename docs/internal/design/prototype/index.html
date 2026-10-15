@@ -474,9 +474,8 @@ select.input{padding-right:10px}
     const p = prof(S.me);
     const isPlayer = S.role === 'player';
     return head('Profile', null) + '<div class="main" style="padding-top:8px">' +
-      '<div class="card" style="flex-direction:row;align-items:center;gap:14px">' + avatar(S.me, 'lg') +
+      '<div class="card" style="align-items:center;text-align:center;gap:10px">' + photoButtons(S.me) +
         '<div style="min-width:0"><b style="font-size:18px">' + S.me + '</b><p class="tiny">' + p.email + '</p><p class="tiny">' + (isPlayer ? 'Player, ' : 'Coach, ') + MY_TEAM + '</p></div></div>' +
-      photoButtons(S.me) +
       (isPlayer
         ? '<div class="field"><label for="pos">Position</label><select class="input" id="pos" data-position="' + S.me + '">' +
             POSITIONS.map(x => '<option' + (x === p.position ? ' selected' : '') + '>' + x + '</option>').join('') + '</select></div>' +
@@ -492,18 +491,23 @@ select.input{padding-right:10px}
   function vAProfile(){
     const p = prof(S.me);
     return head('Profile', null) + '<div class="main" style="padding-top:8px">' +
-      '<div class="card" style="flex-direction:row;align-items:center;gap:14px">' + avatar(S.me, 'lg') +
+      '<div class="card" style="align-items:center;text-align:center;gap:10px">' + photoButtons(S.me) +
         '<div style="min-width:0"><b style="font-size:18px">' + S.me + '</b><p class="tiny">Club admin · IVI</p><p class="tiny">' + p.email + '</p></div></div>' +
-      photoButtons(S.me) +
       '<div class="row"><span class="name">Language</span><span class="tiny">English</span></div>' +
       '<button class="btn btn-outline" type="button" data-signout>Sign out</button>' +
       '</div>' + navbar('profile');
   }
   function photoButtons(n){
-    return '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">' +
-      '<button class="btn btn-outline btn-sm" type="button" data-pick-photo="' + n + '">' + (prof(n).photo ? 'Change photo' : 'Add photo') + '</button>' +
-      (prof(n).photo ? '<button class="btn btn-outline btn-sm" type="button" data-remove-photo="' + n + '">Remove photo</button>' : '<span></span>') +
-      '</div>';
+    const has = !!prof(n).photo;
+    const badge = has ? '<span aria-hidden="true" style="position:absolute;right:-2px;bottom:-2px;width:30px;height:30px;border-radius:50%;background:var(--navy);color:var(--on-navy);border:2px solid var(--bg);display:flex;align-items:center;justify-content:center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></span>' : '';
+    const attr = has ? 'data-photo-menu="' + n + '"' : 'data-pick-photo="' + n + '"';
+    const label = has ? 'Change or remove profile photo' : 'Add profile photo';
+    return '<div style="display:flex;flex-direction:column;align-items:center;gap:6px">' +
+      '<button type="button" ' + attr + ' aria-label="' + label + '" style="position:relative;width:96px;height:96px;padding:0;border:0;border-radius:50%;background:none;cursor:pointer;color:var(--text)">' +
+        '<span class="avatar lg" aria-hidden="true" style="width:96px;height:96px;font-size:30px">' + (has ? '<img src="' + prof(n).photo + '" alt="">' : initials(n)) + '</span>' + badge +
+      '</button>' +
+      (has ? '' : '<span class="tiny">Tap to add a photo</span>') +
+    '</div>';
   }
 
   function vAHome(){
@@ -604,6 +608,15 @@ select.input{padding-right:10px}
 
   function dialogHtml(){
     if (!S.dialog) return '';
+    if (S.dialog.type === 'photo'){
+      const pn = S.dialog.name;
+      return '<div class="dialog-wrap"><div class="dialog" role="dialog" aria-modal="true" aria-labelledby="dlgT">' +
+        '<h3 id="dlgT">Profile photo</h3>' +
+        '<button class="btn btn-primary" type="button" data-pick-photo="' + pn + '">Upload new photo</button>' +
+        '<button class="btn btn-danger" type="button" data-remove-photo="' + pn + '">Remove photo</button>' +
+        '<button class="btn btn-outline" type="button" data-photo-cancel>Cancel</button>' +
+      '</div></div>';
+    }
     const e = S.events.find(x => x.id === S.dialog.ev);
     const n = S.dialog.name;
     return '<div class="dialog-wrap"><div class="dialog" role="dialog" aria-modal="true" aria-labelledby="dlgT">' +
@@ -683,8 +696,10 @@ select.input{padding-right:10px}
     if (d.rosterRemove){ S.removingRoster = d.rosterRemove; refresh(); return; }
     if (d.rosterRemoveYes){ const n = d.rosterRemoveYes; removeFromTeam(n); S.removingRoster = null; toast(n + ' removed from ' + S.team.name + '.'); refresh(); return; }
     if (d.rosterRemoveNo !== undefined){ S.removingRoster = null; refresh(); return; }
-    if (d.pickPhoto){ S.photoTarget = d.pickPhoto; document.getElementById('photoIn').click(); return; }
-    if (d.removePhoto){ prof(d.removePhoto).photo = null; toast('Photo removed.'); refresh(); return; }
+    if (d.photoMenu){ S.dialog = {type:'photo', name:d.photoMenu}; refresh(); return; }
+    if (d.photoCancel !== undefined){ S.dialog = null; refresh(); return; }
+    if (d.pickPhoto){ S.dialog = null; S.photoTarget = d.pickPhoto; document.getElementById('photoIn').click(); return; }
+    if (d.removePhoto){ prof(d.removePhoto).photo = null; S.dialog = null; toast('Photo removed.'); refresh(); return; }
     if (d.pickLogo !== undefined){ S.photoTarget = 'team'; document.getElementById('photoIn').click(); return; }
   });
 

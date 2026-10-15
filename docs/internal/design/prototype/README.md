@@ -18,6 +18,7 @@ File: `index.html` (one page, no build step). Open it in a browser, or use the "
 - **Coach permissions** apply to the coach's own team only (decision 40). Approvals stay with admins.
 - **Admin profiles**: several admins, each with a profile (decision 41). Only players have a position.
 - **Player details** (planned, decision 43): height, weight, address and emergency contact are on the player profile. Only club admins see them, through Club › Club members. The prototype has no real access control.
+- **Profile photo**: the photo circle is the control. With no photo, tapping the circle adds one. With a photo, a small camera badge on the corner opens Upload new photo, Remove photo or Cancel.
 - **Admin navigation** (decision 44): Home, Events, Members, Club, Profile. Team roster, club members, club settings and invitations open from Club and go back to Club.
 - **Team labels**: division and team name only, e.g. "Div 4 · Ravens". Team gender is removed (decision 42); gender still applies to social events (decision 19).
 - **Approval** needs at least one team; the approve button stays disabled until one is picked (decision 32).

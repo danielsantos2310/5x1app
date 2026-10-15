@@ -1,0 +1,501 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="claude:viewport-fit-sides" content="cover">
+<title>5x1 Clickable Prototype</title>
+<style>
+/* Tokens from docs/internal/design-tokens.md. Light is the default; dark follows the system unless the viewer picks a theme. */
+:root{
+  --bg:#F8FAF7; --card:#F1F6F4; --surface:#FFFFFF; --text:#021C37; --text2:#5B6675; --line:#D9DDE3;
+  --green:#09CD71; --on-green:#021C37; --orange:#FE6D09; --flame:#F84C04; --on-status:#021C37;
+  --navy:#021C37; --on-navy:#F8F8F5; --dim:rgba(2,28,55,.55);
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#021426; --card:#0A1725; --surface:#06233F; --text:#F8F8F5; --text2:#9AA4AF; --line:#2A4560;
+    --dim:rgba(0,0,0,.6); color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#021426; --card:#0A1725; --surface:#06233F; --text:#F8F8F5; --text2:#9AA4AF; --line:#2A4560;
+  --dim:rgba(0,0,0,.6); color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:#E9EDE8;color:var(--text);font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:16px;line-height:1.5;padding:16px}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) body{background:#010B17} }
+:root[data-theme="dark"] body{background:#010B17}
+button,select{font-family:inherit}
+:focus-visible{outline:3px solid var(--green);outline-offset:2px}
+h1,h2,h3,p{margin:0}
+h2{font-size:24px;font-weight:700;line-height:1.25}
+h3{font-size:17px;font-weight:700}
+.cap{font-size:14px;color:var(--text2);line-height:1.45}
+.label{font-size:13px;font-weight:600;color:var(--text2)}
+
+/* Prototype controls (outside the phone) */
+.bar{max-width:1040px;margin:0 auto 16px;display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}
+.bar h1{font-size:20px;font-weight:700}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.seg button{min-height:44px;padding:0 14px;border:0;background:var(--surface);color:var(--text);font-weight:600;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--green);color:var(--on-green)}
+.jump{min-height:44px;border-radius:12px;border:1px solid var(--line);background:var(--surface);color:var(--text);padding:0 10px;font-size:15px}
+.note{max-width:1040px;margin:0 auto 16px}
+
+/* Phone */
+.stage{display:flex;justify-content:center}
+.phone{position:relative;width:360px;height:740px;border-radius:32px;border:2px solid var(--line);background:var(--bg);color:var(--text);overflow:hidden;display:flex;flex-direction:column}
+@media (max-width:480px){ body{padding:0} .bar,.note{padding:0 8px} .phone{width:100%;height:calc(100dvh - 0px);border-radius:0;border:0} }
+.main{flex:1;min-height:0;overflow-y:auto;padding:16px 16px 24px;display:flex;flex-direction:column;gap:14px}
+.appbar{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:56px;padding:12px 16px 0;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.back{min-height:44px;border:0;background:transparent;color:var(--text);font-weight:600;font-size:16px;padding:0 6px 0 0;cursor:pointer}
+.logo{height:30px;width:auto;display:block}
+.logo-d{display:none}
+:root[data-theme="dark"] .logo-l{display:none}
+:root[data-theme="dark"] .logo-d{display:block}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .logo-l{display:none} :root:not([data-theme="light"]) .logo-d{display:block} }
+.logo.big{height:76px;margin:0 auto}
+.crest{width:56px;height:auto;flex:none;display:block}
+.navbar{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid var(--line);background:var(--bg);padding:6px 0 10px}
+.navbar button{min-height:52px;border:0;background:transparent;color:var(--text2);font-size:12px;font-weight:600;cursor:pointer;padding:0}
+.navbar button[aria-current="page"]{color:var(--text);font-weight:700;box-shadow:inset 0 3px 0 var(--green)}
+
+/* Components */
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;min-height:52px;width:100%;border-radius:16px;border:2px solid transparent;font-weight:600;font-size:16px;padding:10px 14px;cursor:pointer;text-align:center;background:transparent;color:var(--text)}
+.btn-primary{background:var(--green);color:var(--on-green);border-color:var(--green)}
+.btn-outline{border-color:var(--text)}
+.btn-danger{background:var(--flame);color:var(--on-status);border-color:var(--flame)}
+.btn-sm{min-height:44px;width:auto;padding:8px 12px;font-size:14px;border-radius:12px}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn-sm.on{background:var(--green);color:var(--on-green);border-color:var(--green)}
+.btn-sm.outline{border-color:var(--text)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:14px;display:flex;flex-direction:column;gap:12px}
+.chip{display:inline-flex;align-items:center;height:28px;padding:0 10px;border-radius:999px;font-size:13px;font-weight:600;white-space:nowrap}
+.chip-ok{background:var(--green);color:var(--on-green)}
+.chip-wait{background:var(--orange);color:var(--on-status)}
+.chip-grey{border:1px solid var(--line);color:var(--text2)}
+.track{height:8px;border-radius:999px;background:var(--line);overflow:hidden}
+.fill{height:100%;background:var(--green)}
+.row{display:flex;align-items:center;gap:12px;min-height:56px;padding:8px 0;border-bottom:1px solid var(--line)}
+.row .name{flex:1;min-width:0;font-weight:600;font-size:15px}
+.avatar{width:36px;height:36px;border-radius:50%;background:var(--card);border:1px solid var(--line);display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex:none}
+.tabs{display:flex;gap:16px;border-bottom:1px solid var(--line)}
+.tabs button{min-height:44px;border:0;background:transparent;color:var(--text2);font-size:15px;font-weight:600;padding:0 0 8px;cursor:pointer;border-bottom:3px solid transparent}
+.tabs button[aria-pressed="true"]{color:var(--text);border-bottom-color:var(--green)}
+.banner{border:2px solid var(--orange);border-radius:14px;padding:10px 12px;font-size:14px;display:flex;gap:10px;background:var(--surface)}
+.status{min-height:24px;font-size:15px;font-weight:600}
+.choices{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.choice{min-height:72px;border-radius:14px;border:1px solid var(--line);background:var(--surface);color:var(--text);font-weight:600;font-size:15px;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:6px}
+.choice small{font-size:12px;font-weight:400;color:var(--text2)}
+.choice[aria-pressed="true"]{background:var(--green);border-color:var(--green);color:var(--on-green)}
+.choice[aria-pressed="true"] small{color:var(--on-green)}
+.date{width:56px;height:60px;border-radius:12px;background:var(--navy);color:var(--on-navy);display:flex;flex-direction:column;align-items:center;justify-content:center;flex:none}
+.date b{font-size:20px;line-height:1}
+.date span{font-size:11px;letter-spacing:.08em}
+.event-row{display:flex;gap:12px;align-items:center;width:100%;min-height:72px;padding:10px 12px;border-radius:16px;border:1px solid var(--line);background:var(--card);color:var(--text);text-align:left;cursor:pointer;font-size:15px}
+.seg3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.seg3 button{min-height:48px;border-radius:12px;border:2px solid var(--line);background:var(--surface);color:var(--text);font-weight:600;font-size:14px;cursor:pointer;padding:4px 2px}
+.seg3 button[aria-pressed="true"].present{background:var(--green);border-color:var(--green);color:var(--on-green)}
+.seg3 button[aria-pressed="true"].absent{background:var(--flame);border-color:var(--flame);color:var(--on-status)}
+.seg3 button[aria-pressed="true"].late{background:var(--orange);border-color:var(--orange);color:var(--on-status)}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;text-align:center}
+.stats .card{padding:8px 4px;gap:2px}
+.footer{border-top:1px solid var(--line);background:var(--surface);padding:12px 16px;display:flex;flex-direction:column;gap:8px}
+.field{display:flex;flex-direction:column;gap:6px}
+.field label{font-size:14px;font-weight:600}
+.input{height:52px;border-radius:14px;border:2px solid var(--line);background:var(--surface);display:flex;align-items:center;padding:0 14px;color:var(--text2);font-size:16px}
+.toast{position:absolute;left:12px;right:12px;bottom:76px;background:var(--navy);color:var(--on-navy);border-radius:14px;padding:12px 14px;font-size:14px;font-weight:600;box-shadow:0 6px 18px rgba(0,0,0,.25);display:none}
+.toast.show{display:block}
+.dialog-wrap{position:absolute;inset:0;background:var(--dim);display:flex;align-items:center;justify-content:center;padding:20px;z-index:5}
+.dialog{background:var(--surface);color:var(--text);border:1px solid var(--line);border-radius:20px;padding:18px;display:flex;flex-direction:column;gap:14px;width:100%}
+.mono{font-size:12px;color:var(--text2)}
+.tiny{font-size:13px;color:var(--text2)}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <div>
+    <h1>5x1 · Clickable prototype</h1>
+    <p class="cap">v0.1 · English only · Prototype data, no sign-in. Tap through the flows; nothing is saved.</p>
+  </div>
+  <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+    <label class="label" for="jump">Jump to</label>
+    <select id="jump" class="jump" aria-describedby="jumpNote"></select>
+    <div class="seg" role="group" aria-label="Theme">
+      <button type="button" data-theme-set="auto" aria-pressed="true">System</button>
+      <button type="button" data-theme-set="light" aria-pressed="false">Light</button>
+      <button type="button" data-theme-set="dark" aria-pressed="false">Dark</button>
+    </div>
+  </div>
+</div>
+<p id="jumpNote" class="sr-only">Choose a screen to open it directly.</p>
+
+<div class="stage">
+  <div class="phone" id="phone" aria-live="off">
+    <div id="screen" style="flex:1;min-height:0;display:flex;flex-direction:column"></div>
+    <div class="toast" id="toast" role="status"></div>
+    <div id="layer"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const LOGO = '<img class="logo logo-l" src="../../brand/5x1-logo-light.svg" alt="5x1"><img class="logo logo-d" src="../../brand/5x1-logo-dark.svg" alt="" aria-hidden="true">';
+  const LOGO_BIG = LOGO.replace('class="logo logo-l"', 'class="logo big logo-l"').replace('class="logo logo-d"', 'class="logo big logo-d"');
+  const CREST = '<img class="crest" src="../../assets/ivi-crest.png" alt="International Volleyball Ireland crest">';
+
+  const TEAMS = ['Div 2 Vixens','Div 2 Dinosaurs','Div 3 Lynnx','Div 3 Dragons','Div 4 Regional League Phoenix','Div 4 Regional League Ravens'];
+  const SCREENS = [
+    ['landing','Landing'],['signin','Sign in'],
+    ['p-home','Player · Home'],['p-events','Player · Events'],['p-team','Player · Team'],['p-profile','Player · Profile'],
+    ['a-home','Admin · Overview'],['a-members','Admin · Approvals'],['a-events','Admin · Events'],['a-event','Admin · Event detail (waitlist)'],['attendance','Attendance'],['a-more','Admin · More']
+  ];
+
+  const S = {
+    role: null,
+    view: 'landing',
+    me: 'João Pereira',
+    cap: 10,
+    confirmed: ['Bruno Alves','Caio Mendes','Daniel Rocha','Felipe Nunes','Gustavo Lima','Hugo Teixeira','Igor Souza','João Pereira','Kleber Dias'],
+    waitlist: [{name:'Lucas Martins', held:false},{name:'Ethan Ferreira', held:false}],
+    maybe: ['Marco Silva','Nando Reis','Otávio Braga'],
+    pending: ['Sofia Ribeiro','Tomás Moreira'],
+    approving: {},
+    tab: 'confirmed',
+    att: {},
+    attSaved: false,
+    rsvpMsg: '',
+    mine: null,
+    dialog: null,
+    removing: null,
+    approveMsg: ''
+  };
+
+  const $ = (s, r) => (r || document).querySelector(s);
+  const initials = n => n.split(' ').map(w => w[0]).slice(0,2).join('').toUpperCase();
+  let toastTimer = null;
+  function toast(msg){
+    const t = $('#toast'); t.textContent = msg; t.classList.add('show');
+    clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('show'), 2600);
+  }
+
+  /* ---------- Rules (from docs/spec: RSVP-01, RSVP-02, ATT-01, decisions 38-39) ---------- */
+  function promoteAuto(){
+    const moved = [];
+    while (S.confirmed.length < S.cap){
+      const i = S.waitlist.findIndex(w => !w.held);      // held people are skipped by automatic promotion
+      if (i < 0) break;
+      const [w] = S.waitlist.splice(i, 1);
+      S.confirmed.push(w.name); moved.push(w.name);
+    }
+    return moved;
+  }
+  function myState(){
+    if (S.confirmed.includes(S.me)) return 'going';
+    const w = S.waitlist.findIndex(x => x.name === S.me);
+    if (w >= 0) return 'waitlist:' + (w + 1);
+    if (S.maybe.includes(S.me)) return 'maybe';
+    return 'none';
+  }
+  function rsvp(choice){
+    S.mine = choice;
+    const before = S.confirmed.includes(S.me);
+    S.confirmed = S.confirmed.filter(n => n !== S.me);
+    S.waitlist = S.waitlist.filter(w => w.name !== S.me);
+    S.maybe = S.maybe.filter(n => n !== S.me);
+    let msg = '';
+    if (choice === 'going'){
+      if (S.confirmed.length < S.cap){ S.confirmed.push(S.me); msg = "You're going."; }
+      else { S.waitlist.push({name:S.me, held:false}); msg = "Event is full. You're waitlist #" + S.waitlist.length + '.'; }
+    } else if (choice === 'maybe'){
+      S.maybe.push(S.me); msg = 'Maybe. This does not hold a place.';
+    } else {
+      msg = 'Not going.';
+    }
+    if (before && choice !== 'going'){
+      const moved = promoteAuto();
+      if (moved.length) msg += ' ' + moved.join(' and ') + (moved.length > 1 ? ' move' : ' moves') + ' up from the waitlist.';
+    }
+    S.rsvpMsg = msg;
+  }
+  function adminPromote(name){
+    const w = S.waitlist.findIndex(x => x.name === name);
+    if (w < 0) return;
+    if (S.confirmed.length >= S.cap){ S.dialog = {type:'raise', name}; return; }
+    S.waitlist.splice(w, 1); S.confirmed.push(name);
+    toast(name + ' is confirmed.');
+  }
+  function raiseAndPromote(){
+    const name = S.dialog.name;
+    S.cap += 1;
+    const w = S.waitlist.findIndex(x => x.name === name);
+    if (w >= 0){ S.waitlist.splice(w, 1); S.confirmed.push(name); }
+    S.dialog = null;
+    toast('Capacity raised to ' + S.cap + '. ' + name + ' is confirmed.');
+  }
+  function markCount(){ return S.confirmed.filter(n => S.att[n]).length; }
+
+  /* ---------- Screens ---------- */
+  const nav = {
+    player: [['p-home','Home'],['p-events','Events'],['p-team','Team'],['p-profile','Profile']],
+    admin:  [['a-home','Home'],['a-events','Events'],['a-members','Members'],['a-more','More']]
+  };
+  function navbar(active, set){
+    return '<nav class="navbar" aria-label="' + (set === 'player' ? 'Player' : 'Admin') + ' navigation">' +
+      nav[set].map(([id, label]) => '<button type="button" data-go="' + id + '"' + (active === id ? ' aria-current="page"' : '') + '>' + label + '</button>').join('') +
+      '</nav>';
+  }
+  function head(title, back){
+    return '<div class="appbar">' + (back ? '<button class="back" type="button" data-go="' + back[0] + '">‹ ' + back[1] + '</button>' : '<span>' + LOGO + '</span>') + (back ? '<span></span>' : '') + '</div>' +
+      '<h2 tabindex="-1" id="sTitle" style="padding:0 16px">' + title + '</h2>';
+  }
+
+  function vLanding(){
+    return '<div class="main" style="justify-content:flex-end;padding:24px">' +
+      '<div style="flex:1"></div>' +
+      '<div style="display:flex;justify-content:center">' + LOGO_BIG + '</div>' +
+      '<p style="font-size:18px;text-align:center;color:var(--text2)">Your club, on the palm of your hand.</p>' +
+      '<div style="height:16px"></div>' +
+      '<button class="btn btn-primary" type="button" data-go="signin">Sign in</button>' +
+      '<button class="btn btn-outline" type="button" data-go="signin">Create account</button>' +
+      '<p class="cap" style="text-align:center">Have an invite link? Open it on this device.</p>' +
+      '</div>';
+  }
+  function vSignin(){
+    return head('Sign in', ['landing','Back']) +
+      '<div class="main">' +
+      '<p class="cap">Use the email you joined with.</p>' +
+      '<div class="field"><label for="em">Email</label><div class="input" id="em">joao@example.com</div></div>' +
+      '<div class="field"><label for="pw">Password</label><div class="input" id="pw">••••••••••</div></div>' +
+      '<button class="btn" type="button" style="justify-content:flex-start;min-height:44px;color:var(--text);text-decoration:underline;border:0;padding:0">Forgot password?</button>' +
+      '<div class="card" style="background:var(--surface)"><p class="tiny"><b>Prototype only.</b> There is no real sign-in yet. Choose a role to continue.</p>' +
+      '<button class="btn btn-primary" type="button" data-role="player">Continue as player</button>' +
+      '<button class="btn btn-outline" type="button" data-role="admin">Continue as admin</button></div>' +
+      '</div>';
+  }
+
+  function vPHome(){
+    const st = myState();
+    const pressed = {going: st === 'going' || st.startsWith('waitlist'), maybe: st === 'maybe', not: st === 'none' && S.mine === 'not'};
+    const chip = st === 'going' ? '<span class="chip chip-ok">Going</span>' : st.startsWith('waitlist') ? '<span class="chip chip-wait">Waitlist #' + st.split(':')[1] + '</span>' : st === 'maybe' ? '<span class="chip chip-grey">Maybe</span>' : S.mine === 'not' ? '<span class="chip chip-grey">Not going</span>' : '<span class="chip chip-grey">No answer</span>';
+    return '<div class="appbar"><span>' + LOGO + '</span><button class="btn btn-sm outline" type="button" data-msg="No new notifications.">Notifications</button></div>' +
+      '<div class="main">' +
+      '<div><h2 tabindex="-1" id="sTitle">Hi, João!</h2><p class="cap">IVI · Div 3 Dragons</p></div>' +
+      '<div class="card">' +
+        '<div style="display:flex;justify-content:space-between;align-items:center"><span class="chip" style="background:var(--navy);color:var(--on-navy)">NEXT TRAINING</span><span style="font-weight:600;font-size:14px">Thu 17 Oct · 19:00</span></div>' +
+        '<div><h3>Team training</h3><p class="cap">Collinstown Sports Complex · 19:00–21:00</p></div>' +
+        '<div><div style="display:flex;justify-content:space-between;font-size:14px"><span class="cap">Confirmed</span><b>' + S.confirmed.length + ' / ' + S.cap + '</b></div><div class="track" style="margin-top:6px"><div class="fill" style="width:' + Math.round(S.confirmed.length / S.cap * 100) + '%"></div></div></div>' +
+        '<div style="display:flex;justify-content:space-between;align-items:center"><span style="font-weight:600">Your answer</span>' + chip + '</div>' +
+        '<div class="choices" role="group" aria-label="Will you attend?">' +
+          '<button class="choice" type="button" data-rsvp="going" aria-pressed="' + pressed.going + '">Going</button>' +
+          '<button class="choice" type="button" data-rsvp="maybe" aria-pressed="' + pressed.maybe + '">Maybe<small>No place held</small></button>' +
+          '<button class="choice" type="button" data-rsvp="not" aria-pressed="' + pressed.not + '">Not going</button>' +
+        '</div>' +
+        '<p class="status" role="status" aria-live="polite">' + (S.rsvpMsg || '') + '</p>' +
+      '</div>' +
+      '<div style="display:flex;justify-content:space-between;align-items:center"><h3>Upcoming</h3><button class="btn btn-sm outline" type="button" data-go="p-events">All events</button></div>' +
+      '<div class="card" style="flex-direction:row;align-items:center;padding:10px"><div class="date"><b>18</b><span>OCT</span></div><div style="flex:1;min-width:0"><b>League match</b><p class="cap">Sun 13:00 · IVI Arena</p></div><span class="chip chip-grey">Maybe</span></div>' +
+      '<div class="card" style="flex-direction:row;align-items:center;padding:10px"><div class="date"><b>22</b><span>OCT</span></div><div style="flex:1;min-width:0"><b>Technical training</b><p class="cap">Thu 19:00 · Collinstown</p></div><span class="chip chip-grey">No answer</span></div>' +
+      '</div>' + navbar('p-home','player');
+  }
+  function vPEvents(){
+    return head('Events') + '<div class="main">' +
+      '<button class="event-row" type="button" data-go="p-home"><div class="date"><b>17</b><span>OCT</span></div><div style="flex:1;min-width:0"><b>Team training</b><p class="cap">Thu 19:00 · ' + S.confirmed.length + ' of ' + S.cap + ' confirmed</p></div><span class="chip chip-ok">Going</span></button>' +
+      '<button class="event-row" type="button" data-go="p-home"><div class="date"><b>18</b><span>OCT</span></div><div style="flex:1;min-width:0"><b>League match</b><p class="cap">Sun 13:00 · IVI Arena</p></div><span class="chip chip-grey">Maybe</span></button>' +
+      '<button class="event-row" type="button" data-go="p-home"><div class="date"><b>22</b><span>OCT</span></div><div style="flex:1;min-width:0"><b>Technical training</b><p class="cap">Thu 19:00 · Collinstown</p></div><span class="chip chip-grey">No answer</span></button>' +
+      '</div>' + navbar('p-events','player');
+  }
+  function vPTeam(){
+    return head('Team') + '<div class="main">' +
+      '<div class="card"><h3>Div 3 Dragons</h3><p class="cap">' + S.confirmed.length + ' players confirmed for training</p></div>' +
+      S.confirmed.map(n => '<div class="row"><span class="avatar" aria-hidden="true">' + initials(n) + '</span><span class="name">' + n + '</span></div>').join('') +
+      '</div>' + navbar('p-team','player');
+  }
+  function vPProfile(){
+    return head('Profile') + '<div class="main">' +
+      '<div class="card"><b style="font-size:18px">João Pereira</b><p class="cap">joao@example.com</p></div>' +
+      '<div class="row"><span class="name">Language</span><span class="tiny">English</span></div>' +
+      '<p class="tiny">Change the language in Settings. Public screens stay in English.</p>' +
+      '<button class="btn btn-outline" type="button" data-signout>Sign out</button>' +
+      '</div>' + navbar('p-profile','player');
+  }
+
+  function vAHome(){
+    const done = 2;
+    return '<div class="appbar"><span>' + LOGO + '</span><button class="btn btn-sm outline" type="button" data-msg="No new notifications.">Notifications</button></div>' +
+      '<div class="main">' +
+      '<div style="display:flex;gap:12px;align-items:center">' + CREST + '<div><h2 tabindex="-1" id="sTitle" style="font-size:20px">IVI</h2><p class="cap">International Volleyball Ireland</p></div></div>' +
+      '<div class="card"><div style="display:flex;justify-content:space-between;align-items:center"><h3>Set-up</h3><span class="tiny">' + done + ' of 3 done</span></div>' +
+        '<div class="row" style="min-height:44px"><span class="avatar" aria-hidden="true">✓</span><span class="name">Add a team</span></div>' +
+        '<div class="row" style="min-height:44px"><span class="avatar" aria-hidden="true">✓</span><span class="name">Create an invite link</span></div>' +
+        '<div class="row" style="min-height:44px;border:0"><span class="avatar" aria-hidden="true">3</span><span class="name">Schedule the first event</span></div>' +
+      '</div>' +
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">' +
+        '<button class="card" type="button" data-go="a-members" style="text-align:left;color:var(--text);cursor:pointer"><b style="font-size:22px">' + S.pending.length + '</b><span class="cap">Pending approvals</span></button>' +
+        '<div class="card"><b style="font-size:22px">42</b><span class="cap">Members in total</span></div>' +
+      '</div>' +
+      '<div style="display:flex;justify-content:space-between;align-items:center"><h3>Upcoming</h3><button class="btn btn-sm outline" type="button" data-go="a-events">All events</button></div>' +
+      '<button class="event-row" type="button" data-go="a-event"><div class="date"><b>17</b><span>OCT</span></div><div style="flex:1;min-width:0"><b>Team training</b><p class="cap">Thu 19:00 · ' + S.confirmed.length + ' confirmed · ' + S.waitlist.length + ' waitlisted</p></div></button>' +
+      '</div>' + navbar('a-home','admin');
+  }
+  function vAMembers(){
+    const rows = S.pending.map(n => {
+      const picked = S.approving[n] || [];
+      return '<div class="card" style="margin-bottom:4px"><div style="display:flex;align-items:center;gap:12px"><span class="avatar" aria-hidden="true">' + initials(n) + '</span><b style="flex:1">' + n + '</b></div>' +
+        '<p class="tiny" id="t-' + initials(n) + '">Assign at least one team</p>' +
+        '<div style="display:flex;flex-wrap:wrap;gap:6px" role="group" aria-labelledby="t-' + initials(n) + '">' +
+          TEAMS.map(t => '<button class="btn-sm ' + (picked.includes(t) ? 'on' : 'outline') + '" type="button" data-team="' + n + '|' + t + '" aria-pressed="' + picked.includes(t) + '" style="min-height:44px;border:2px solid var(--line);border-radius:12px;background:' + (picked.includes(t) ? 'var(--green)' : 'var(--surface)') + ';color:' + (picked.includes(t) ? 'var(--on-green)' : 'var(--text)') + ';padding:8px 10px;font-size:14px;font-weight:600;cursor:pointer">' + t + '</button>').join('') +
+        '</div>' +
+        '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">' +
+          '<button class="btn btn-primary btn-sm" type="button" data-approve="' + n + '"' + (picked.length ? '' : ' disabled') + '>Approve' + (picked.length ? ' and assign' : '') + '</button>' +
+          '<button class="btn btn-outline btn-sm" type="button" data-decline="' + n + '">Decline</button>' +
+        '</div></div>';
+    }).join('');
+    return head('Approvals', ['a-home','Overview']) + '<div class="main">' +
+      '<p class="cap">Approval and team assignment happen in one step. A player can join several teams.</p>' +
+      '<p class="status" role="status" aria-live="polite">' + (S.approveMsg || '') + '</p>' +
+      (rows || '<div class="card"><p>No one is waiting.</p><p class="tiny">New sign-ups appear here.</p></div>') +
+      '</div>' + navbar('a-members','admin');
+  }
+  function vAEvents(){
+    return head('Events', ['a-home','Overview']) + '<div class="main">' +
+      '<button class="event-row" type="button" data-go="a-event"><div class="date"><b>17</b><span>OCT</span></div><div style="flex:1;min-width:0"><b>Team training</b><p class="cap">Thu 19:00 · ' + S.confirmed.length + ' of ' + S.cap + ' confirmed</p></div></button>' +
+      '<button class="event-row" type="button" data-go="a-event"><div class="date"><b>18</b><span>OCT</span></div><div style="flex:1;min-width:0"><b>League match</b><p class="cap">Sun 13:00 · IVI Arena</p></div></button>' +
+      '</div>' + navbar('a-events','admin');
+  }
+  function vAEvent(){
+    const t = S.tab;
+    let list = '';
+    if (t === 'confirmed'){
+      list = S.confirmed.map(n => '<div class="row"><span class="avatar" aria-hidden="true">' + initials(n) + '</span><span class="name">' + n + '</span><span class="chip chip-ok">Confirmed</span></div>').join('');
+    } else if (t === 'waitlist'){
+      list = S.waitlist.map((w, i) => {
+        const n = w.name;
+        const removing = S.removing === n;
+        return '<div class="card" style="margin-bottom:4px"><div style="display:flex;align-items:center;gap:12px"><span class="avatar" aria-hidden="true">' + initials(n) + '</span><span class="name" style="flex:1;font-weight:600">' + n + '</span><span class="chip chip-wait">Waitlist #' + (i + 1) + '</span></div>' +
+          (w.held ? '<p class="tiny">On hold: skipped by automatic promotion.</p>' : '') +
+          (removing
+            ? '<p class="tiny">Remove ' + n + ' from the waitlist?</p><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><button class="btn btn-danger btn-sm" type="button" data-remove-yes="' + n + '">Remove</button><button class="btn btn-outline btn-sm" type="button" data-remove-no>Keep</button></div>'
+            : '<div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px"><button class="btn btn-primary btn-sm" type="button" data-promote="' + n + '" style="padding:8px 4px">Promote</button><button class="btn btn-outline btn-sm" type="button" data-hold="' + n + '" aria-pressed="' + w.held + '" style="padding:8px 4px">' + (w.held ? 'Release' : 'Hold') + '</button><button class="btn btn-danger btn-sm" type="button" data-remove="' + n + '" style="padding:8px 4px">Remove</button></div>') +
+          '</div>';
+      }).join('') || '<p class="cap">No one is on the waitlist.</p>';
+    } else {
+      list = S.maybe.map(n => '<div class="row"><span class="avatar" aria-hidden="true">' + initials(n) + '</span><span class="name">' + n + '</span><span class="chip chip-grey">Maybe</span></div>').join('');
+    }
+    return head('Team training', ['a-events','Events']) + '<div class="main" style="padding-top:8px">' +
+      '<p class="cap">Thu 17 Oct · 19:00–21:00 · Collinstown Sports Complex</p>' +
+      '<div class="card" style="padding:12px 14px"><div style="display:flex;justify-content:space-between;font-size:14px"><span>Capacity</span><b>' + S.confirmed.length + ' of ' + S.cap + ' confirmed</b></div><div class="track"><div class="fill" style="width:' + Math.min(100, Math.round(S.confirmed.length / S.cap * 100)) + '%"></div></div></div>' +
+      (S.waitlist.length ? '<div class="banner" role="note"><span aria-hidden="true">!</span><span>Capacity is ' + S.cap + '. New sign-ups go to the waitlist.</span></div>' : '') +
+      '<div class="tabs" role="group" aria-label="List">' +
+        '<button type="button" data-tab="confirmed" aria-pressed="' + (t === 'confirmed') + '">Confirmed (' + S.confirmed.length + ')</button>' +
+        '<button type="button" data-tab="waitlist" aria-pressed="' + (t === 'waitlist') + '">Waitlist (' + S.waitlist.length + ')</button>' +
+        '<button type="button" data-tab="maybe" aria-pressed="' + (t === 'maybe') + '">Maybe (' + S.maybe.length + ')</button>' +
+      '</div>' +
+      list +
+      '</div>' +
+      '<div class="footer"><button class="btn btn-primary" type="button" data-go="attendance">Take attendance</button><button class="btn btn-outline" type="button" data-msg="Reminder sent in the app.">Send in-app reminder</button></div>';
+  }
+  function vAttendance(){
+    const n = S.confirmed.length, marked = markCount();
+    const count = v => S.confirmed.filter(x => S.att[x] === v).length;
+    return head('Attendance', ['a-event','Team training']) + '<div class="main" style="padding-top:8px">' +
+      '<div class="stats"><div class="card"><b>' + count('present') + '</b><span class="tiny">Present</span></div><div class="card"><b>' + count('absent') + '</b><span class="tiny">Absent</span></div><div class="card"><b>' + count('late') + '</b><span class="tiny">Late</span></div><div class="card"><b>' + marked + '/' + n + '</b><span class="tiny">Marked</span></div></div>' +
+      '<p class="tiny">Only confirmed players can be marked. One tap per person.</p>' +
+      S.confirmed.map(x => '<div class="row" style="flex-direction:column;align-items:stretch;gap:8px"><span class="name">' + x + '</span><div class="seg3" role="group" aria-label="Status for ' + x + '">' +
+        ['present','absent','late'].map(v => '<button type="button" class="' + v + '" data-att="' + x + '|' + v + '" aria-pressed="' + (S.att[x] === v) + '">' + (v[0].toUpperCase() + v.slice(1)) + '</button>').join('') +
+        '</div></div>').join('') +
+      '</div>' +
+      '<div class="footer"><p class="tiny" style="text-align:center">' + marked + ' of ' + n + ' marked' + (S.attSaved ? ' · saved' : '') + '</p><button class="btn btn-primary" type="button" data-save' + (marked ? '' : ' disabled') + '>Save attendance</button></div>';
+  }
+  function vANoMore(){
+    return head('More', ['a-home','Overview']) + '<div class="main">' +
+      '<button class="row" type="button" data-msg="Club settings: coming in the next pass." style="background:none;border-left:0;border-right:0;border-top:0;color:var(--text);text-align:left;cursor:pointer;font-size:16px"><span class="name">Club settings</span><span aria-hidden="true">›</span></button>' +
+      '<button class="row" type="button" data-msg="Invitations: coming in the next pass." style="background:none;border-left:0;border-right:0;border-top:0;color:var(--text);text-align:left;cursor:pointer;font-size:16px"><span class="name">Invitations</span><span aria-hidden="true">›</span></button>' +
+      '<button class="btn btn-outline" type="button" data-signout>Sign out</button>' +
+      '</div>' + navbar('a-more','admin');
+  }
+
+  const VIEWS = {
+    'landing': vLanding, 'signin': vSignin,
+    'p-home': vPHome, 'p-events': vPEvents, 'p-team': vPTeam, 'p-profile': vPProfile,
+    'a-home': vAHome, 'a-members': vAMembers, 'a-events': vAEvents, 'a-event': vAEvent, 'attendance': vAttendance, 'a-more': vANoMore
+  };
+
+  function dialogHtml(){
+    if (!S.dialog) return '';
+    if (S.dialog.type === 'raise'){
+      const n = S.dialog.name;
+      return '<div class="dialog-wrap"><div class="dialog" role="dialog" aria-modal="true" aria-labelledby="dlgT">' +
+        '<h3 id="dlgT">Confirmed places are full</h3>' +
+        '<p>' + S.confirmed.length + ' of ' + S.cap + ' places are confirmed. Raise capacity to ' + (S.cap + 1) + ' and promote ' + n + '?</p>' +
+        '<p class="tiny">The admin is asked to raise capacity first. The change is recorded.</p>' +
+        '<button class="btn btn-primary" type="button" data-raise-yes>Raise to ' + (S.cap + 1) + ' and promote</button>' +
+        '<button class="btn btn-outline" type="button" data-raise-no>Cancel</button>' +
+      '</div></div>';
+    }
+    return '';
+  }
+
+  function render(focusTitle){
+    const sc = document.getElementById('screen');
+    sc.innerHTML = (VIEWS[S.view] || vLanding)();
+    document.getElementById('layer').innerHTML = dialogHtml();
+    const jump = document.getElementById('jump');
+    jump.innerHTML = SCREENS.map(([id, label]) => '<option value="' + id + '"' + (id === S.view ? ' selected' : '') + '>' + label + '</option>').join('');
+    if (focusTitle){ const h = document.getElementById('sTitle') || sc.querySelector('h2'); if (h) h.focus(); }
+    if (S.dialog){ const d = document.querySelector('#layer [role="dialog"] button'); if (d) d.focus(); }
+  }
+  function go(view, focus){
+    S.view = view; S.dialog = null; S.removing = null; S.approveMsg = ''; S.rsvpMsg = S.view.startsWith('p-') ? S.rsvpMsg : '';
+    if (view === 'a-event' || view === 'attendance') S.tab = S.tab || 'confirmed';
+    render(focus !== false);
+    document.getElementById('screen').scrollTop = 0;
+  }
+  function refresh(){ render(false); }
+
+  /* ---------- Events (single delegated listener) ---------- */
+  document.addEventListener('click', function(e){
+    const el = e.target.closest('button, [data-go]');
+    if (!el) return;
+    const d = el.dataset;
+    if (d.themeSet) return;
+    if (d.role){ S.role = d.role; go(d.role === 'admin' ? 'a-home' : 'p-home'); return; }
+    if (d.go){ go(d.go); return; }
+    if (d.signout !== undefined){ S.role = null; go('landing'); return; }
+    if (d.msg !== undefined){ toast(d.msg); return; }
+    if (d.rsvp){ rsvp(d.rsvp); refresh(); return; }
+    if (d.tab){ S.tab = d.tab; S.removing = null; refresh(); return; }
+    if (d.promote){ adminPromote(d.promote); refresh(); return; }
+    if (d.hold){ const w = S.waitlist.find(x => x.name === d.hold); if (w){ w.held = !w.held; toast(w.held ? d.hold + ' is on hold.' : d.hold + ' is released.'); } refresh(); return; }
+    if (d.remove){ S.removing = d.remove; refresh(); return; }
+    if (d.removeYes){ S.waitlist = S.waitlist.filter(x => x.name !== d.removeYes); S.removing = null; toast(d.removeYes + ' removed from the waitlist.'); refresh(); return; }
+    if (d.removeNo !== undefined){ S.removing = null; refresh(); return; }
+    if (d.raiseYes !== undefined){ raiseAndPromote(); refresh(); return; }
+    if (d.raiseNo !== undefined){ S.dialog = null; refresh(); return; }
+    if (d.team){ const [n, t] = d.team.split('|'); const cur = S.approving[n] || []; S.approving[n] = cur.includes(t) ? cur.filter(x => x !== t) : cur.concat(t); refresh(); return; }
+    if (d.approve){ const picked = S.approving[d.approve] || []; if (picked.length){ S.pending = S.pending.filter(x => x !== d.approve); S.approveMsg = d.approve + ' approved and assigned to ' + picked.join(', ') + '.'; toast(S.approveMsg); delete S.approving[d.approve]; } refresh(); return; }
+    if (d.decline){ S.pending = S.pending.filter(x => x !== d.decline); S.approveMsg = 'Request declined.'; refresh(); return; }
+    if (d.att){ const [n, v] = d.att.split('|'); S.att[n] = S.att[n] === v ? undefined : v; S.attSaved = false; refresh(); return; }
+    if (d.save !== undefined){ S.attSaved = true; toast('Attendance saved for ' + markCount() + ' players.'); refresh(); return; }
+  });
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && S.dialog){ S.dialog = null; refresh(); } });
+
+  document.getElementById('jump').addEventListener('change', function(e){ go(e.target.value); });
+
+  /* ---------- Theme ---------- */
+  function setTheme(v){
+    if (v === 'auto') document.documentElement.removeAttribute('data-theme'); else document.documentElement.setAttribute('data-theme', v);
+    document.querySelectorAll('[data-theme-set]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.themeSet === v)));
+  }
+  document.querySelectorAll('[data-theme-set]').forEach(b => b.addEventListener('click', () => setTheme(b.dataset.themeSet)));
+
+  render(false);
+})();
+</script>
+</body>
+</html>

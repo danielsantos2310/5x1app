@@ -61,7 +61,7 @@ Source and captures live in `docs/internal/wireframes/`:
 Status: layouts approved 15 Oct 2026 (tablet and desktop, `docs/internal/design/hifi/layouts-tablet-desktop-v0.1.html`). The interface palette and light/dark tokens are in `docs/internal/design-tokens.md`, with WCAG contrast checks. Tablet and desktop layouts are not yet drawn (deliverable 2 above is partly met).
 
 ## Design boards (14 Oct 2026, light and dark)
-Two boards with five phone screens, a palette, typography, components, navigation and a club brand example. Images: `docs/internal/design/court-side-board-light.png` and `court-side-board-dark.png`. They show Portuguese copy and a PT-BR/EN switch on the landing, which conflict with the agreed rules; the conflicts are listed in `design-tokens.md` for decision.
+Two boards with five phone screens, a palette, typography, components, navigation and a club brand example. Superseded (15 Oct 2026) by the v0.2 board, `docs/internal/design/5x1-design-board-v0.2.html`. The older images `docs/internal/design/court-side-board-light.png` and `court-side-board-dark.png` showed Portuguese copy and a PT-BR/EN switch on the landing, which conflicted with the agreed rules; they are kept for the record only.
 
 ## High-fidelity screens (v0.1, for review)
 Source: `docs/internal/design/hifi/hifi-player-admin-v0.1.html`. Covers UI-07/UI-08 entry (player home) and UI-04/admin overview, in English, light and dark, on the approved tokens (Inter, 4px spacing, 16px gutter, 44px minimum targets). Event detail (UI-08 admin) and attendance (UI-10) are next. Interactions are static in this version. Approval with team assignment (UI-04) and the pending waiting state (UI-13) are in `docs/internal/design/hifi/approvals-v0.1.html`: approval and team assignment are one step, approval needs at least one team, and the approve button names the team. Event detail (UI-08, admin, with the capacity-lowered warning) and attendance (UI-10, full-word Present / Absent / Late buttons, no bulk action) are in `docs/internal/design/hifi/eventatt-v0.2.html` (v0.1 is kept for the record). v0.2 adds a waitlist tab where each waitlisted RSVP has Promote, Hold and Remove, 44px targets, with each action audited. Hold keeps the person on the waitlist and skips them in automatic promotion until released (approved 15 Oct 2026). Decided 15 Oct 2026: promoting into a full event asks the admin to raise capacity first. Landing and sign-in (UI-01, UI-02, English only, no language switch) are in `docs/internal/design/hifi/landing-v0.1.html`.
@@ -73,6 +73,9 @@ The 5x1 brand is the geometric hexagon mark with the "5x1" wordmark, plus a stan
 - App icon: `5x1-app-icon-dark.svg` (default, navy tile) and `5x1-app-icon-light.svg` (white tile), with PNG exports in `app-icon/` at 512, 192 and 180 px.
 
 The platform logo sits on public and platform screens (landing, sign-in), centred on the landing page. The IVI crest stays on club pages only.
+
+## Clickable prototype (15 Oct 2026)
+A single-page prototype of the approved screens lives at `docs/internal/design/prototype/index.html` (see its `README.md`). It covers landing and sign-in, player home with Going / Maybe / Not going and automatic waitlist promotion, admin approval with team assignment, the event waitlist with promote, hold and remove, and attendance. It uses the approved tokens and brand, and runs in light, dark and system themes. It is for review and the usability test; it has no real data or sign-in.
 
 ## Sitemap and navigation (proposal, 14 Oct 2026)
 Full site map, route names per screen and navigation by role are in `docs/internal/sitemap.md`. Two decisions are open there: coach navigation, and whether Teams sits in the admin Home tabs or the bottom bar.

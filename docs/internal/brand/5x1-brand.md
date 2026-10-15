@@ -56,4 +56,4 @@ Palette tokens are in `docs/internal/design-tokens.md`. Green stays fixed in bot
 
 - The approved sheet is a raster image. The vector files were traced from it, so edges are close but not exact. Ask the designer for the vector source (SVG or Figma) and replace these files when it arrives.
 - Android maskable icon and the favicon set are not generated yet. Keep the hexagon inside the central 80% safe zone when they are.
-- COURT-SIDE remains an open question (see `design-tokens.md`). It is not part of this identity.
+- COURT-SIDE is not used (decided 15 Oct 2026). It is not part of this identity.

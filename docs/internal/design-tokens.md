@@ -94,7 +94,7 @@ Decided by Daniel:
 1. Landing: no language switch on public screens. The board's PT-BR / EN switch is removed.
 2. Reminders: the "Enviar lembrete" button becomes an in-app notice to the event's participants (NOTE-01). No email or push in v1.
 3. Attendance: no "Marcar todos como presentes". Each person is marked individually.
-4. "COURT-SIDE" is a tagline on the boards only. The product name is 5x1.
+4. "COURT-SIDE" is not used (decided 15 Oct 2026). The product name is 5x1.
 
 Still open for the board:
 - Board copy is Portuguese; the screens need English copy (pt-BR is checked for text length, not shown).
@@ -108,6 +108,6 @@ Details of the original review:
 3. **"Enviar lembrete" (send reminder)** on the admin event screen. Email and push reminders are outside v1 (see `product-spec.md`, deferred list). Keep it out of v1 or record it as an in-app notice (NOTE-01).
 4. **"Marcar todos como presentes" (mark all present)** on attendance. Not in the spec. It fits the one-tap rule only if each row is still reviewable. Needs approval.
 5. **Abbreviated attendance buttons** ("A", "At", "P"). Each button needs a full accessible name (Presente / Ausente / Atrasado) and visible text on the phone, not only a letter.
-6. **"COURT-SIDE" tagline.** The 5x1 wordmark on the boards is now the approved brand mark (14 Oct 2026, see `brand/5x1-brand.md`). COURT-SIDE is still unresolved: confirm whether it is a tagline or a separate name before it appears anywhere.
+6. **"COURT-SIDE" tagline: not used (decided 15 Oct 2026).** The 5x1 wordmark on the boards is the approved brand mark (see `brand/5x1-brand.md`). COURT-SIDE does not appear in the product, the brand or the design files.
 7. **Typeface.** The board names Inter (or similar modern sans). The spec does not yet fix a typeface. Pick one and check it supports Portuguese accents.
 8. **Dark ground.** The dark board uses `#021426` for the page, not the navy label `#021C37`. Decide whether the navy label is the page colour or only a surface colour.

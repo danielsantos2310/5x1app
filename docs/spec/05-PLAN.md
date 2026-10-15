@@ -25,10 +25,14 @@ Phase 1 is running ahead of its planned dates; dates are not followed, work proc
 | Design tokens: palette (light and dark), contrast, typography, spacing, breakpoints | Approved | `docs/internal/design-tokens.md` |
 | High-fidelity: player home, admin overview | Done (v0.1), review pending | `docs/internal/design/hifi/hifi-player-admin-v0.1.html` with `-light.png` and `-dark.png` captures |
 | High-fidelity: admin approval with team assignment, pending player waiting | Done (v0.1), review pending | `docs/internal/design/hifi/approvals-v0.1.html` with `-light.png` and `-dark.png` captures |
-| High-fidelity: event detail (admin), attendance | Done (v0.1), review pending | `docs/internal/design/hifi/eventatt-v0.1.html` with `-light.png` and `-dark.png` captures |
+| High-fidelity: event detail (admin, with waitlist promote, hold, remove), attendance | Done (v0.2), approved 15 Oct 2026 | `docs/internal/design/hifi/eventatt-v0.2.html` with `-light.png` and `-dark.png` captures (v0.1 kept) |
 | High-fidelity: landing and sign-in | Done (v0.1), review pending | `docs/internal/design/hifi/landing-v0.1.html` with `-light.png` and `-dark.png` captures |
-| Sitemap and navigation model | Proposed (v0.1), two decisions open (coach navigation, Teams placement) | `docs/internal/sitemap.md` |
-| Tablet (768px) and desktop (1280px) layouts | Not started | — |
+| Sitemap and navigation model | Approved for the pilot, 14 Oct 2026 | `docs/internal/sitemap.md` |
+| Brand identity: hexagon mark, wordmark, palette, app icon, light and dark rules | Approved, 14 Oct 2026 (vector source from designer still to come) | `docs/internal/brand/5x1-brand.md` |
+| Tablet (768px) and desktop (1280px) layouts | Approved, 15 Oct 2026 | `docs/internal/design/hifi/layouts-tablet-desktop-v0.1.html` |
+| Clickable prototype: landing to attendance, RSVP and waitlist rules, approval, role switch | Built (v0.1), for review | `docs/internal/design/prototype/index.html` (see its README) |
+| Five-user usability test (player, coach, admin tasks) | Not started | — |
+| Developer handoff: component states, measurements, accessible labels | Not started | — |
 | Clickable prototype and five-user usability test | Not started | — |
 | Developer handoff (component variants, states, accessible labels) | Not started | — |
 

@@ -183,6 +183,8 @@ Seven phases, each ending at a gate. Dates are proposals for a part-time build.
 | 35 | Coach navigation | Same bottom bar as players; attendance opened from the team event |
 | 36 | Teams placement | Admin Home tabs; bottom bar is Home, Events, Members, More |
 | 37 | Brand identity | Hexagon mark with "5x1" wordmark, navy/green (+ optional orange), standalone icon and app icon; approved 14 Oct 2026, rules in `docs/internal/brand/5x1-brand.md` |
+| 38 | Waitlist hold | Hold keeps a waitlisted RSVP on the waitlist and skips them in automatic promotion until an admin releases them; approved 15 Oct 2026 |
+| 39 | Promote into a full event | The admin is asked to raise capacity first; approved 15 Oct 2026 |
 | — | Product name | 5x1 |
 | — | Language on screen | English only; pt-BR chosen in Settings (14 Oct 2026: pt-BR labels removed from screens) |
 | — | Success targets | Confirmed, with definitions in the testing document |

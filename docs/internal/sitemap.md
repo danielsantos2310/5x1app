@@ -92,5 +92,5 @@ Route names are a proposal for the build phase. They must be the same in the Eng
 
 ## Open items
 
-- Tablet (768px) and desktop (1280px) navigation: the bottom bar becomes a side rail. Drawn in `docs/internal/design/hifi/layouts-tablet-desktop-v0.1.html`.
+- Tablet (768px) and desktop (1280px) navigation: the bottom bar becomes a side rail. Drawn and approved (15 Oct 2026) in `docs/internal/design/hifi/layouts-tablet-desktop-v0.1.html`.
 - Empty states (no events, no team) for the internal pilot: an approved player always has a team, so the no-team state is out of scope.

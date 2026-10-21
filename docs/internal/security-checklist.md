@@ -47,4 +47,4 @@ Date: 21 Oct 2026. No backend code exists yet, so "Covered" means the spec requi
 | Security headers (CSP, HSTS, nosniff) | Missing | Not stated. Add to the deployment config in phase 2. |
 
 ## Summary
-Covered: 6. Partial: 9. Missing: 7 (parameterized queries, upload checks, .gitignore, debug mode, generic errors, security headers, plus the login-specific rate limit as a gap in the partial list).
+20 items: Covered 7, Partial 7, Missing 6. Close every Partial and Missing item in phase 2.

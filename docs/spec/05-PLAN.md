@@ -31,10 +31,10 @@ Phase 1 is running ahead of its planned dates; dates are not followed, work proc
 | Brand identity: hexagon mark, wordmark, palette, app icon, light and dark rules | Approved, 14 Oct 2026 (vector source from designer still to come) | `docs/internal/brand/5x1-brand.md` |
 | Tablet (768px) and desktop (1280px) layouts | Approved, 15 Oct 2026 | `docs/internal/design/hifi/layouts-tablet-desktop-v0.1.html` |
 | Clickable prototype: landing to attendance, RSVP and waitlist rules, approval, role switch | Built (v0.1), for review | `docs/internal/design/prototype/index.html` (see its README) |
-| Five-user usability test (player, coach, admin tasks) | Not started | — |
-| Developer handoff: component states, measurements, accessible labels | Not started | — |
-| Clickable prototype and five-user usability test | Not started | — |
-| Developer handoff (component variants, states, accessible labels) | Not started | — |
+| Five-user usability test plan (tasks, measures, pass criteria) | Drafted 21 Oct 2026, for approval | `docs/internal/usability-test-plan.md` |
+| Five-user usability test run and findings | Not started (after plan approval) | — |
+| Developer handoff: states, tokens, accessible labels, behaviour rules | Drafted 21 Oct 2026, for approval | `docs/internal/developer-handoff.md` |
+| Repeating events (design only, v2) | Shown in prototype, 21 Oct 2026 | decision 47 |
 
 ## Build dependencies
 1. Repository, lint/typecheck, test pipeline and migration framework.

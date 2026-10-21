@@ -44,6 +44,7 @@ h3{font-size:17px;font-weight:700}
 .seg button{min-height:44px;padding:0 14px;border:0;background:var(--surface);color:var(--text);font-weight:600;cursor:pointer}
 .seg button[aria-pressed="true"]{background:var(--green);color:var(--on-green)}
 .jump{min-height:44px;border-radius:12px;border:1px solid var(--line);background:var(--surface);color:var(--text);padding:0 10px;font-size:15px;max-width:100%}
+[hidden]{display:none!important}
 .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 
 /* Phone */
@@ -422,6 +423,18 @@ select.input{padding-right:10px}
       '<div class="field"><label for="ne-place">Venue</label><input class="input" id="ne-place" name="place" value="' + f.place + '" required></div>' +
       '<div class="field"><label for="ne-cap">Capacity (optional)</label><input class="input" id="ne-cap" name="cap" inputmode="numeric" value="' + f.cap + '" placeholder="Leave blank for no limit"></div>' +
       '<p class="tiny">The RSVP deadline is 2 hours before the start, unless you change it.</p>' +
+      '<div class="card" style="gap:10px"><label style="display:flex;justify-content:space-between;align-items:center;gap:12px;min-height:44px;cursor:pointer"><span><b>Repeat this event</b><span class="tiny" style="display:block">Coming in v2. The design is shown here; the build waits for the pilot.</span></span><input type="checkbox" id="rp-on" style="width:24px;height:24px;flex:none"></label>' +
+      '<div id="rp-body" hidden style="display:flex;flex-direction:column;gap:10px">' +
+        '<fieldset style="border:0;padding:0;margin:0;display:flex;flex-direction:column;gap:6px"><legend class="label" style="padding:0 0 6px">How often</legend>' +
+          '<label class="row" style="min-height:44px;border:0;padding:0"><input type="radio" name="rp-pattern" value="weekly" checked style="width:22px;height:22px"><span class="name">Every week, on the same day</span></label>' +
+          '<label class="row" style="min-height:44px;border:0;padding:0"><input type="radio" name="rp-pattern" value="dates" style="width:22px;height:22px"><span class="name">Pick the dates myself</span></label>' +
+        '</fieldset>' +
+        '<div id="rp-weekly"><div class="field"><label for="rp-count">Stop after</label><select class="input" id="rp-count"><option>4 events</option><option selected>8 events</option><option>12 events</option></select></div>' +
+          '<p class="tiny">Creates one event each week on the same day and time, for example Thu 24 Oct, Thu 31 Oct and so on.</p></div>' +
+        '<div id="rp-dates" hidden><p class="label">Tap the dates to include</p><div style="display:flex;flex-wrap:wrap;gap:8px">' +
+          ['Thu 24 Oct','Thu 31 Oct','Thu 7 Nov','Thu 14 Nov','Thu 21 Nov'].map(x => '<button type="button" class="btn btn-sm outline" data-rp-date aria-pressed="false" style="width:auto">' + x + '</button>').join('') +
+        '</div><p class="tiny">In the full design this is a calendar.</p></div>' +
+      '</div></div>' +
       '<p class="status" id="ne-err" role="alert" style="color:var(--flame)">' + (S.eventErr || '') + '</p>' +
       '<button class="btn btn-primary" type="submit">Create event</button>' +
       '</form>';
@@ -741,6 +754,7 @@ select.input{padding-right:10px}
     if (!el) return;
     const d = el.dataset;
     if (d.themeSet) return;
+    if (d.rpDate !== undefined){ el.setAttribute('aria-pressed', el.getAttribute('aria-pressed') === 'true' ? 'false' : 'true'); return; }
     if (d.setupRole){ S.draft.role = d.setupRole; refresh(); return; }
     if (d.signupContinue !== undefined){
       const dr = S.draft;
@@ -825,6 +839,11 @@ select.input{padding-right:10px}
     if (t.dataset && t.dataset.position){ prof(t.dataset.position).position = t.value; toast('Position saved: ' + t.value + '.'); refresh(); }
   });
 
+  document.addEventListener('change', function(ev){
+    if (ev.target.id === 'rp-on'){ document.getElementById('rp-body').hidden = !ev.target.checked; return; }
+    if (ev.target.name === 'rp-pattern'){ const dates = ev.target.value === 'dates'; document.getElementById('rp-weekly').hidden = dates; document.getElementById('rp-dates').hidden = !dates; }
+  });
+
   document.addEventListener('submit', function(ev){
     if (ev.target.id !== 'newEventForm') return;
     ev.preventDefault();
@@ -838,7 +857,8 @@ select.input{padding-right:10px}
     S.events.push({id, title:v.title, date:v.date, time:v.time, place:v.place, team:MY_TEAM, cap: v.cap ? parseInt(v.cap, 10) : null,
       confirmed:[], waitlist:[], maybe:[], att:{}, attSaved:false, mine:null, tab:'confirmed'});
     S.cur = id; S.eventErr = '';
-    toast('Event created. RSVP deadline: 2 hours before the start.');
+    const repeatOn = document.getElementById('rp-on') && document.getElementById('rp-on').checked;
+    toast(repeatOn ? 'Prototype: one event created. Repeating events are v2.' : 'Event created. RSVP deadline: 2 hours before the start.');
     go('event');
   });
 

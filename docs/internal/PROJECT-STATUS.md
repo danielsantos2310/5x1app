@@ -12,7 +12,7 @@ Volleyball club management app. First club: IVI (International Volleyball Irelan
 - Pages (GitHub) stays as it is.
 
 ## Where the project is
-- Phase 0 (spec): done. Nine spec docs in `docs/spec/`, decisions register in `docs/product-spec.md` (46 decisions, latest 45 new-member sign-up, 46 profile save and settings).
+- Phase 0 (spec): done. Nine spec docs in `docs/spec/`, decisions register in `docs/product-spec.md` (47 decisions, latest 45 new-member sign-up, 46 profile save and settings, 47 repeating events design).
 - Phase 1 (UX/UI): mostly done. Approved: design board, design tokens, sitemap, brand identity, tablet and desktop layouts, event detail v0.2. Done but review pending: hi-fi player/admin, approvals, landing/sign-in.
 - Clickable prototype: `docs/internal/design/prototype/index.html` (README beside it). At v0.2, all changes pushed; published artifact 7wV9A8uJ2aMR4wEKkPH1zk (private). Covers sign-in (one player/coach entry, one admin entry), role chosen on Complete your profile, create account, profile (photo circle, position for players, staged details with Save changes), Settings row (theme, language), admin tabs Home/Events/Members/Club/Profile, club sub-screens, member details (admin only), waiting for approval.
 - Phase 2 (foundation): not started. Planned start 22 Nov 2026.
@@ -30,6 +30,7 @@ Volleyball club management app. First club: IVI (International Volleyball Irelan
 - Prototype test scripts (Playwright, in the working session, not in repo) need updating to the new sign-in flow.
 
 ## Decisions most likely to matter next
+- 47 repeating events (design shown in prototype as v2; build waits for the pilot)
 - 40 coach permissions (own teams only; approvals stay with admins)
 - 41 profiles and photos (multiple admins; position for players only)
 - 42 team gender removed (gender only on social events)

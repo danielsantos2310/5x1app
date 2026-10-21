@@ -81,3 +81,10 @@ Note: item 5 is a question for the owner, not a usability defect. The status "ac
 
 ## Changes made after this round
 None recorded yet. Prototype v0.2 is unchanged.
+
+## Follow-ups agreed after this round (21 Oct 2026)
+- Issue 1, "looks like a paid app": taken as a compliment, no change (decision 51).
+- Issue 2, Settings buttons too big: restyled to full-width rows with icons, about 56px tall (decision 48, prototype).
+- Issue 3, social features: logged as a v2 idea. Badges for event participation, shown on profiles, with an inclusion badge possible. Colour themes stay as they are (decision 49).
+- Issue 4, limited themes: already covered by the Settings work above; no change.
+- Issue 5, admin on desktop: agreed. Admin on desktop gets a fuller working dashboard (decision 50).

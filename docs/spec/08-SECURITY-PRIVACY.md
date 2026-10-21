@@ -29,6 +29,9 @@ Specify different schedules for pending invites, audit events, member accounts, 
 Option A (initial): EU-hosted primary for IVI; assess UK/Brazil transfers and prohibit regional guarantees not implemented.
 Option B (later): separate regional projects/data planes with a global routing/control plane only if compliance/legal/business needs justify cost; avoid synchronizing personally identifiable data across regions by default.
 
+## Build checklist
+The full checklist, with status per item, is in `docs/internal/security-checklist.md`. Phase 2 must close every Partial and Missing item before the first feature build.
+
 ## Sources (official)
 - https://supabase.com/docs/guides/platform/regions
 - https://supabase.com/legal/privacy-resources/data-residency-and-transfers-faq

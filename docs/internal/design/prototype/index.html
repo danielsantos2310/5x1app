@@ -123,7 +123,23 @@ h3{font-size:17px;font-weight:700}
 .input{min-height:52px;width:100%;border-radius:14px;border:2px solid var(--line);background:var(--surface);color:var(--text);padding:0 14px;font-size:16px}
 select.input{padding-right:10px}
 .toast{position:absolute;left:12px;right:12px;bottom:76px;background:var(--navy);color:var(--on-navy);border-radius:14px;padding:12px 14px;font-size:14px;font-weight:600;box-shadow:0 6px 18px rgba(0,0,0,.25);display:none;z-index:4}
-.toast.show{display:block}
+.toast.show{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.toast-undo{min-height:44px;min-width:44px;padding:0 14px;border:0;border-radius:10px;background:var(--green);color:var(--on-green);font:inherit;font-weight:700;cursor:pointer;white-space:nowrap}
+.toast-undo:focus-visible{outline:3px solid var(--text);outline-offset:2px}
+.steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;list-style:none;margin:8px 0 12px;padding:0}
+.steps li{display:flex;flex-direction:column;gap:6px;font-size:13px;color:var(--text2)}
+.steps li::before{content:"";display:block;height:6px;border-radius:6px;background:var(--line)}
+.steps li.done::before{background:var(--green)}
+.steps li.now::before{background:var(--text)}
+.steps li.now{color:var(--text);font-weight:700}
+.hint{margin:6px 0 0;font-size:13px;display:flex;gap:6px;align-items:flex-start;color:var(--text2)}
+.hint.bad{color:var(--text);font-weight:600}
+.hint .mk{flex:none;font-weight:700;color:var(--text)}
+.meter{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px;margin-top:8px}
+.meter span{height:6px;border-radius:6px;background:var(--line)}
+.meter span.on{background:var(--green)}
+.pw-checks{list-style:none;padding:0;margin:8px 0 0;font-size:13px;color:var(--text2);display:flex;flex-direction:column;gap:4px}
+.pw-checks li.ok{color:var(--text)}
 .dialog-wrap{position:absolute;inset:0;background:var(--dim);display:flex;align-items:center;justify-content:center;padding:20px;z-index:5}
 .dialog{background:var(--surface);color:var(--text);border:1px solid var(--line);border-radius:20px;padding:18px;display:flex;flex-direction:column;gap:14px;width:100%}
 </style>
@@ -219,10 +235,95 @@ select.input{padding-right:10px}
     const p = prof(n);
     return '<span class="avatar ' + (cls || '') + '" aria-hidden="true">' + (p.photo ? '<img src="' + p.photo + '" alt="">' : initials(n)) + '</span>';
   }
-  let toastTimer = null;
+  let toastTimer = null, undoTick = null, pendingUndo = null;
+  let pwDraft = '';   // prototype only: held in memory, never shown or logged
   function toast(msg){
-    const t = $('#toast'); t.textContent = msg; t.classList.add('show');
+    const t = $('#toast'); clearInterval(undoTick); undoTick = null; pendingUndo = null;
+    t.textContent = msg; t.classList.add('show');
     clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('show'), 2600);
+  }
+  // Undo toast: shows Undo with a 5-second countdown. Clicking Undo runs the reversal.
+  function toastUndo(msg, undo){
+    const t = $('#toast'); clearTimeout(toastTimer); clearInterval(undoTick);
+    pendingUndo = undo; let left = 5;
+    t.innerHTML = '<span></span><button class="toast-undo" type="button" data-undo>Undo (5)</button>';
+    t.firstChild.textContent = msg; t.classList.add('show');
+    undoTick = setInterval(() => {
+      left -= 1;
+      if (left <= 0){ clearUndo(); return; }
+      const b = t.querySelector('[data-undo]'); if (b) b.textContent = 'Undo (' + left + ')';
+    }, 1000);
+  }
+  function clearUndo(){
+    clearInterval(undoTick); undoTick = null; pendingUndo = null;
+    const t = $('#toast'); t.classList.remove('show'); t.textContent = '';
+  }
+  function runUndo(){
+    const u = pendingUndo; clearUndo();
+    if (u) u();
+    refresh(); toast('Undone.');
+  }
+  function snapRoster(){
+    return { roster: S.team.roster.slice(), pool: S.pool.slice(),
+      evs: S.events.map(e => ({ e, confirmed: e.confirmed.slice(), waitlist: e.waitlist.map(w => ({...w})), maybe: e.maybe.slice() })) };
+  }
+  function restoreRoster(sn){
+    S.team.roster = sn.roster; S.pool = sn.pool;
+    sn.evs.forEach(x => Object.assign(x.e, { confirmed: x.confirmed, waitlist: x.waitlist, maybe: x.maybe }));
+  }
+
+  /* ---------- Sign-up rules: letters, email shape, password strength ---------- */
+  function nameRule(v){
+    const s = v.trim(); if (!s) return null;
+    if (/[^\p{L}\s'’.-]/u.test(s)) return { ok:false, t: /\d/.test(s) ? 'Use letters only. Remove the numbers.' : 'Use letters only. Remove symbols such as @ or #.' };
+    return { ok:true, t:'Looks good.' };
+  }
+  function emailRule(v){
+    const s = v.trim(); if (!s) return null;
+    if (/\s/.test(s)) return { ok:false, t:'Remove the spaces from your email.' };
+    if ((s.match(/@/g) || []).length > 1) return { ok:false, t:'Use only one @ symbol.' };
+    if (!s.includes('@')) return { ok:false, t:'Add the @ symbol, for example name@example.com.' };
+    const [local, dom] = s.split('@');
+    if (!local) return { ok:false, t:'Add the part before the @.' };
+    if (!dom) return { ok:false, t:'Add the part after the @, for example example.com.' };
+    if (!/\.[a-z]{2,}$/i.test(dom)) return { ok:false, t:'Add the domain ending, for example .com or .ie.' };
+    return { ok:true, t:'Looks good.' };
+  }
+  function pwRule(v){
+    const len = v.length, hasL = /\p{L}/u.test(v), hasD = /\d/.test(v);
+    const mixed = (/\p{Ll}/u.test(v) && /\p{Lu}/u.test(v)) || /[^\p{L}\d]/u.test(v);
+    let score = (len >= 8 ? 1 : 0) + (len >= 12 ? 1 : 0) + (hasL && hasD ? 1 : 0) + (mixed ? 1 : 0);
+    if (len < 8) score = Math.min(score, 1);
+    const ok = len >= 8 && hasL && hasD;
+    return { ok, score, label: ['Weak','Weak','Fair','Good','Strong'][score],
+      checks: [ { ok: len >= 8, t:'At least 8 characters' }, { ok: hasL && hasD, t:'A letter and a number' } ] };
+  }
+  function hintHtml(rule){
+    if (!rule) return '';
+    return '<span class="mk" aria-hidden="true">' + (rule.ok ? '✓' : '!') + '</span><span>' + escHtml(rule.t) + '</span>';
+  }
+  function hintP(id, rule){
+    return '<p class="hint' + (rule && !rule.ok ? ' bad' : '') + '" id="' + id + '" aria-live="polite">' + hintHtml(rule) + '</p>';
+  }
+  function setHint(id, rule){
+    const el = document.getElementById(id); if (!el) return;
+    el.className = 'hint' + (rule && !rule.ok ? ' bad' : ''); el.innerHTML = hintHtml(rule);
+  }
+  function pwBlock(v){
+    const r = pwRule(v);
+    const bars = [1,2,3,4].map(i => '<span class="' + (r.score >= i ? 'on' : '') + '"></span>').join('');
+    return '<div class="meter" aria-hidden="true">' + bars + '</div>' +
+      '<p class="tiny" style="margin:6px 0 0" aria-live="polite">Strength: ' + (v ? r.label : 'not set') + '</p>' +
+      '<ul class="pw-checks">' + r.checks.map(c => '<li class="' + (c.ok ? 'ok' : '') + '"><span aria-hidden="true">' + (c.ok ? '✓' : '○') + '</span> ' + c.t + '</li>').join('') + '</ul>';
+  }
+  /* Progress: where the person is in sign-up */
+  function stepper(n){
+    const labels = ['Account','Profile','Approval'];
+    return '<p class="tiny" style="margin:0">Step ' + n + ' of 3: ' + labels[n-1] + '</p>' +
+      '<ol class="steps" aria-label="Sign-up progress">' + labels.map((l,i) => {
+        const k = i + 1, cls = k < n ? 'done' : (k === n ? 'now' : '');
+        return '<li class="' + cls + '"' + (k === n ? ' aria-current="step"' : '') + '>' + (k < n ? '<span aria-hidden="true">✓ </span>' : '') + l + '</li>';
+      }).join('') + '</ol>';
   }
 
   /* ---------- Rules (docs/spec: RSVP-01, RSVP-02, ATT-01; decisions 32, 38, 39) ---------- */
@@ -246,6 +347,7 @@ select.input{padding-right:10px}
   }
   function rsvp(choice){
     const e = E();
+    const before = { confirmed: e.confirmed.slice(), waitlist: e.waitlist.map(w => ({...w})), maybe: e.maybe.slice(), mine: e.mine };
     const wasGoing = e.confirmed.includes(S.me);
     e.confirmed = e.confirmed.filter(n => n !== S.me);
     e.waitlist = e.waitlist.filter(w => w.name !== S.me);
@@ -265,6 +367,7 @@ select.input{padding-right:10px}
       if (moved.length) msg += ' ' + moved.join(' and ') + (moved.length > 1 ? ' move' : ' moves') + ' up from the waitlist.';
     }
     S.rsvpMsg = msg;
+    return { msg, undo: () => { Object.assign(e, before); S.rsvpMsg = ''; } };
   }
   function adminPromote(e, name){
     const w = e.waitlist.findIndex(x => x.name === name);
@@ -657,11 +760,14 @@ select.input{padding-right:10px}
   function vSignup(){
     const d = S.draft;
     const field = (id, label, attrs) => '<div class="field"><label for="' + id + '">' + label + '</label><input class="input" id="' + id + '" ' + attrs + ' style="color:var(--text);background:var(--surface);width:100%"></div>';
-    return head('Create account', ['landing','Back']) + '<div class="main">' +
+    return head('Create account', ['landing','Back']) + '<div class="main">' + stepper(1) +
       '<p class="cap">Create your account, then complete your profile. A club admin approves you before you see team details.</p>' +
-      field('su-name', 'Full name', 'data-draft="name" autocomplete="name" value="' + escHtml(d.name) + '"') +
-      field('su-email', 'Email', 'data-draft="email" type="email" autocomplete="email" value="' + escHtml(d.email) + '"') +
-      field('su-pw', 'Password', 'type="password" autocomplete="new-password"') +
+      field('su-name', 'Full name', 'data-draft="name" autocomplete="name" aria-describedby="hint-name" value="' + escHtml(d.name) + '"') +
+      hintP('hint-name', nameRule(d.name)) +
+      field('su-email', 'Email', 'data-draft="email" type="email" autocomplete="email" aria-describedby="hint-email" value="' + escHtml(d.email) + '"') +
+      hintP('hint-email', d.email.includes('@') ? emailRule(d.email) : null) +
+      field('su-pw', 'Password', 'type="password" autocomplete="new-password" aria-describedby="pw-block" value="' + escHtml(pwDraft) + '"') +
+      '<div id="pw-block">' + pwBlock(pwDraft) + '</div>' +
       '<label class="row" style="min-height:48px;border:0;align-items:flex-start;gap:10px;cursor:pointer"><input type="checkbox" data-draft="adult"' + (d.adult ? ' checked' : '') + ' style="width:22px;height:22px;margin-top:2px;flex:none"><span>I am 18 or older. Sign-up for under-18s is not open yet.</span></label>' +
       (S.signupErr ? '<p class="status" role="alert" style="color:var(--text)">' + escHtml(S.signupErr) + '</p>' : '') +
       '<button class="btn btn-primary" type="button" data-signup-continue>Continue</button>' +
@@ -672,10 +778,11 @@ select.input{padding-right:10px}
     const key = S.setupKey || 'New member';
     const isPlayer = dr.role !== 'coach';
     const p = prof(key);
-    return head('Complete your profile', null) + '<div class="main" style="padding-top:8px">' +
+    return head('Complete your profile', null) + '<div class="main" style="padding-top:8px">' + stepper(2) +
       '<p class="cap">Add your name, your role and a photo. An admin then approves you and assigns your team.</p>' +
       '<div class="card" style="align-items:center;text-align:center;gap:10px">' + photoButtons(key) + '</div>' +
       '<div class="field"><label for="su-name">Full name</label><input class="input" id="su-name" data-draft="name" autocomplete="name" value="' + escHtml(dr.name) + '" style="color:var(--text);background:var(--surface);width:100%"></div>' +
+      hintP('hint-name', nameRule(dr.name)) +
       '<div class="field"><span class="label" id="roleLbl">I am a</span><div class="choices" role="group" aria-labelledby="roleLbl">' +
         '<button class="choice" type="button" data-setup-role="player" aria-pressed="' + (isPlayer) + '">Player</button>' +
         '<button class="choice" type="button" data-setup-role="coach" aria-pressed="' + (!isPlayer) + '">Coach</button>' +
@@ -692,7 +799,7 @@ select.input{padding-right:10px}
   function vWaiting(){
     const me = S.me || S.draft.name || 'New member';
     return '<div class="appbar"><span>' + LOGO + '</span><span></span></div>' +
-      '<div class="main" style="justify-content:center;gap:16px">' +
+      '<div class="main" style="justify-content:center;gap:16px">' + stepper(3) +
       '<h2 tabindex="-1" id="sTitle">Waiting for approval</h2>' +
       '<p>Thanks, ' + escHtml(me.split(' ')[0]) + '. An admin of IVI will review your sign-up and assign your team.</p>' +
       '<div class="card"><p class="tiny">Until an admin approves you, you see only this message. No team, events or members are shown.</p></div>' +
@@ -767,13 +874,19 @@ select.input{padding-right:10px}
     const el = ev.target.closest('button, [data-go]');
     if (!el) return;
     const d = el.dataset;
+    if (d.undo !== undefined){ runUndo(); return; }
     if (d.themeSet) return;
     if (d.rpDate !== undefined){ el.setAttribute('aria-pressed', el.getAttribute('aria-pressed') === 'true' ? 'false' : 'true'); return; }
     if (d.setupRole){ S.draft.role = d.setupRole; refresh(); return; }
     if (d.signupContinue !== undefined){
-      const dr = S.draft;
+      const dr = S.draft, nr = nameRule(dr.name), em = emailRule(dr.email), pw = pwRule(pwDraft);
       if (!dr.name.trim()) S.signupErr = 'Enter your full name.';
-      else if (!/^\S+@\S+\.\S+$/.test(dr.email)) S.signupErr = 'Enter a valid email address.';
+      else if (nr && !nr.ok) S.signupErr = nr.t;
+      else if (dr.name.trim().split(/\s+/).length < 2) S.signupErr = 'Add your last name too, for example Ines Duarte.';
+      else if (!dr.email.trim()) S.signupErr = 'Enter your email address.';
+      else if (!em.ok) S.signupErr = em.t;
+      else if (!pwDraft) S.signupErr = 'Create a password.';
+      else if (!pw.ok) S.signupErr = 'Use at least 8 characters, with a letter and a number.';
       else if (!dr.adult) S.signupErr = 'You must be 18 or older to join for now.';
       else { S.setupKey = null; S.signupErr = ''; go('setup'); return; }
       refresh(); return;
@@ -784,11 +897,11 @@ select.input{padding-right:10px}
       const key = S.setupKey || 'New member';
       if (key !== name){ S.profiles[name] = prof(key); delete S.profiles[key]; }
       prof(name).email = S.draft.email || prof(name).email || '';
-      S.me = name; S.role = S.draft.role; S.setupKey = null; S.signupErr = '';
+      S.me = name; S.role = S.draft.role; S.setupKey = null; S.signupErr = ''; pwDraft = '';
       go('waiting'); return;
     }
     if (d.approveNew !== undefined){ go('home'); return; }
-    if (d.role === 'member'){ S.draft = {name:'', email:'', role:'player', adult:true}; S.setupKey = null; S.signupErr = ''; go('setup'); return; }
+    if (d.role === 'member'){ pwDraft = ''; S.draft = {name:'', email:'', role:'player', adult:true}; S.setupKey = null; S.signupErr = ''; go('setup'); return; }
     if (d.role === 'admin'){ setRole('admin'); go('home'); return; }
     if (d.member){ S.memberId = d.member; go('club-member'); return; }
     if (d.go){ go(d.go); return; }
@@ -797,9 +910,9 @@ select.input{padding-right:10px}
       if (d.then) { go(d.then); return; }
       go('event'); return;
     }
-    if (d.signout !== undefined){ S.role = null; S.me = null; S.draft = {name:'', email:'', role:'player', adult:false}; S.signupErr = ''; go('landing'); return; }
+    if (d.signout !== undefined){ S.role = null; S.me = null; pwDraft = ''; S.draft = {name:'', email:'', role:'player', adult:false}; S.signupErr = ''; go('landing'); return; }
     if (d.msg !== undefined){ toast(d.msg); return; }
-    if (d.rsvp){ rsvp(d.rsvp); refresh(); return; }
+    if (d.rsvp){ const u = rsvp(d.rsvp); refresh(); toastUndo(u.msg, u.undo); return; }
     if (d.etab){ E().tab = d.etab; E().removingWL = null; refresh(); return; }
     if (d.promote){ adminPromote(E(), d.promote); refresh(); return; }
     if (d.hold){ const w = E().waitlist.find(x => x.name === d.hold); if (w){ w.held = !w.held; toast(w.held ? d.hold + ' is on hold.' : d.hold + ' is released.'); } refresh(); return; }
@@ -815,7 +928,7 @@ select.input{padding-right:10px}
     if (d.save !== undefined){ const e = E(); e.attSaved = true; toast('Attendance saved for ' + markCount(e) + ' players.'); refresh(); return; }
     if (d.rosterAdd){ S.pool = S.pool.filter(x => x !== d.rosterAdd); S.team.roster.push(d.rosterAdd); toast(d.rosterAdd + ' added to ' + S.team.name + '.'); refresh(); return; }
     if (d.rosterRemove){ S.removingRoster = d.rosterRemove; refresh(); return; }
-    if (d.rosterRemoveYes){ const n = d.rosterRemoveYes; removeFromTeam(n); S.removingRoster = null; toast(n + ' removed from ' + S.team.name + '.'); refresh(); return; }
+    if (d.rosterRemoveYes){ const n = d.rosterRemoveYes, sn = snapRoster(); removeFromTeam(n); S.removingRoster = null; refresh(); toastUndo(n + ' removed from ' + S.team.name + '.', () => restoreRoster(sn)); return; }
     if (d.rosterRemoveNo !== undefined){ S.removingRoster = null; refresh(); return; }
     if (d.photoMenu){ S.dialog = {type:'photo', name:d.photoMenu}; refresh(); return; }
     if (d.profileSave !== undefined){
@@ -827,8 +940,15 @@ select.input{padding-right:10px}
     if (d.langPick){ S.lang = d.langPick; toast(d.langPick === 'pt-BR' ? 'Português is planned. Screens stay in English for now.' : 'Language: English.'); refresh(); return; }
     if (d.photoCancel !== undefined){ S.dialog = null; refresh(); return; }
     if (d.pickPhoto){ S.dialog = null; S.photoTarget = d.pickPhoto; document.getElementById('photoIn').click(); return; }
-    if (d.removePhoto){ prof(d.removePhoto).photo = null; S.dialog = null; toast('Photo removed.'); refresh(); return; }
+    if (d.removePhoto){ const who = d.removePhoto, old = prof(who).photo; prof(who).photo = null; S.dialog = null; refresh(); toastUndo('Photo removed.', () => { prof(who).photo = old; }); return; }
     if (d.pickLogo !== undefined){ S.photoTarget = 'team'; document.getElementById('photoIn').click(); return; }
+  });
+
+  document.addEventListener('input', function(ev){
+    const t = ev.target;
+    if (t.id === 'su-pw'){ pwDraft = t.value; const b = document.getElementById('pw-block'); if (b) b.innerHTML = pwBlock(pwDraft); return; }
+    if (t.dataset && t.dataset.draft === 'name'){ S.draft.name = t.value; setHint('hint-name', nameRule(t.value)); return; }
+    if (t.dataset && t.dataset.draft === 'email'){ S.draft.email = t.value; setHint('hint-email', t.value.includes('@') ? emailRule(t.value) : null); return; }
   });
 
   document.addEventListener('change', function(ev){

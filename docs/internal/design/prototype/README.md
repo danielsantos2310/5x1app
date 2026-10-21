@@ -40,3 +40,9 @@ File: `index.html` (one page, no build step). Open it in a browser, or use the "
 - Edit event is not in this version.
 - Nothing is saved between visits. Data resets on reload.
 - Not yet tested with users (see the usability test in the plan).
+
+## Sign-up progress, field checks and undo (21 Oct 2026)
+- Sign-up shows progress (Account, Profile, Approval). Hints for name and email; password strength meter and checklist; Continue is blocked until the password meets the rule.
+- Undo toast (5 seconds) for removing a photo, changing an RSVP and removing a team roster member.
+- Tests: test_signup_v5 (20 checks) and test_flow_v4 (17) pass; test_regress_v4 has no JS errors.
+- Open gap: "Continue as player / coach" on sign-in skips the account step (no email or password). Decide whether that route should also collect an account.

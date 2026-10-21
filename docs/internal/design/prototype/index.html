@@ -350,8 +350,8 @@ select.input{padding-right:10px}
       '<div style="display:flex;gap:12px;align-items:center">' + avatar(S.me, 'lg') +
         '<div style="min-width:0"><h2 tabindex="-1" id="sTitle">Hi, ' + S.me.split(' ')[0] + '!</h2><p class="cap">IVI · ' + MY_TEAM + (S.role === 'coach' ? ' · Coach' : '') + '</p></div></div>' +
       '<div class="card">' +
-        '<div style="display:flex;justify-content:space-between;align-items:center"><span class="chip" style="background:var(--navy);color:var(--on-navy)">NEXT TRAINING</span><span style="font-weight:600;font-size:14px">' + e.date + ' · ' + e.time.split('–')[0] + '</span></div>' +
-        '<div><h3>' + e.title + '</h3><p class="cap">' + e.place + '</p></div>' +
+        '<div style="display:flex;justify-content:space-between;align-items:center"><span class="chip" style="background:var(--navy);color:var(--on-navy)">NEXT TRAINING</span><span style="font-weight:600;font-size:14px">' + escHtml(e.date) + ' · ' + e.time.split('–')[0] + '</span></div>' +
+        '<div><h3>' + escHtml(e.title) + '</h3><p class="cap">' + escHtml(e.place) + '</p></div>' +
         '<div><div style="display:flex;justify-content:space-between;font-size:14px"><span class="cap">Confirmed</span><b>' + e.confirmed.length + ' / ' + e.cap + '</b></div><div class="track" style="margin-top:6px"><div class="fill" style="width:' + Math.min(100, Math.round(e.confirmed.length / e.cap * 100)) + '%"></div></div></div>' +
         '<div style="display:flex;justify-content:space-between;align-items:center"><span style="font-weight:600">Your answer</span>' + chip + '</div>' +
         '<div class="choices" role="group" aria-label="Will you attend?">' +
@@ -363,7 +363,7 @@ select.input{padding-right:10px}
       '</div>' +
       coachTools +
       '<div style="display:flex;justify-content:space-between;align-items:center"><h3>Upcoming</h3><button class="btn btn-sm outline" type="button" data-go="events">All events</button></div>' +
-      S.events.slice(1).map(x => '<button class="event-row" type="button" data-open-event="' + x.id + '"><div class="date"><b>' + x.date.split(' ')[1] + '</b><span>' + x.date.split(' ')[0].toUpperCase() + '</span></div><div style="flex:1;min-width:0"><b>' + x.title + '</b><p class="cap">' + x.time + ' · ' + x.place + '</p></div><span class="chip chip-grey">' + (x.maybe.includes(S.me) ? 'Maybe' : 'No answer') + '</span></button>').join('') +
+      S.events.slice(1).map(x => '<button class="event-row" type="button" data-open-event="' + x.id + '"><div class="date"><b>' + x.date.split(' ')[1] + '</b><span>' + x.date.split(' ')[0].toUpperCase() + '</span></div><div style="flex:1;min-width:0"><b>' + escHtml(x.title) + '</b><p class="cap">' + x.time + ' · ' + escHtml(x.place) + '</p></div><span class="chip chip-grey">' + (x.maybe.includes(S.me) ? 'Maybe' : 'No answer') + '</span></button>').join('') +
       '</div>' + navbar('home');
   }
 
@@ -371,7 +371,7 @@ select.input{padding-right:10px}
     const list = S.events.map(x => {
       const st = myState(x);
       const label = st === 'going' ? '<span class="chip chip-ok">Going</span>' : st.startsWith('waitlist') ? '<span class="chip chip-wait">Waitlist</span>' : st === 'maybe' ? '<span class="chip chip-grey">Maybe</span>' : '<span class="chip chip-grey">No answer</span>';
-      return '<button class="event-row" type="button" data-open-event="' + x.id + '"><div class="date"><b>' + x.date.split(' ')[1] + '</b><span>' + x.date.split(' ')[0].toUpperCase() + '</span></div><div style="flex:1;min-width:0"><b>' + x.title + '</b><p class="cap">' + x.time.split('–')[0] + ' · ' + x.confirmed.length + (x.cap ? ' of ' + x.cap : '') + ' confirmed</p></div>' + (S.role === 'admin' ? '' : label) + '</button>';
+      return '<button class="event-row" type="button" data-open-event="' + x.id + '"><div class="date"><b>' + x.date.split(' ')[1] + '</b><span>' + x.date.split(' ')[0].toUpperCase() + '</span></div><div style="flex:1;min-width:0"><b>' + escHtml(x.title) + '</b><p class="cap">' + x.time.split('–')[0] + ' · ' + x.confirmed.length + (x.cap ? ' of ' + x.cap : '') + ' confirmed</p></div>' + (S.role === 'admin' ? '' : label) + '</button>';
     }).join('');
     return head('Events') + '<div class="main">' +
       (isStaff() ? '<button class="btn btn-primary" type="button" data-go="new-event">Create event</button>' : '') +
@@ -400,8 +400,8 @@ select.input{padding-right:10px}
     }
     const cap = e.cap == null ? 'No capacity limit' : e.confirmed.length + ' of ' + e.cap + ' confirmed';
     const pct = e.cap == null ? 0 : Math.min(100, Math.round(e.confirmed.length / e.cap * 100));
-    return head(e.title, ['events','Events']) + '<div class="main" style="padding-top:8px">' +
-      '<p class="cap">' + e.date + ' · ' + e.time + ' · ' + e.place + '</p>' +
+    return head(escHtml(e.title), ['events','Events']) + '<div class="main" style="padding-top:8px">' +
+      '<p class="cap">' + escHtml(e.date) + ' · ' + escHtml(e.time) + ' · ' + escHtml(e.place) + '</p>' +
       '<div class="card" style="padding:12px 14px"><div style="display:flex;justify-content:space-between;font-size:14px"><span>Capacity</span><b>' + cap + '</b></div>' + (e.cap == null ? '' : '<div class="track"><div class="fill" style="width:' + pct + '%"></div></div>') + '</div>' +
       (e.waitlist.length && e.cap != null ? '<div class="banner" role="note"><span aria-hidden="true">!</span><span>Capacity is ' + e.cap + '. New sign-ups go to the waitlist.</span></div>' : '') +
       '<div class="tabs" role="group" aria-label="List">' +
@@ -417,11 +417,11 @@ select.input{padding-right:10px}
     const f = S.newEvent;
     return head('New event', ['events','Events']) + '<form class="main" id="newEventForm" novalidate style="padding-top:8px">' +
       '<p class="cap">For ' + MY_TEAM + '. Event type: training.</p>' +
-      '<div class="field"><label for="ne-title">Title</label><input class="input" id="ne-title" name="title" value="' + f.title + '" required aria-describedby="ne-err"></div>' +
-      '<div class="field"><label for="ne-date">Date</label><input class="input" id="ne-date" name="date" value="' + f.date + '" placeholder="e.g. Thu 24 Oct" required></div>' +
-      '<div class="field"><label for="ne-time">Time</label><input class="input" id="ne-time" name="time" value="' + f.time + '" placeholder="e.g. 19:00–21:00" required></div>' +
-      '<div class="field"><label for="ne-place">Venue</label><input class="input" id="ne-place" name="place" value="' + f.place + '" required></div>' +
-      '<div class="field"><label for="ne-cap">Capacity (optional)</label><input class="input" id="ne-cap" name="cap" inputmode="numeric" value="' + f.cap + '" placeholder="Leave blank for no limit"></div>' +
+      '<div class="field"><label for="ne-title">Title</label><input class="input" id="ne-title" name="title" value="' + escHtml(f.title) + '" required aria-describedby="ne-err"></div>' +
+      '<div class="field"><label for="ne-date">Date</label><input class="input" id="ne-date" name="date" value="' + escHtml(f.date) + '" placeholder="e.g. Thu 24 Oct" required></div>' +
+      '<div class="field"><label for="ne-time">Time</label><input class="input" id="ne-time" name="time" value="' + escHtml(f.time) + '" placeholder="e.g. 19:00–21:00" required></div>' +
+      '<div class="field"><label for="ne-place">Venue</label><input class="input" id="ne-place" name="place" value="' + escHtml(f.place) + '" required></div>' +
+      '<div class="field"><label for="ne-cap">Capacity (optional)</label><input class="input" id="ne-cap" name="cap" inputmode="numeric" value="' + escHtml(f.cap) + '" placeholder="Leave blank for no limit"></div>' +
       '<p class="tiny">The RSVP deadline is 2 hours before the start, unless you change it.</p>' +
       '<div class="card" style="gap:10px"><label style="display:flex;justify-content:space-between;align-items:center;gap:12px;min-height:44px;cursor:pointer"><span><b>Repeat this event</b><span class="tiny" style="display:block">Coming in v2. The design is shown here; the build waits for the pilot.</span></span><input type="checkbox" id="rp-on" style="width:24px;height:24px;flex:none"></label>' +
       '<div id="rp-body" hidden style="display:flex;flex-direction:column;gap:10px">' +
@@ -564,7 +564,7 @@ select.input{padding-right:10px}
         '<div class="card"><b style="font-size:22px">42</b><span class="cap">Members in total</span></div>' +
       '</div>' +
       '<div style="display:flex;justify-content:space-between;align-items:center"><h3>Upcoming</h3><button class="btn btn-sm outline" type="button" data-go="events">All events</button></div>' +
-      '<button class="event-row" type="button" data-open-event="' + e.id + '"><div class="date"><b>17</b><span>OCT</span></div><div style="flex:1;min-width:0"><b>' + e.title + '</b><p class="cap">Thu 19:00 · ' + e.confirmed.length + ' confirmed · ' + e.waitlist.length + ' waitlisted</p></div></button>' +
+      '<button class="event-row" type="button" data-open-event="' + e.id + '"><div class="date"><b>17</b><span>OCT</span></div><div style="flex:1;min-width:0"><b>' + escHtml(e.title) + '</b><p class="cap">Thu 19:00 · ' + e.confirmed.length + ' confirmed · ' + e.waitlist.length + ' waitlisted</p></div></button>' +
       '</div>' + navbar('home');
   }
   function vMembers(){

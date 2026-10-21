@@ -13,14 +13,15 @@ Volleyball club management app. First club: IVI (International Volleyball Irelan
 
 ## Where the project is
 - Phase 0 (spec): done. Nine spec docs in `docs/spec/`, decisions register in `docs/product-spec.md` (47 decisions, latest 45 new-member sign-up, 46 profile save and settings, 47 repeating events design).
-- Phase 1 (UX/UI): mostly done. Approved: design board, design tokens, sitemap, brand identity, tablet and desktop layouts, event detail v0.2. Done but review pending: hi-fi player/admin, approvals, landing/sign-in.
+- Phase 1 (UX/UI): deliverables drafted 21 Oct 2026. Usability test plan (`docs/internal/usability-test-plan.md`) and developer handoff (`docs/internal/developer-handoff.md`) await owner approval. The five-person usability test itself needs recruited IVI participants.
+- Phase 1 (UX/UI) earlier status: mostly done. Approved: design board, design tokens, sitemap, brand identity, tablet and desktop layouts, event detail v0.2. Done but review pending: hi-fi player/admin, approvals, landing/sign-in.
 - Clickable prototype: `docs/internal/design/prototype/index.html` (README beside it). At v0.2, all changes pushed; published artifact 7wV9A8uJ2aMR4wEKkPH1zk (private). Covers sign-in (one player/coach entry, one admin entry), role chosen on Complete your profile, create account, profile (photo circle, position for players, staged details with Save changes), Settings row (theme, language), admin tabs Home/Events/Members/Club/Profile, club sub-screens, member details (admin only), waiting for approval.
 - Phase 2 (foundation): not started. Planned start 22 Nov 2026.
 - Code: none yet. Only the prototype exists.
 
 ## Open items
-- Five-user usability test plan: not started (needed to close phase 1).
-- Developer handoff: not started.
+- Five-user usability test: plan drafted, run not started (needs participants).
+- Developer handoff: drafted, awaiting approval.
 - Legal review: under-18 gate, data controller role.
 - IVI official colour values.
 - Designer's vector source for the logo (current logo is traced).

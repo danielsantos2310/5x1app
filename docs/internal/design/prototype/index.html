@@ -52,6 +52,7 @@ h3{font-size:17px;font-weight:700}
 .phone{position:relative;width:360px;height:740px;border-radius:32px;border:2px solid var(--line);background:var(--bg);color:var(--text);overflow:hidden;display:flex;flex-direction:column}
 @media (max-width:480px){ body{padding:0} .bar{padding:8px} .phone{width:100%;height:100dvh;border-radius:0;border:0} }
 .main{flex:1;min-height:0;overflow-y:auto;padding:16px 16px 24px;display:flex;flex-direction:column;gap:14px}
+.main > *{flex-shrink:0}  /* scrolling column: rows keep their height instead of squeezing */
 .appbar{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:56px;padding:12px 16px 0}
 .back{min-height:44px;border:0;background:transparent;color:var(--text);font-weight:600;font-size:16px;padding:0 6px 0 0;cursor:pointer}
 .logo{height:30px;width:auto;display:block}
@@ -560,7 +561,7 @@ select.input{padding-right:10px}
     return head('Attendance', ['event','Back']) + '<div class="main" style="padding-top:8px">' +
       '<div class="stats"><div class="card"><b>' + count('present') + '</b><span class="tiny">Present</span></div><div class="card"><b>' + count('absent') + '</b><span class="tiny">Absent</span></div><div class="card"><b>' + count('late') + '</b><span class="tiny">Late</span></div><div class="card"><b>' + marked + '/' + n + '</b><span class="tiny">Marked</span></div></div>' +
       '<p class="tiny">Only confirmed players can be marked. One tap per person.</p>' +
-      e.confirmed.map(x => '<div class="row" style="flex-direction:column;align-items:stretch;gap:8px"><span class="name">' + x + '</span><div class="seg3" role="group" aria-label="Status for ' + x + '">' +
+      e.confirmed.map(x => '<div class="row" style="flex:none;flex-direction:column;align-items:stretch;gap:8px"><span class="name" style="flex:none">' + x + '</span><div class="seg3" role="group" aria-label="Status for ' + x + '">' +
         ['present','absent','late'].map(v => '<button type="button" class="' + v + '" data-att="' + x + '|' + v + '" aria-pressed="' + (e.att[x] === v) + '">' + (v[0].toUpperCase() + v.slice(1)) + '</button>').join('') +
         '</div></div>').join('') +
       '</div>' +

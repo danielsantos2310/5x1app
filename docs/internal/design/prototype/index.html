@@ -239,7 +239,7 @@ select.input{padding-right:10px}
   const det = n => { const p = prof(n); if (!p.details) p.details = {}; DETAIL_KEYS.forEach(k => { if (p.details[k] === undefined) p.details[k] = ''; }); return p.details; };
   function avatar(n, cls){
     const p = prof(n);
-    return '<span class="avatar ' + (cls || '') + '" aria-hidden="true">' + (p.photo ? '<img src="' + p.photo + '" alt="">' : initials(n)) + '</span>';
+    return '<span class="avatar ' + (cls || '') + '" aria-hidden="true">' + (p.photo ? '<img src="' + escHtml(p.photo) + '" alt="">' : initials(n)) + '</span>';
   }
   let toastTimer = null, undoTick = null, pendingUndo = null;
   let pwDraft = '';   // prototype only: held in memory, never shown or logged
@@ -325,7 +325,7 @@ select.input{padding-right:10px}
   /* Progress: where the person is in sign-up */
   function stepper(n){
     const labels = ['Account','Profile','Approval'];
-    return '<p class="tiny" style="margin:0">Step ' + n + ' of 3: ' + labels[n-1] + '</p>' +
+    return '<p class="tiny" style="margin:0">Step ' + escHtml(n) + ' of 3: ' + labels[n-1] + '</p>' +
       '<ol class="steps" aria-label="Sign-up progress">' + labels.map((l,i) => {
         const k = i + 1, cls = k < n ? 'done' : (k === n ? 'now' : '');
         return '<li class="' + cls + '"' + (k === n ? ' aria-current="step"' : '') + '>' + (k < n ? '<span aria-hidden="true">✓ </span>' : '') + l + '</li>';
@@ -498,20 +498,20 @@ select.input{padding-right:10px}
     const t = e.tab;
     let list = '';
     if (t === 'confirmed'){
-      list = e.confirmed.map(n => '<div class="row">' + avatar(n) + '<span class="name">' + n + '</span><span class="chip chip-ok">Confirmed</span></div>').join('') || '<p class="cap">No one is confirmed yet.</p>';
+      list = e.confirmed.map(n => '<div class="row">' + avatar(n) + '<span class="name">' + escHtml(n) + '</span><span class="chip chip-ok">Confirmed</span></div>').join('') || '<p class="cap">No one is confirmed yet.</p>';
     } else if (t === 'waitlist'){
       list = e.waitlist.map((w, i) => {
         const n = w.name;
         const removing = e.removingWL === n;
-        return '<div class="card" style="margin-bottom:4px"><div style="display:flex;align-items:center;gap:12px">' + avatar(n) + '<span class="name" style="flex:1;font-weight:600">' + n + '</span><span class="chip chip-wait">Waitlist #' + (i + 1) + '</span></div>' +
+        return '<div class="card" style="margin-bottom:4px"><div style="display:flex;align-items:center;gap:12px">' + avatar(n) + '<span class="name" style="flex:1;font-weight:600">' + escHtml(n) + '</span><span class="chip chip-wait">Waitlist #' + (i + 1) + '</span></div>' +
           (w.held ? '<p class="tiny">On hold: skipped by automatic promotion.</p>' : '') +
           (removing
-            ? '<p class="tiny">Remove ' + n + ' from the waitlist?</p><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><button class="btn btn-danger btn-sm" type="button" data-remove-yes="' + n + '">Remove</button><button class="btn btn-outline btn-sm" type="button" data-remove-no>Keep</button></div>'
-            : '<div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px"><button class="btn btn-primary btn-sm" type="button" data-promote="' + n + '" style="padding:8px 4px">Promote</button><button class="btn btn-outline btn-sm" type="button" data-hold="' + n + '" aria-pressed="' + w.held + '" style="padding:8px 4px">' + (w.held ? 'Release' : 'Hold') + '</button><button class="btn btn-danger btn-sm" type="button" data-remove="' + n + '" style="padding:8px 4px">Remove</button></div>') +
+            ? '<p class="tiny">Remove ' + escHtml(n) + ' from the waitlist?</p><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><button class="btn btn-danger btn-sm" type="button" data-remove-yes="' + escHtml(n) + '">Remove</button><button class="btn btn-outline btn-sm" type="button" data-remove-no>Keep</button></div>'
+            : '<div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px"><button class="btn btn-primary btn-sm" type="button" data-promote="' + escHtml(n) + '" style="padding:8px 4px">Promote</button><button class="btn btn-outline btn-sm" type="button" data-hold="' + escHtml(n) + '" aria-pressed="' + w.held + '" style="padding:8px 4px">' + (w.held ? 'Release' : 'Hold') + '</button><button class="btn btn-danger btn-sm" type="button" data-remove="' + escHtml(n) + '" style="padding:8px 4px">Remove</button></div>') +
           '</div>';
       }).join('') || '<p class="cap">No one is on the waitlist.</p>';
     } else {
-      list = e.maybe.map(n => '<div class="row">' + avatar(n) + '<span class="name">' + n + '</span><span class="chip chip-grey">Maybe</span></div>').join('') || '<p class="cap">No maybe answers.</p>';
+      list = e.maybe.map(n => '<div class="row">' + avatar(n) + '<span class="name">' + escHtml(n) + '</span><span class="chip chip-grey">Maybe</span></div>').join('') || '<p class="cap">No maybe answers.</p>';
     }
     const cap = e.cap == null ? 'No capacity limit' : e.confirmed.length + ' of ' + e.cap + ' confirmed';
     const pct = e.cap == null ? 0 : Math.min(100, Math.round(e.confirmed.length / e.cap * 100));
@@ -547,7 +547,7 @@ select.input{padding-right:10px}
         '<div id="rp-weekly"><div class="field"><label for="rp-count">Stop after</label><select class="input" id="rp-count"><option>4 events</option><option selected>8 events</option><option>12 events</option></select></div>' +
           '<p class="tiny">Creates one event each week on the same day and time, for example Thu 24 Oct, Thu 31 Oct and so on.</p></div>' +
         '<div id="rp-dates" hidden><p class="label">Tap the dates to include</p><div style="display:flex;flex-wrap:wrap;gap:8px">' +
-          ['Thu 24 Oct','Thu 31 Oct','Thu 7 Nov','Thu 14 Nov','Thu 21 Nov'].map(x => '<button type="button" class="btn btn-sm outline" data-rp-date aria-pressed="false" style="width:auto">' + x + '</button>').join('') +
+          ['Thu 24 Oct','Thu 31 Oct','Thu 7 Nov','Thu 14 Nov','Thu 21 Nov'].map(x => '<button type="button" class="btn btn-sm outline" data-rp-date aria-pressed="false" style="width:auto">' + escHtml(x) + '</button>').join('') +
         '</div><p class="tiny">In the full design this is a calendar.</p></div>' +
       '</div></div>' +
       '<p class="status" id="ne-err" role="alert" style="color:var(--flame)">' + (S.eventErr || '') + '</p>' +
@@ -559,13 +559,13 @@ select.input{padding-right:10px}
     const e = E(), n = e.confirmed.length, marked = markCount(e);
     const count = v => e.confirmed.filter(x => e.att[x] === v).length;
     return head('Attendance', ['event','Back']) + '<div class="main" style="padding-top:8px">' +
-      '<div class="stats"><div class="card"><b>' + count('present') + '</b><span class="tiny">Present</span></div><div class="card"><b>' + count('absent') + '</b><span class="tiny">Absent</span></div><div class="card"><b>' + count('late') + '</b><span class="tiny">Late</span></div><div class="card"><b>' + marked + '/' + n + '</b><span class="tiny">Marked</span></div></div>' +
+      '<div class="stats"><div class="card"><b>' + count('present') + '</b><span class="tiny">Present</span></div><div class="card"><b>' + count('absent') + '</b><span class="tiny">Absent</span></div><div class="card"><b>' + count('late') + '</b><span class="tiny">Late</span></div><div class="card"><b>' + marked + '/' + escHtml(n) + '</b><span class="tiny">Marked</span></div></div>' +
       '<p class="tiny">Only confirmed players can be marked. One tap per person.</p>' +
-      e.confirmed.map(x => '<div class="row" style="flex:none;flex-direction:column;align-items:stretch;gap:8px"><span class="name" style="flex:none">' + x + '</span><div class="seg3" role="group" aria-label="Status for ' + x + '">' +
-        ['present','absent','late'].map(v => '<button type="button" class="' + v + '" data-att="' + x + '|' + v + '" aria-pressed="' + (e.att[x] === v) + '">' + (v[0].toUpperCase() + v.slice(1)) + '</button>').join('') +
+      e.confirmed.map(x => '<div class="row" style="flex:none;flex-direction:column;align-items:stretch;gap:8px"><span class="name" style="flex:none">' + escHtml(x) + '</span><div class="seg3" role="group" aria-label="Status for ' + escHtml(x) + '">' +
+        ['present','absent','late'].map(v => '<button type="button" class="' + v + '" data-att="' + escHtml(x) + '|' + v + '" aria-pressed="' + (e.att[x] === v) + '">' + (v[0].toUpperCase() + v.slice(1)) + '</button>').join('') +
         '</div></div>').join('') +
       '</div>' +
-      '<div class="footer"><p class="tiny" style="text-align:center">' + marked + ' of ' + n + ' marked' + (e.attSaved ? ' · saved' : '') + '</p><button class="btn btn-primary" type="button" data-save' + (marked ? '' : ' disabled') + '>Save attendance</button></div>';
+      '<div class="footer"><p class="tiny" style="text-align:center">' + marked + ' of ' + escHtml(n) + ' marked' + (e.attSaved ? ' · saved' : '') + '</p><button class="btn btn-primary" type="button" data-save' + (marked ? '' : ' disabled') + '>Save attendance</button></div>';
   }
 
   function vTeam(){
@@ -575,20 +575,20 @@ select.input{padding-right:10px}
       const p = prof(n);
       const removing = S.removingRoster === n;
       return '<div class="card" style="margin-bottom:2px"><div style="display:flex;align-items:center;gap:12px">' + avatar(n) +
-        '<div style="flex:1;min-width:0"><b>' + n + '</b><p class="tiny">' + (p.position || 'Not set') + '</p></div></div>' +
+        '<div style="flex:1;min-width:0"><b>' + escHtml(n) + '</b><p class="tiny">' + (p.position || 'Not set') + '</p></div></div>' +
         (canManage ? (removing
-          ? '<p class="tiny">Remove ' + n + ' from ' + t.name + '? They will be taken off upcoming events.</p><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><button class="btn btn-danger btn-sm" type="button" data-roster-remove-yes="' + n + '">Remove</button><button class="btn btn-outline btn-sm" type="button" data-roster-remove-no>Keep</button></div>'
-          : (n === S.me ? '' : '<button class="btn btn-outline btn-sm" type="button" data-roster-remove="' + n + '">Remove from team</button>'))
+          ? '<p class="tiny">Remove ' + escHtml(n) + ' from ' + escHtml(t.name) + '? They will be taken off upcoming events.</p><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><button class="btn btn-danger btn-sm" type="button" data-roster-remove-yes="' + escHtml(n) + '">Remove</button><button class="btn btn-outline btn-sm" type="button" data-roster-remove-no>Keep</button></div>'
+          : (n === S.me ? '' : '<button class="btn btn-outline btn-sm" type="button" data-roster-remove="' + escHtml(n) + '">Remove from team</button>'))
         : '') + '</div>';
     }).join('');
     const pickList = canManage && S.pool.length
       ? '<div class="card"><h3>Add a club member</h3><p class="tiny">Existing club members only. New sign-ups are approved by an admin first.</p>' +
-        S.pool.map(n => '<div class="row" style="min-height:48px;border:0;padding:4px 0">' + avatar(n) + '<span class="name">' + n + '</span><button class="btn btn-primary btn-sm" type="button" data-roster-add="' + n + '">Add</button></div>').join('') + '</div>'
+        S.pool.map(n => '<div class="row" style="min-height:48px;border:0;padding:4px 0">' + avatar(n) + '<span class="name">' + escHtml(n) + '</span><button class="btn btn-primary btn-sm" type="button" data-roster-add="' + escHtml(n) + '">Add</button></div>').join('') + '</div>'
       : '';
     return head('Team', S.role === 'admin' ? ['club','Club'] : null) + '<div class="main" style="padding-top:8px">' +
       '<div class="card" style="flex-direction:row;align-items:center;gap:14px">' +
-        '<span class="teamlogo" aria-hidden="true">' + (t.logo ? '<img src="' + t.logo + '" alt="">' : 'D3') + '</span>' +
-        '<div style="flex:1;min-width:0"><h3 style="font-size:18px">' + t.name + '</h3><p class="tiny">' + t.roster.length + ' players · IVI</p></div>' +
+        '<span class="teamlogo" aria-hidden="true">' + (t.logo ? '<img src="' + escHtml(t.logo) + '" alt="">' : 'D3') + '</span>' +
+        '<div style="flex:1;min-width:0"><h3 style="font-size:18px">' + escHtml(t.name) + '</h3><p class="tiny">' + t.roster.length + ' players · IVI</p></div>' +
       '</div>' +
       (canManage ? '<button class="btn btn-outline btn-sm" type="button" data-pick-logo style="align-self:flex-start">' + (t.logo ? 'Change team logo' : 'Add team logo') + '</button>' : '') +
       pickList +
@@ -621,7 +621,7 @@ select.input{padding-right:10px}
         '<div><b style="font-size:18px">' + escHtml(S.me) + '</b><p class="tiny">' + escHtml(prof(S.me).email) + '</p><p class="tiny">' + (isPlayer ? 'Player' : 'Coach') + ', ' + MY_TEAM + '</p></div></div>' +
       (isPlayer
         ? '<div class="field"><label for="pos">Position</label><select class="input" id="pos" data-position="' + escHtml(S.me) + '">' +
-            POSITIONS.map(x => '<option' + (x === pget('position') ? ' selected' : '') + '>' + x + '</option>').join('') + '</select></div>' +
+            POSITIONS.map(x => '<option' + (x === pget('position') ? ' selected' : '') + '>' + escHtml(x) + '</option>').join('') + '</select></div>' +
           '<p class="tiny">Only club admins can see these details. You can see what you entered.</p>' +
           '<div class="card"><h3>Personal details</h3>' + detailField('height', 'Height (cm)', 'number') + detailField('weight', 'Weight (kg)', 'number') + detailField('address', 'Address') + '</div>' +
           '<div class="card"><h3>Emergency contact</h3>' + detailField('emName', 'Contact name') + detailField('emPhone', 'Contact phone', 'tel') + detailField('emAddress', 'Contact address') + '</div>'
@@ -662,11 +662,11 @@ select.input{padding-right:10px}
   function photoButtons(n){
     const has = !!prof(n).photo;
     const badge = has ? '<span aria-hidden="true" style="position:absolute;right:-2px;bottom:-2px;width:30px;height:30px;border-radius:50%;background:var(--navy);color:var(--on-navy);border:2px solid var(--bg);display:flex;align-items:center;justify-content:center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></span>' : '';
-    const attr = has ? 'data-photo-menu="' + n + '"' : 'data-pick-photo="' + n + '"';
+    const attr = has ? 'data-photo-menu="' + escHtml(n) + '"' : 'data-pick-photo="' + escHtml(n) + '"';
     const label = has ? 'Change or remove profile photo' : 'Add profile photo';
     return '<div style="display:flex;flex-direction:column;align-items:center;gap:6px">' +
       '<button type="button" ' + attr + ' aria-label="' + label + '" style="position:relative;width:96px;height:96px;padding:0;border:0;border-radius:50%;background:none;cursor:pointer;color:var(--text)">' +
-        '<span class="avatar lg" aria-hidden="true" style="width:96px;height:96px;font-size:30px">' + (has ? '<img src="' + prof(n).photo + '" alt="">' : initials(n)) + '</span>' + badge +
+        '<span class="avatar lg" aria-hidden="true" style="width:96px;height:96px;font-size:30px">' + (has ? '<img src="' + escHtml(prof(n).photo) + '" alt="">' : initials(n)) + '</span>' + badge +
       '</button>' +
       (has ? '' : '<span class="tiny">Tap to add a photo</span>') +
     '</div>';
@@ -694,14 +694,14 @@ select.input{padding-right:10px}
     const rows = S.pending.map(n => {
       const picked = S.approving[n] || [];
       const tid = 't-' + n.replace(/\W/g, '');
-      return '<div class="card" style="margin-bottom:4px"><div style="display:flex;align-items:center;gap:12px">' + avatar(n) + '<b style="flex:1">' + n + '</b></div>' +
+      return '<div class="card" style="margin-bottom:4px"><div style="display:flex;align-items:center;gap:12px">' + avatar(n) + '<b style="flex:1">' + escHtml(n) + '</b></div>' +
         '<p class="tiny" id="' + tid + '">Assign at least one team</p>' +
         '<div style="display:flex;flex-wrap:wrap;gap:6px" role="group" aria-labelledby="' + tid + '">' +
-          S.teamOptions().map(t => '<button type="button" data-team="' + n + '|' + t + '" aria-pressed="' + picked.includes(t) + '" style="min-height:44px;border:2px solid var(--line);border-radius:12px;background:' + (picked.includes(t) ? 'var(--green)' : 'var(--surface)') + ';color:' + (picked.includes(t) ? 'var(--on-green)' : 'var(--text)') + ';padding:8px 10px;font-size:14px;font-weight:600;cursor:pointer">' + t + '</button>').join('') +
+          S.teamOptions().map(t => '<button type="button" data-team="' + escHtml(n) + '|' + t + '" aria-pressed="' + picked.includes(t) + '" style="min-height:44px;border:2px solid var(--line);border-radius:12px;background:' + (picked.includes(t) ? 'var(--green)' : 'var(--surface)') + ';color:' + (picked.includes(t) ? 'var(--on-green)' : 'var(--text)') + ';padding:8px 10px;font-size:14px;font-weight:600;cursor:pointer">' + t + '</button>').join('') +
         '</div>' +
         '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">' +
-          '<button class="btn btn-primary btn-sm" type="button" data-approve="' + n + '"' + (picked.length ? '' : ' disabled') + '>Approve' + (picked.length ? ' and assign' : '') + '</button>' +
-          '<button class="btn btn-outline btn-sm" type="button" data-decline="' + n + '">Decline</button>' +
+          '<button class="btn btn-primary btn-sm" type="button" data-approve="' + escHtml(n) + '"' + (picked.length ? '' : ' disabled') + '>Approve' + (picked.length ? ' and assign' : '') + '</button>' +
+          '<button class="btn btn-outline btn-sm" type="button" data-decline="' + escHtml(n) + '">Decline</button>' +
         '</div></div>';
     }).join('');
     return head('Approvals', ['home','Overview']) + '<div class="main">' +
@@ -745,7 +745,7 @@ select.input{padding-right:10px}
       '</div>' + navbar('club');
   }
   function vClubMembers(){
-    const rows = S.team.roster.map(n => '<button class="row" type="button" data-member="' + n + '" style="background:none;border-left:0;border-right:0;border-top:0;color:var(--text);text-align:left;cursor:pointer;font-size:16px">' + avatar(n) + '<span class="name">' + n + '</span><span aria-hidden="true">›</span></button>').join('');
+    const rows = S.team.roster.map(n => '<button class="row" type="button" data-member="' + escHtml(n) + '" style="background:none;border-left:0;border-right:0;border-top:0;color:var(--text);text-align:left;cursor:pointer;font-size:16px">' + avatar(n) + '<span class="name">' + escHtml(n) + '</span><span aria-hidden="true">›</span></button>').join('');
     return head('Club members', ['club','Club']) + '<div class="main" style="padding-top:8px">' +
       '<p class="tiny">Tap a member to see their details. Personal and emergency details are visible to club admins only.</p>' +
       rows + '</div>' + navbar('club');
@@ -756,7 +756,7 @@ select.input{padding-right:10px}
     const v = (k, u) => d[k] ? d[k] + (u || '') : '<span class="tiny">Not given</span>';
     const line = (label, k, u) => '<div class="row"><span class="name">' + label + '</span><span style="text-align:right">' + v(k, u) + '</span></div>';
     return head(n, ['club-members','Club members']) + '<div class="main" style="padding-top:8px">' +
-      '<div class="card" style="flex-direction:row;align-items:center;gap:14px">' + avatar(n, 'lg') + '<div style="min-width:0"><b style="font-size:18px">' + n + '</b><p class="tiny">' + MY_TEAM + '</p></div></div>' +
+      '<div class="card" style="flex-direction:row;align-items:center;gap:14px">' + avatar(n, 'lg') + '<div style="min-width:0"><b style="font-size:18px">' + escHtml(n) + '</b><p class="tiny">' + MY_TEAM + '</p></div></div>' +
       '<p class="tiny">Visible to club admins only.</p>' +
       '<h3>Personal details</h3>' + line('Height', 'height', ' cm') + line('Weight', 'weight', ' kg') + line('Address', 'address') +
       '<h3>Emergency contact</h3>' + line('Name', 'emName') + line('Phone', 'emPhone') + line('Address', 'emAddress') +
@@ -795,7 +795,7 @@ select.input{padding-right:10px}
       '</div></div>' +
       (isPlayer
         ? '<div class="field"><label for="pos">Position</label><select class="input" id="pos" data-position="' + escHtml(key) + '">' +
-            POSITIONS.map(x => '<option' + (x === p.position ? ' selected' : '') + '>' + x + '</option>').join('') + '</select></div>' +
+            POSITIONS.map(x => '<option' + (x === p.position ? ' selected' : '') + '>' + escHtml(x) + '</option>').join('') + '</select></div>' +
           '<p class="tiny">Height, weight, address and emergency contact are optional. Only club admins can see them.</p>'
         : '') +
       (S.signupErr ? '<p class="status" role="alert" style="color:var(--text)">' + escHtml(S.signupErr) + '</p>' : '') +
@@ -834,7 +834,7 @@ select.input{padding-right:10px}
     const n = S.dialog.name;
     return '<div class="dialog-wrap"><div class="dialog" role="dialog" aria-modal="true" aria-labelledby="dlgT">' +
       '<h3 id="dlgT">Confirmed places are full</h3>' +
-      '<p>' + e.confirmed.length + ' of ' + e.cap + ' places are confirmed. Raise capacity to ' + (e.cap + 1) + ' and promote ' + n + '?</p>' +
+      '<p>' + e.confirmed.length + ' of ' + e.cap + ' places are confirmed. Raise capacity to ' + (e.cap + 1) + ' and promote ' + escHtml(n) + '?</p>' +
       '<p class="tiny">The admin is asked to raise capacity first. The change is recorded.</p>' +
       '<button class="btn btn-primary" type="button" data-raise-yes>Raise to ' + (e.cap + 1) + ' and promote</button>' +
       '<button class="btn btn-outline" type="button" data-raise-no>Cancel</button>' +
@@ -900,6 +900,9 @@ select.input{padding-right:10px}
     if (d.setupFinish !== undefined){
       const name = S.draft.name.trim();
       if (!name){ S.signupErr = 'Enter your full name.'; refresh(); return; }
+      const snr = nameRule(name);
+      if (snr && !snr.ok){ S.signupErr = snr.t; refresh(); return; }
+      if (name.split(/\s+/).length < 2){ S.signupErr = 'Add your last name too, for example Ines Duarte.'; refresh(); return; }
       const key = S.setupKey || 'New member';
       if (key !== name){ S.profiles[name] = prof(key); delete S.profiles[key]; }
       prof(name).email = S.draft.email || prof(name).email || '';

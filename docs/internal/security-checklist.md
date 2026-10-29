@@ -48,3 +48,19 @@ Date: 21 Oct 2026. No backend code exists yet, so "Covered" means the spec requi
 
 ## Summary
 20 items: Covered 7, Partial 7, Missing 6. Close every Partial and Missing item in phase 2.
+
+## 7. Code check, 29 Oct 2026 (eight-item review)
+Scope: tracked files at commit 1946b51 (prototype HTML and Markdown only, no server code, no packages) and the 5x1 Supabase project.
+
+| # | Item | Status | Evidence and action |
+| --- | --- | --- | --- |
+| 1 | Data validation and sanitisation | Partial | Client-side rules for name, email and password; escaping of names and image links (fixed 27 Oct). No server validation exists yet. Phase 2: validate on the server for every endpoint. |
+| 2 | Parameterised queries | Not applicable yet | No query code in the repo. Phase 2: no string-built SQL, enforced in lint or review. |
+| 3 | Secrets in environment variables | Not yet | No secrets found in tracked files or history. No `.gitignore`, so a `.env` file could be committed by mistake. Phase 2: add `.gitignore` first. |
+| 4 | Secure error handling | Not applicable yet | Prototype shows friendly messages only. Phase 2: generic user messages, detailed server logs. |
+| 5 | Least privilege | Partly verified | Supabase security advisor returned no findings (29 Oct). RLS enabled on all 10 public tables (earlier check). Policies not yet verified: the project is now INACTIVE (paused), so the policy query could not run. Action: restore the project, then check `pg_policies`. |
+| 6 | Hashing and encryption | Not implemented | Prototype does not store passwords. Supabase Auth hashes passwords; confirm the algorithm in the auth ADR. Field-level encryption for emergency contacts is open (decision 43). |
+| 7 | SAST | Not configured | No CI, linter or scanner. Phase 2: Semgrep or CodeQL in CI. |
+| 8 | Third-party dependencies | Not applicable yet | No package files. Prototype loads nothing from third parties. Phase 2: Dependabot and `npm audit` once packages exist. |
+
+Open action: restore the 5x1 Supabase project (currently INACTIVE) before the policy check. The project was active on 21 Oct.
